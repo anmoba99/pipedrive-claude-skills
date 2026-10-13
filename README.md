@@ -12,7 +12,7 @@
 <tr>
 <td align="center" width="33%"><h3>1 message</h3>to start: describe your business,<br>get a plan built for it</td>
 <td align="center" width="33%"><h3>0 changes</h3>to your CRM<br>without your yes</td>
-<td align="center" width="33%"><h3>13 skills</h3>plus 12 industry packs,<br>free and open</td>
+<td align="center" width="33%"><h3>19 skills</h3>plus 12 industry packs,<br>free and open</td>
 </tr>
 </table>
 
@@ -37,6 +37,12 @@ Pipedrive stores your deals well. The work around them still eats your day. Thes
 | **Why you lose** | Lost reason says "Price" | Patterns from the notes your team actually wrote |
 | **Messy data** | Find duplicates when reports break | A data health page: how full every field is, empty custom fields, duplicates, deals with no next step, and what improved since last time |
 | **Account management** | A spreadsheet of customers, renewals found too late | "show my book": every account scored, renewals in the next 90 days, single-threaded accounts, what peers buy that they do not. Optional health score saved back to Pipedrive |
+| **Which deals will slip** | Find out at quarter end | "premortem": each open deal matched to the lost deals it looks like, how it will most likely die, and the move that saves it |
+| **What actually wins** | A playbook nobody follows, written from memory | The path your won deals really took: steps, order, timing, contacts. Open deals that are off it |
+| **One contact per deal** | Your champion leaves, the deal dies | Who is involved, their role read from notes, single-threaded deals, past champions now at other companies |
+| **Lost deals** | Gone forever | Which lost deals to reopen now and why now (timing came around, contract renewal, contact moved), with a draft built from the old conversation |
+| **Who to target** | ICP written in a workshop | The customer profile your wins point to, the segments that waste time, and every open deal and lead scored by fit |
+| **CRM setup** | Stages and fields nobody questions | A blueprint from real usage: stages to merge or split, fields nobody fills, fields hiding in notes, lost reason picklist, automations worth building |
 | **Who sees what** | Reports quietly miss deals you cannot see | "what can Claude see?": missing permissions, owner-only deals, and the exact fix |
 
 Ask in your own words and your own language. No setup screens, no code.
@@ -70,6 +76,12 @@ Start with `pd-advisor`. It picks the rest for you.
 | `pd-data-hygiene` | "clean my CRM" | A data health page with tabs (field completeness, empty values, duplicates, no next step, value at risk, by owner and pipeline, trend), a fix list, CSV import cleanup. Works on large accounts: samples fields, checks every open deal, trends over runs |
 | `pd-access` | "what can Claude see?" | Connector permissions, whose deals are visible, owner-only deals, read-only fields, exact fixes |
 | `pd-account-health` | "show my book" | A portfolio page per account manager (health score, revenue, renewals, coverage, upsell whitespace), QBR briefs, sales to customer success handoff. Optional health score write-back to a Pipedrive field you choose |
+| `pd-premortem` | "which deals will we lose?" | Each open deal vs the lost deals it resembles: cause of death, proof, likely date, save move |
+| `pd-playbook-miner` | "what do our wins have in common?" | A playbook mined from won deals (steps, order, timing, contacts), what losses skipped, open deals off track |
+| `pd-thread-map` | "who is involved in the Acme deal?" | Buying group with roles from notes, single-threaded deals, silent champions, past champions at new companies |
+| `pd-ghost-reviver` | "which lost deals should we reopen?" | Lost deals worth a call now, the reason why now, a re-opener draft from the old conversation |
+| `pd-icp-discovery` | "who is our ideal customer?" | Win rate, value and cycle by segment, the profile that wins, the segments to stop chasing, fit score for open deals and leads |
+| `pd-crm-architect` | "is our Pipedrive set up right?" | A before and after blueprint: stages, fields, picklists, required fields, automations, with manual steps for the admin |
 | `pd-ask` | "how many deals did we win in March?" | A straight answer from your CRM |
 | `pd-industry` | (used by the others) | How your industry sells: stages, vocabulary, qualification, risk signals |
 | `pd-core` | (used by the others) | Shared rules: cheap queries, short answers, safe writes |

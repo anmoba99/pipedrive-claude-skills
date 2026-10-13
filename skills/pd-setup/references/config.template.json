@@ -11,7 +11,13 @@
     "pd-pipeline-review": ["chat", "file"],
     "pd-win-loss": ["chat", "file"],
     "pd-data-hygiene": ["file"],
-    "pd-account-health": ["chat", "file"]
+    "pd-account-health": ["chat", "file"],
+    "pd-premortem": ["chat", "file"],
+    "pd-playbook-miner": ["chat", "file"],
+    "pd-thread-map": ["chat"],
+    "pd-ghost-reviver": ["gmail-draft", "chat"],
+    "pd-icp-discovery": ["chat", "file"],
+    "pd-crm-architect": ["chat", "file"]
   },
   "team_channel": null,
   "renewal_field": null,

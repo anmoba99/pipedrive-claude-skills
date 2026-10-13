@@ -17,7 +17,15 @@ Format: skill: purpose. Triggers. Needs. Output. Cost (low/med/high Pipedrive ca
 - pd-pipeline-review: modes review (by rep/stage, stuck deals), forecast (stage vs real signals, slipping close dates), digest (weekly owner summary). Triggers: "pipeline review", "forecast check", "weekly digest". Needs Pipedrive (manager visibility for team). Optional Slack, Google Docs. Output chat/file/Slack. Cost med to high.
 - pd-win-loss: themes behind won and lost deals from lost reasons and note text; actions. Triggers: "why do we lose", "win-loss". Needs Pipedrive. Output chat/file. Cost med.
 
+## Deal intelligence (learn from this account's own history)
+- pd-premortem: matches each open deal to the closed deals it looks like (stage, value, age, days in stage, idle, pace, next step, unanswered email); writes how it will most likely die, proof from lost neighbors and notes, likely date, save move. Triggers: "which deals will we lose", "premortem", "deal risk", "what to save this week". Needs Pipedrive, 10+ lost deals. Output chat/file, optional save activities (after confirm). Cost med.
+- pd-playbook-miner: activity paths of won vs lost deals (steps, order, first touch speed, longest silence, contacts); 4 to 7 plays with evidence; audit of open deals off the playbook. Triggers: "sales playbook", "what do our wins have in common", "onboard a new rep". Needs Pipedrive, 15+ won deals with activities. Output chat/Google Doc/file, optional activities (after confirm). Cost med to high.
+- pd-thread-map: buying group per open deal, roles read from notes (champion, decision maker, blocker), single-threaded deals, champion gone quiet, people linked to another org, past champions from won deals. Modes deal, pipeline, alumni. Triggers: "who is involved in X", "single-threaded deals", "multi-thread", "where did our champions go". Needs Pipedrive. Output chat/file, optional activities and role note (after confirm). Cost low (deal) to med.
+- pd-ghost-reviver: lost deals worth reopening now: reason class from the account's own lost reasons, timing windows, competitor anniversaries, contact moved org, org active again; hook from old notes; re-opener drafts, never sent. Triggers: "revive lost deals", "win back", "who should we call back". Needs Pipedrive. Optional Gmail/Outlook. Output chat/drafts, optional activities (after confirm). Cost med.
+- pd-icp-discovery: win rate, lift, value and cycle per customer trait and pair of traits (source, size, country, industry, any field); ICP profile, red flags, segments to stop chasing; fit score for open deals and leads, optional write-back to an opt-in field. Triggers: "ideal customer", "ICP", "which lead sources work", "rank leads by fit". Needs Pipedrive, 40+ closed deals. Output chat/file/CSV. Cost med.
+
 ## Ops / admin
+- pd-crm-architect: design review from real usage: dead, leaky and bottleneck stages, near-empty fields, facts repeated in notes with no field, lost reason picklist, required fields per stage, Pipedrive automations to build; manual admin steps. Triggers: "is our Pipedrive set up right", "redesign pipeline", "which fields do we need". Needs Pipedrive (admin user best). Output chat/Google Doc/file. Read-only. Cost med.
 - pd-data-hygiene: modes audit (field completeness per standard and custom field, empty values, duplicates, no next step, stale, owner-only visibility; tabbed data health tracker with value at risk, owners, pipelines, bulk fix recipes and trend since last run; large accounts via sampling, scoped checks and incremental runs) and import-clean (CSV before import). Triggers: "clean my CRM", "find duplicates", "clean this CSV". Needs Pipedrive (audit) or nothing (import-clean). Output tracker HTML (artifact on claude.ai), CSV fix list, optional fill-blank updates (after confirm). Cost med to high.
 
 ## Customer success / account management
@@ -45,4 +53,8 @@ Files in pd-industry/references/. Set once via pd-setup; other skills load the m
 - Messy CRM: pd-setup, pd-data-hygiene audit first, then everything else.
 - Inbound-heavy: pd-lead-qualifier, pd-follow-up.
 - Recurring revenue: pd-account-health renewals, pd-win-loss.
+- Forecast keeps missing: pd-premortem weekly, pd-thread-map pipeline, pd-pipeline-review forecast.
+- New reps or no process: pd-playbook-miner, then pd-crm-architect to turn plays into stage exit rules.
+- Lead volume, low win rate: pd-icp-discovery, then pd-lead-qualifier on the top fit leads.
+- Pipeline dry: pd-ghost-reviver monthly, pd-icp-discovery to aim new outbound.
 - CS / account team: pd-setup accounts mapping, pd-access, pd-account-health portfolio weekly + renewals monthly + review before QBRs, pd-data-hygiene for org and contact gaps.
