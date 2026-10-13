@@ -1,12 +1,13 @@
 {
   "name": "pipedrive-claude-skills",
+  "description": "Claude skills for Pipedrive users: describe your business, get a plan, run it through the Pipedrive connector.",
   "owner": {
-    "name": "pipedrive-claude-skills contributors"
+    "name": "André Barreira"
   },
   "plugins": [
     {
       "name": "pipedrive-skills",
-      "source": "./plugins/pipedrive-skills",
+      "source": "./",
       "description": "Skills that turn Claude and the Pipedrive MCP connector into a sales assistant: advisor, setup, briefs, call logging, qualification, pipeline review, win-loss, hygiene, account health and industry packs.",
       "version": "0.1.0"
     }

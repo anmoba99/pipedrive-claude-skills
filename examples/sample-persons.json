@@ -1,7 +1,0 @@
-{"data": [
-  {"id": 1, "name": "Ana Silva", "emails": [{"value": "ana@acme.com", "primary": true}], "phones": [{"value": "+351 912 345 678"}]},
-  {"id": 2, "name": "Ana  Sílva", "emails": [], "phones": [{"value": "912345678"}]},
-  {"id": 3, "name": "John Smith", "emails": [{"value": "john@beta.com"}], "phones": []},
-  {"id": 4, "name": "Jon Smith", "emails": [{"value": "JOHN@beta.com"}], "phones": []},
-  {"id": 5, "name": "Maria Costa", "emails": [{"value": "maria@gamma.io"}], "phones": []}
-]}
