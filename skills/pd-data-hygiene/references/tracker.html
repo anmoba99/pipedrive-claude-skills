@@ -6,7 +6,7 @@
 <title>CRM Data Health</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap">
 <style>
-/* Layout: CRM settings page. Summary tiles, then fields table, then a filterable record list. */
+/* Layout: CRM settings page. Header, tab bar, one panel per tab. Built for large accounts: paginated tables, data capped by the script. */
 :root {
   --bg: #f4f6f5; --surface: #ffffff; --line: #e1e6e3; --fg: #1b2420; --muted: #5c6b64;
   --accent: #0a7a4b; --accent-soft: #e3f3ea;
@@ -26,25 +26,37 @@
   --ok: #4fd18a; --warn: #f0a83a; --warn-soft: #3a2b12; --bad: #ff7a66; --bad-soft: #3d1d18;
   color-scheme: dark; }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 var(--font); }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 24px 16px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
 h1 { font-size: 24px; font-weight: 700; margin: 0; text-wrap: balance; }
 h2 { font-size: 17px; font-weight: 700; margin: 0; }
 .meta { color: var(--muted); font-size: 13px; }
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tabs button { font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 14px; cursor: pointer; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.tabs .cnt { font-weight: 400; font-size: 12px; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 2px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 2px; align-content: start; }
 .tile .n { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .tile .l { color: var(--muted); font-size: 13px; }
 .tile .d { font-size: 12px; font-variant-numeric: tabular-nums; }
 .good { color: var(--ok); } .badc { color: var(--bad); }
-section.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; min-width: 0; align-content: start; }
 .head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 16px; align-items: start; }
 .scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.mid { min-width: 520px; }
+table.wide { min-width: 760px; }
 th { text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th.num { text-align: right; }
 td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
 td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+tr.click { cursor: pointer; } tr.click:hover td { background: var(--bg); }
+tr.sel td { background: var(--accent-soft); }
 tr.done td { opacity: .45; } tr.done td.name { text-decoration: line-through; }
 .bar { width: 120px; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
 .bar i { display: block; height: 100%; background: var(--accent); }
@@ -54,18 +66,28 @@ tr.done td { opacity: .45; } tr.done td.name { text-decoration: line-through; }
 .p-empty { background: var(--bad-soft); color: var(--bad); }
 .p-read_only, .p-not_returned { background: var(--bg); color: var(--muted); }
 .tag { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-left: 6px; }
-.filters { display: flex; flex-wrap: wrap; gap: 8px; }
-select, input[type=search] { font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; min-width: 0; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+select, input[type=search] { font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; min-width: 0; max-width: 100%; }
 input[type=search] { flex: 1 1 180px; }
-button.link { font: inherit; font-size: 13px; color: var(--accent); background: none; border: 0; cursor: pointer; padding: 0; }
+button.link { font: inherit; font-size: 13px; color: var(--accent); background: none; border: 0; cursor: pointer; padding: 0; text-align: left; }
+button.pg { font: inherit; font-size: 13px; border: 1px solid var(--line); border-radius: var(--r); padding: 4px 10px; color: var(--fg); background: var(--surface); cursor: pointer; }
+button.pg:disabled { opacity: .4; cursor: default; }
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 2px 12px; font-size: 13px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 a { color: var(--accent); }
 .id { font-family: var(--mono); font-size: 12px; color: var(--muted); }
-.owners { display: flex; flex-wrap: wrap; gap: 8px; }
-.owner { border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; font-size: 13px; }
 .note { color: var(--muted); font-size: 13px; }
+details.recipe { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; background: var(--bg); }
+details.recipe summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+details.recipe dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; margin: 10px 0 0; font-size: 14px; }
+details.recipe dt { color: var(--muted); }
+details.recipe dd { margin: 0; }
+.recipes { display: grid; gap: 8px; }
+.recipes:empty { display: none; }
+code { font-family: var(--mono); font-size: 13px; }
 footer { color: var(--muted); font-size: 12px; text-align: center; }
-@media (max-width: 560px) { .bar { width: 56px; } h1 { font-size: 21px; } }
+@media (max-width: 560px) { .bar { width: 56px; } h1 { font-size: 21px; } .tabs button { padding: 10px; } }
 </style>
 </head>
 <body>
@@ -78,203 +100,444 @@ footer { color: var(--muted); font-size: 12px; text-align: center; }
     <div class="meta" id="trend"></div>
   </header>
 
-  <div class="tiles" id="tiles"></div>
+  <div id="ownerChip" hidden></div>
 
-  <section class="card">
-    <div class="head">
-      <h2>Fields that need attention</h2>
-      <button class="link" id="toggleFields" type="button">Show all fields</button>
-    </div>
-    <div class="scroll"><table>
-      <thead><tr><th>Field</th><th>Item</th><th>Filled</th><th></th><th>Status</th><th>Suggestion</th></tr></thead>
-      <tbody id="fields"></tbody>
-    </table></div>
-    <div class="note">Read-only fields are set by Pipedrive. "Not returned" means the connector did not send that field, so it is not counted as empty.</div>
-  </section>
+  <nav class="tabs" role="tablist" aria-label="Sections" id="tabs"></nav>
 
-  <section class="card">
-    <div class="head">
-      <h2>Records to fix</h2>
-      <span class="meta" id="fixedCount"></span>
+  <div class="panel" role="tabpanel" id="p-overview" aria-labelledby="t-overview">
+    <div class="tiles" id="tiles"></div>
+    <div class="note" id="coverage"></div>
+    <section class="card">
+      <div class="head"><h2>Open pipeline affected</h2><span class="meta">Open deals with each issue, and their value</span></div>
+      <div class="scroll"><table class="mid">
+        <thead><tr><th>Issue</th><th class="num">Open deals</th><th class="num">Open value</th><th></th></tr></thead>
+        <tbody id="risk"></tbody>
+      </table></div>
+    </section>
+    <div class="grid2">
+      <section class="card">
+        <div class="head"><h2>By owner</h2><span class="meta">Click an owner to filter every tab</span></div>
+        <div class="scroll"><table class="mid">
+          <thead><tr><th>Owner</th><th class="num">Records</th><th class="num">With issues</th><th class="num">No next step</th><th class="num">No contact</th></tr></thead>
+          <tbody id="owners"></tbody>
+        </table></div>
+        <div class="pager" id="ownersMore" hidden><span class="note" id="ownersNote"></span><button class="pg" type="button" id="ownersToggle"></button></div>
+      </section>
+      <section class="card">
+        <div class="head"><h2>By pipeline</h2><span class="meta">Open deals only</span></div>
+        <div class="scroll"><table class="mid">
+          <thead><tr><th>Pipeline</th><th class="num">Open</th><th class="num">No next step</th><th class="num">No close date</th><th class="num">No value</th><th class="num">Idle</th></tr></thead>
+          <tbody id="pipes"></tbody>
+        </table></div>
+      </section>
     </div>
-    <div class="owners" id="owners"></div>
-    <div class="filters">
-      <select id="fEntity" aria-label="Item type"><option value="">All items</option></select>
-      <select id="fIssue" aria-label="Issue"><option value="">All issues</option></select>
-      <select id="fOwner" aria-label="Owner"><option value="">All owners</option></select>
-      <select id="fDone" aria-label="Status"><option value="open">To fix</option><option value="done">Fixed</option><option value="">All</option></select>
-      <input type="search" id="fText" placeholder="Search name or ID" aria-label="Search">
-    </div>
-    <div class="scroll"><table>
-      <thead><tr><th>Fixed</th><th>Record</th><th>Item</th><th>Issue</th><th>Fix</th><th>Owner</th></tr></thead>
-      <tbody id="rows"></tbody>
-    </table></div>
-    <div class="note" id="rowNote"></div>
-  </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-fields" aria-labelledby="t-fields" hidden>
+    <section class="card">
+      <div class="head">
+        <h2>Field completeness</h2>
+        <div class="filters">
+          <select id="fldEnt" aria-label="Item type"><option value="">All items</option><option value="deal">Deals</option><option value="person">People</option><option value="org">Organizations</option></select>
+          <select id="fldStatus" aria-label="Status"><option value="need">Needs attention</option><option value="">All fields</option></select>
+        </div>
+      </div>
+      <div class="note" id="sampleNote"></div>
+      <div class="scroll"><table class="wide">
+        <thead><tr><th>Field</th><th>Item</th><th class="num">Filled</th><th></th><th>Status</th><th>Suggestion</th></tr></thead>
+        <tbody id="fieldRows"></tbody>
+      </table></div>
+      <div class="note">Read-only fields are set by Pipedrive. "Not returned" means the connector did not send that field, so it is not counted as empty.</div>
+    </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-deal" aria-labelledby="t-deal" hidden></div>
+  <div class="panel" role="tabpanel" id="p-person" aria-labelledby="t-person" hidden></div>
+  <div class="panel" role="tabpanel" id="p-org" aria-labelledby="t-org" hidden></div>
+
+  <div class="panel" role="tabpanel" id="p-dupes" aria-labelledby="t-dupes" hidden>
+    <section class="card">
+      <div class="head"><h2>Possible duplicates</h2><span class="meta" id="dupeMeta"></span></div>
+      <div class="recipes" id="dupeRecipe"></div>
+      <div class="filters">
+        <select id="dupEnt" aria-label="Item type"><option value="">People and organizations</option><option value="person">People</option><option value="org">Organizations</option></select>
+        <input type="search" id="dupText" placeholder="Search name or ID" aria-label="Search duplicates">
+      </div>
+      <div class="scroll"><table class="wide">
+        <thead><tr><th>Item</th><th>Record</th><th>Looks like</th><th>Why</th><th class="num">Score</th></tr></thead>
+        <tbody id="dupeRows"></tbody>
+      </table></div>
+      <div class="pager" id="dupPager"></div>
+    </section>
+  </div>
 
   <footer>Built by the pd-data-hygiene community skill. Not an official Pipedrive product. Fix data in Pipedrive; this page never changes your CRM.</footer>
 </div>
+
+<template id="recTpl">
+  <section class="card">
+    <div class="head"><h2 class="rt"></h2><span class="meta fixedCount"></span></div>
+    <div class="recipes"></div>
+    <div class="filters">
+      <select class="fIssue" aria-label="Issue"><option value="">All issues</option></select>
+      <select class="fSort" aria-label="Sort"></select>
+      <select class="fDone" aria-label="Status"><option value="open">To fix</option><option value="done">Marked fixed</option><option value="">All</option></select>
+      <input type="search" class="fText" placeholder="Search name or ID" aria-label="Search records">
+    </div>
+    <div class="scroll"><table class="wide">
+      <thead><tr></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <div class="pager"></div>
+    <div class="note truncNote"></div>
+  </section>
+</template>
 
 <script id="data" type="application/json">/*DATA*/</script>
 <script>
 (function () {
   var D;
-  try { D = JSON.parse(document.getElementById("data").textContent); } catch (e) { D = null; }
-  if (!D || !D.kpis) {
-    document.getElementById("scope").textContent = "No data yet. Run pd-data-hygiene audit to fill this page.";
-    return;
-  }
-  var ENT = { deal: "Deal", person: "Person", org: "Organization" };
+  try { D = JSON.parse(document.getElementById("data").textContent); }
+  catch (e) { document.getElementById("scope").textContent = "No data yet. Run the pd-data-hygiene audit."; return; }
+
+  var ENTS = ["deal", "person", "org"];
+  var ENT = { deal: "Deals", person: "People", org: "Organizations" };
+  var ONE = { deal: "Deal", person: "Person", org: "Organization" };
   var PATH = { deal: "deal", person: "person", org: "organization" };
+  var ISSUE = {
+    no_next_step: ["No next activity", "Schedule next activity"],
+    no_close_date: ["No expected close date", "Set expected close date"],
+    no_value: ["No deal value", "Add value or products"],
+    stale: ["Idle {d} days", "Revive or close as lost"],
+    no_contact: ["No email or phone", "Add email or phone"],
+    no_org: ["No organization", "Link an organization"],
+    owner_only: ["Visible to owner only", "Check visibility if the team needs it"]
+  };
+  var SHORT = { stale: "Idle, no update" };
+  function shortLabel(c) { return SHORT[c] || (ISSUE[c] || [c])[0]; }
   var STATUS = { ok: "Healthy", attention: "Needs attention", empty: "Never used", read_only: "Read-only", not_returned: "Not returned" };
+  var PAGE = 50;
   var KEY = "pd-hygiene-fixed";
+  var NONE = "_none";
   var fixed = {};
   try { fixed = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { fixed = {}; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(fixed)); } catch (e) {} }
-  function el(tag, attrs, text) {
-    var n = document.createElement(tag);
-    for (var k in attrs || {}) n.setAttribute(k, attrs[k]);
-    if (text != null) n.textContent = text;
-    return n;
-  }
+
+  var nf = new Intl.NumberFormat();
+  function n(x) { return x == null ? "n/a" : nf.format(x); }
   function pct(x) { return x == null ? "n/a" : Math.round(x * 100) + "%"; }
-  function fmt(n) { return (n || 0).toLocaleString(); }
-  var owners = {};
-  (D.owners || []).forEach(function (o) { owners[o.id] = o.name; });
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function money(byCur) {
+    var parts = [];
+    Object.keys(byCur || {}).sort(function (a, b) { return byCur[b] - byCur[a]; }).forEach(function (cur) {
+      var v = byCur[cur]; if (!v) return;
+      try { parts.push(new Intl.NumberFormat(undefined, { style: "currency", currency: cur, maximumFractionDigits: 0 }).format(v)); }
+      catch (e) { parts.push(nf.format(Math.round(v)) + (cur ? " " + cur : "")); }
+    });
+    return parts.length ? parts.join(" + ") : "";
+  }
+  function one(cur, v) { var o = {}; o[cur] = v; return money(o); }
+  function sum(o) { var t = 0; Object.keys(o || {}).forEach(function (k) { t += o[k] || 0; }); return t; }
+  function issueLabel(r) { return (ISSUE[r.c] || [r.c])[0].replace("{d}", r.d == null ? "" : n(r.d)); }
+  function link(e, id, label) {
+    var t = esc(label || "#" + id);
+    return D.domain ? '<a href="https://' + esc(D.domain) + ".pipedrive.com/" + PATH[e] + "/" + esc(id) + '" target="_blank" rel="noopener">' + t + "</a>" : t;
+  }
+  var ownerName = {};
+  (D.owners || []).forEach(function (o) { ownerName[o.id || NONE] = o.name; });
+  var pipeName = {};
+  (D.pipelines || []).forEach(function (p) { pipeName[p.id] = p.name; });
+  var state = { owner: "" };
+  var recPanels = [];
 
-  var s = D.scope || {};
+  // Header
+  var cov = D.coverage || {}, sc = cov.scope || {}, smp = cov.sample || {};
   document.getElementById("scope").textContent = "Audit " + D.date + " | " +
-    Object.keys(s).filter(function (k) { return s[k]; }).map(function (k) { return fmt(s[k]) + " " + ENT[k].toLowerCase() + "s"; }).join(", ");
+    ENTS.filter(function (e) { return sc[e]; }).map(function (e) { return n(sc[e]) + " " + ENT[e].toLowerCase(); }).join(", ");
   if (D.trend && D.trend.date) document.getElementById("trend").textContent = "Compared with " + D.trend.date;
+  var covBits = [];
+  if (cov.note) covBits.push("Scope: " + cov.note + ".");
+  if (cov.merged) covBits.push("Merged with the saved snapshot" + (cov.snapshot_age_days != null ? " from " + cov.snapshot_age_days + " days ago" : "") +
+    ", " + n(sum(cov.fresh)) + " records refreshed this run.");
+  document.getElementById("coverage").textContent = covBits.join(" ");
 
-  var td = (D.trend && D.trend.kpis) || {};
-  var tiles = [
-    ["completeness", pct(D.kpis.completeness), "Field completeness", true, true],
-    ["records_with_issues", fmt(D.kpis.records_with_issues), "Records with issues", false],
-    ["fields_attention", fmt(D.kpis.fields_attention), "Fields need attention", false],
-    ["duplicates", fmt(D.kpis.duplicates), "Possible duplicates", false],
-    ["no_next_step", fmt(D.kpis.no_next_step), "Open deals, no next step", false],
-    ["owner_only", fmt(D.kpis.owner_only), "Visible to owner only", false]
+  // Tabs
+  var counts = D.counts || {}, issues = D.issues || {}, trunc = D.truncated || {};
+  var withIssues = D.with_issues || {};
+  function entTotal(e) { return withIssues[e] != null ? withIssues[e] : (issues[e] || []).length + (trunc[e] || 0); }
+  var TABS = [
+    ["overview", "Overview", null],
+    ["fields", "Fields", (D.fields || []).filter(function (f) { return f.status === "attention" || f.status === "empty"; }).length],
+    ["deal", "Deals", entTotal("deal")],
+    ["person", "People", entTotal("person")],
+    ["org", "Organizations", entTotal("org")],
+    ["dupes", "Duplicates", (D.dupes || []).length + (D.dupes_truncated || 0)]
   ];
-  var T = document.getElementById("tiles");
-  tiles.forEach(function (t) {
-    var box = el("div", { "class": "tile" });
-    box.appendChild(el("div", { "class": "n" }, t[1]));
-    box.appendChild(el("div", { "class": "l" }, t[2]));
-    var d = td[t[0]];
-    if (typeof d === "number" && (t[4] ? Math.round(d * 100) : d) !== 0) {
+  var ALIAS = { deals: "deal", people: "person", persons: "person", organizations: "org", orgs: "org", duplicates: "dupes" };
+  var tabsEl = document.getElementById("tabs");
+  var current = "overview";
+  TABS.forEach(function (t) {
+    var b = document.createElement("button");
+    b.type = "button"; b.id = "t-" + t[0]; b.setAttribute("role", "tab"); b.setAttribute("aria-controls", "p-" + t[0]);
+    b.innerHTML = esc(t[1]) + (t[2] != null ? '<span class="cnt">' + n(t[2]) + "</span>" : "");
+    b.addEventListener("click", function () { show(t[0], true); });
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener("keydown", function (ev) {
+    var ids = TABS.map(function (t) { return t[0]; }), i = ids.indexOf(current);
+    if (ev.key === "ArrowRight") i = (i + 1) % ids.length;
+    else if (ev.key === "ArrowLeft") i = (i - 1 + ids.length) % ids.length;
+    else if (ev.key === "Home") i = 0;
+    else if (ev.key === "End") i = ids.length - 1;
+    else return;
+    ev.preventDefault(); show(ids[i], true); document.getElementById("t-" + ids[i]).focus();
+  });
+  function show(id, push) {
+    current = id;
+    TABS.forEach(function (t) {
+      var on = t[0] === id, b = document.getElementById("t-" + t[0]);
+      b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1;
+      document.getElementById("p-" + t[0]).hidden = !on;
+    });
+    if (push) { try { history.replaceState(null, "", "#" + id); } catch (e) {} }
+  }
+  var start = (location.hash || "").slice(1).toLowerCase();
+  start = ALIAS[start] || start;
+  show(TABS.some(function (t) { return t[0] === start; }) ? start : "overview", false);
+
+  // Owner filter, applies to every record tab
+  function setOwner(id) {
+    state.owner = state.owner === id ? "" : id;
+    var chip = document.getElementById("ownerChip");
+    if (state.owner) {
+      chip.hidden = false;
+      chip.innerHTML = '<span class="chip">Owner: ' + esc(ownerName[state.owner] || state.owner) + ' <button class="link" type="button" id="clearOwner">Clear</button></span>';
+      document.getElementById("clearOwner").addEventListener("click", function () { setOwner(state.owner); });
+    } else { chip.hidden = true; chip.innerHTML = ""; }
+    renderOwners();
+    recPanels.forEach(function (p) { p.page = 0; p.render(); });
+  }
+
+  // Overview tiles
+  var k = D.kpis || {}, tk = (D.trend && D.trend.kpis) || {};
+  var TILES = [
+    ["completeness", "Field completeness", pct, true],
+    ["records_with_issues", "Records with issues", n, false],
+    ["no_next_step", "Open deals, no next step", n, false],
+    ["fields_attention", "Fields need attention", n, false],
+    ["duplicates", "Possible duplicates", n, false],
+    ["owner_only", "Visible to owner only", n, false]
+  ];
+  document.getElementById("tiles").innerHTML = TILES.map(function (t) {
+    var d = tk[t[0]], dh = "", isPct = t[0] === "completeness";
+    if (typeof d === "number" && Math.round(isPct ? d * 100 : d) !== 0) {
       var better = t[3] ? d > 0 : d < 0;
-      var txt = t[4] ? (d > 0 ? "+" : "") + Math.round(d * 100) + " pts" : (d > 0 ? "+" : "") + d;
-      box.appendChild(el("div", { "class": "d " + (better ? "good" : "badc") }, txt + " since last run"));
+      var shown = (d > 0 ? "+" : "") + (isPct ? Math.round(d * 100) + " pts" : n(d));
+      dh = '<span class="d ' + (better ? "good" : "badc") + '">' + shown + " since last run</span>";
     }
-    T.appendChild(box);
+    return '<div class="tile"><span class="n">' + t[2](k[t[0]]) + '</span><span class="l">' + t[1] + "</span>" + dh + "</div>";
+  }).join("");
+
+  // Value at risk
+  var risk = D.at_risk || {};
+  var riskCodes = ["no_next_step", "no_close_date", "no_value", "stale"].filter(function (c) { return counts[c]; });
+  document.getElementById("risk").innerHTML = riskCodes.length ? riskCodes.map(function (c) {
+    var val = c === "no_value" ? "none set" : (money(risk[c]) || "none");
+    return "<tr><td>" + esc(shortLabel(c)) + '</td><td class="num">' + n(counts[c]) + '</td><td class="num">' + esc(val) + "</td>" +
+      '<td><button class="link" type="button" data-go="deal" data-issue="' + c + '">See deals</button></td></tr>';
+  }).join("") : '<tr><td colspan="4" class="note">No open deal issues found.</td></tr>';
+  document.getElementById("risk").addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-go]"); if (!b) return;
+    var p = recPanels.filter(function (x) { return x.ent === b.dataset.go; })[0];
+    if (p) { p.issue.value = b.dataset.issue; p.page = 0; p.render(); }
+    show(b.dataset.go, true);
+    document.getElementById("t-" + b.dataset.go).focus();
   });
 
-  var showAll = false;
+  // Owners
+  var OWNERS_SHORT = 10, OWNERS_MAX = 200, ownersAll = false;
+  function renderOwners() {
+    var rows = (D.owners || []).slice(0, ownersAll ? OWNERS_MAX : OWNERS_SHORT);
+    document.getElementById("owners").innerHTML = rows.map(function (o) {
+      var c = o.codes || {}, id = o.id || NONE;
+      return '<tr class="click' + (state.owner === id ? " sel" : "") + '" data-owner="' + esc(id) + '" tabindex="0" aria-pressed="' + (state.owner === id) + '"><td>' + esc(o.name) +
+        '</td><td class="num">' + n(o.records) + '</td><td class="num">' + n(o.with_issues) + ' <span class="note">' + pct(o.records ? o.with_issues / o.records : 0) +
+        '</span></td><td class="num">' + n(c.no_next_step || 0) + '</td><td class="num">' + n(c.no_contact || 0) + "</td></tr>";
+    }).join("") || '<tr><td colspan="5" class="note">No owners.</td></tr>';
+  }
+  var ownerCount = (D.owners || []).length;
+  function ownersFooter() {
+    var shown = Math.min(ownerCount, ownersAll ? OWNERS_MAX : OWNERS_SHORT);
+    document.getElementById("ownersNote").textContent = "Top " + n(shown) + " of " + n(ownerCount) + " owners, most records with issues first";
+    document.getElementById("ownersToggle").textContent = ownersAll ? "Show top " + OWNERS_SHORT : "Show " + (ownerCount > OWNERS_MAX ? "top " + OWNERS_MAX : "all");
+  }
+  if (ownerCount > OWNERS_SHORT) {
+    document.getElementById("ownersMore").hidden = false; ownersFooter();
+    document.getElementById("ownersToggle").addEventListener("click", function () { ownersAll = !ownersAll; renderOwners(); ownersFooter(); });
+  }
+  var ownersEl = document.getElementById("owners");
+  function pickOwner(ev) { var tr = ev.target.closest("[data-owner]"); if (tr) setOwner(tr.dataset.owner); }
+  ownersEl.addEventListener("click", pickOwner);
+  ownersEl.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pickOwner(ev); } });
+  renderOwners();
+
+  // Pipelines
+  document.getElementById("pipes").innerHTML = (D.pipelines || []).map(function (p) {
+    var m = money(p.value);
+    return "<tr><td>" + esc(p.name) + (m ? '<div class="note">' + esc(m) + "</div>" : "") + '</td><td class="num">' + n(p.open) + '</td><td class="num">' + n(p.no_next_step) +
+      '</td><td class="num">' + n(p.no_close_date) + '</td><td class="num">' + n(p.no_value) + '</td><td class="num">' + n(p.stale) + "</td></tr>";
+  }).join("") || '<tr><td colspan="6" class="note">No open deals in scope.</td></tr>';
+
+  // Fields
+  var partial = ENTS.some(function (e) { return (smp[e] || 0) < (sc[e] || 0); });
+  document.getElementById("sampleNote").textContent = "Fill rates from " +
+    ENTS.filter(function (e) { return smp[e]; }).map(function (e) { return n(smp[e]) + " " + ENT[e].toLowerCase(); }).join(", ") +
+    (partial ? ", the most recently updated records of each item." : ".");
   function suggestion(f) {
-    if (f.status === "empty") return f.custom ? "Unused: remove or hide the field" : "Start filling it, or ignore";
-    if (f.status === "attention") return f.custom ? "Make it required in the stage, or drop it" : "Fill on key records";
+    if (f.status === "empty") return f.custom ? "Never filled: hide or remove the field" : "Start filling it, or ignore";
+    if (f.status === "attention") return f.custom ? "Make it required in the right stage, or drop it" : "Fill it on key records";
+    if (f.status === "read_only") return "Set by Pipedrive";
+    if (f.status === "not_returned") return "Not sent by the connector";
     return "";
   }
-  function drawFields() {
-    var body = document.getElementById("fields");
-    body.textContent = "";
-    var list = (D.fields || []).filter(function (f) { return showAll || f.status === "attention" || f.status === "empty"; });
-    if (!list.length) {
-      var tr = el("tr"); var c = el("td", { colspan: "6", "class": "note" }, "Every field is above the target fill rate.");
-      tr.appendChild(c); body.appendChild(tr);
+  function renderFields() {
+    var e = document.getElementById("fldEnt").value, s = document.getElementById("fldStatus").value;
+    var list = (D.fields || []).filter(function (f) {
+      return (!e || f.entity === e) && (!s || f.status === "attention" || f.status === "empty");
+    });
+    document.getElementById("fieldRows").innerHTML = list.map(function (f) {
+      var d = typeof f.delta === "number" && Math.round(f.delta * 100) !== 0 ? ' <span class="' + (f.delta > 0 ? "good" : "badc") + '">' + (f.delta > 0 ? "+" : "") + Math.round(f.delta * 100) + "</span>" : "";
+      return "<tr><td>" + esc(f.field) + (f.custom ? '<span class="tag">custom</span>' : "") + "</td><td>" + ONE[f.entity] +
+        '</td><td class="num">' + pct(f.fill) + d + ' <span class="note">' + n(f.filled) + "/" + n(f.total) + "</span></td>" +
+        '<td><div class="bar"><i style="width:' + Math.round(f.fill * 100) + '%"></i></div></td>' +
+        '<td><span class="pill p-' + f.status + '">' + STATUS[f.status] + "</span></td><td>" + suggestion(f) + "</td></tr>";
+    }).join("") || '<tr><td colspan="6" class="note">Nothing here.</td></tr>';
+  }
+  document.getElementById("fldEnt").addEventListener("change", renderFields);
+  document.getElementById("fldStatus").addEventListener("change", renderFields);
+  renderFields();
+
+  // Fix-in-bulk recipes
+  var REC = D.recipes || {};
+  function recipeHtml(code, label) {
+    var r = REC[code]; if (!r) return "";
+    return '<details class="recipe"><summary>Fix in bulk: ' + esc(label) + "</summary><dl>" +
+      "<dt>Where</dt><dd>" + esc(r.where) + "</dd><dt>Filter</dt><dd><code>" + esc(r.filter) + "</code></dd>" +
+      "<dt>Then</dt><dd>" + esc(r.action) + "</dd></dl></details>";
+  }
+
+  // Pager
+  function pagerHtml(page, total) {
+    var pages = Math.max(1, Math.ceil(total / PAGE));
+    var from = total ? page * PAGE + 1 : 0, to = Math.min(total, (page + 1) * PAGE);
+    return '<span class="note">' + n(from) + " to " + n(to) + " of " + n(total) + '</span><span class="filters">' +
+      '<button class="pg" type="button" data-p="-1"' + (page === 0 ? " disabled" : "") + ">Previous</button>" +
+      '<button class="pg" type="button" data-p="1"' + (page >= pages - 1 ? " disabled" : "") + ">Next</button></span>";
+  }
+
+  // Record tabs
+  var SORTS = {
+    deal: [["value", "Biggest value first"], ["recent", "Recently updated"], ["name", "Name"]],
+    person: [["recent", "Recently updated"], ["name", "Name"]],
+    org: [["recent", "Recently updated"], ["name", "Name"]]
+  };
+  recPanels = ENTS.map(function (ent) {
+    var host = document.getElementById("p-" + ent);
+    host.appendChild(document.getElementById("recTpl").content.cloneNode(true));
+    // One row per record, with all of its issues.
+    var all = [], byId = {};
+    (issues[ent] || []).forEach(function (r) {
+      var g = byId[r.id];
+      if (!g) { g = byId[r.id] = { e: r.e, id: r.id, n: r.n, o: r.o, v: r.v, cur: r.cur, p: r.p, u: r.u, open: r.open, items: [] }; all.push(g); }
+      g.items.push(r);
+    });
+    var p = { ent: ent, page: 0 };
+    host.querySelector(".rt").textContent = ENT[ent] + " to fix";
+    var codes = [];
+    (issues[ent] || []).forEach(function (r) { if (codes.indexOf(r.c) < 0) codes.push(r.c); });
+    p.issue = host.querySelector(".fIssue");
+    codes.forEach(function (c) { var o = document.createElement("option"); o.value = c; o.textContent = shortLabel(c); p.issue.appendChild(o); });
+    var sortSel = host.querySelector(".fSort");
+    SORTS[ent].forEach(function (s) { var o = document.createElement("option"); o.value = s[0]; o.textContent = s[1]; sortSel.appendChild(o); });
+    var done = host.querySelector(".fDone"), text = host.querySelector(".fText");
+    var recEl = host.querySelector(".recipes");
+    function showRecipe() {
+      var c = p.issue.value;
+      recEl.innerHTML = c ? recipeHtml(c, shortLabel(c)).replace("<details", "<details open") :
+        (codes.length ? '<div class="note">Thousands of records? Pick an issue to see how to fix it in bulk with a Pipedrive filter.</div>' : "");
     }
-    list.forEach(function (f) {
-      var tr = el("tr");
-      var name = el("td"); name.textContent = f.field;
-      if (f.custom) name.appendChild(el("span", { "class": "tag" }, "custom"));
-      tr.appendChild(name);
-      tr.appendChild(el("td", {}, ENT[f.entity]));
-      var n = el("td", { "class": "num" }, pct(f.fill) + " (" + fmt(f.filled) + "/" + fmt(f.total) + ")");
-      if (typeof f.delta === "number" && f.delta !== 0) n.appendChild(el("span", { "class": f.delta > 0 ? "good" : "badc" }, " " + (f.delta > 0 ? "+" : "") + Math.round(f.delta * 100)));
-      tr.appendChild(n);
-      var b = el("td"); var bar = el("div", { "class": "bar" }); var i = el("i"); i.style.width = Math.round(f.fill * 100) + "%"; bar.appendChild(i); b.appendChild(bar); tr.appendChild(b);
-      var st = el("td"); st.appendChild(el("span", { "class": "pill p-" + f.status }, STATUS[f.status])); tr.appendChild(st);
-      tr.appendChild(el("td", { "class": "note" }, suggestion(f)));
-      body.appendChild(tr);
-    });
-  }
-  document.getElementById("toggleFields").addEventListener("click", function () {
-    showAll = !showAll;
-    this.textContent = showAll ? "Show only fields to fix" : "Show all fields";
-    drawFields();
-  });
-  drawFields();
-
-  var O = document.getElementById("owners");
-  (D.owners || []).slice(0, 8).forEach(function (o) {
-    O.appendChild(el("span", { "class": "owner" }, o.name + ": " + fmt(o.issues) + " of " + fmt(o.records) + " with issues"));
-  });
-
-  function fill(id, values, label) {
-    var s = document.getElementById(id);
-    values.forEach(function (v) { s.appendChild(el("option", { value: v }, label(v))); });
-  }
-  var issues = D.issues || [];
-  function uniq(key) { var m = {}; issues.forEach(function (i) { m[i[key]] = 1; }); return m; }
-  var ISSUE = { no_contact: "No email or phone", no_org: "No organization", no_value: "No deal value",
-    no_close_date: "No close date", no_next_step: "No next activity", stale: "Idle too long",
-    duplicate: "Possible duplicate", owner_only: "Owner-only visibility" };
-  fill("fEntity", Object.keys(uniq("entity")), function (v) { return ENT[v]; });
-  fill("fIssue", Object.keys(uniq("code")), function (v) { return ISSUE[v] || v; });
-  fill("fOwner", Object.keys(uniq("owner")), function (v) { return owners[v] || "User " + v; });
-
-  function rowKey(i) { return i.entity + ":" + i.id + ":" + i.code; }
-  function link(i) {
-    if (!D.domain) return null;
-    return "https://" + encodeURIComponent(D.domain) + ".pipedrive.com/" + PATH[i.entity] + "/" + encodeURIComponent(i.id);
-  }
-  function drawRows() {
-    var f = {
-      e: document.getElementById("fEntity").value, c: document.getElementById("fIssue").value,
-      o: document.getElementById("fOwner").value, d: document.getElementById("fDone").value,
-      t: document.getElementById("fText").value.trim().toLowerCase()
+    var cols = ["Fixed", "Record", "Issue", "Fix"].concat(ent === "deal" ? ["Value", "Pipeline"] : []).concat(["Owner"]);
+    host.querySelector("thead tr").innerHTML = cols.map(function (c) { return "<th" + (c === "Value" ? ' class="num"' : "") + ">" + c + "</th>"; }).join("");
+    var tbody = host.querySelector("tbody"), pager = host.querySelector(".pager");
+    var tn = trunc[ent] || 0;
+    if (tn) host.querySelector(".truncNote").textContent = "Showing " + n(all.length) + " of " + n(entTotal(ent)) + " " + ENT[ent].toLowerCase() + " with issues, " +
+      "shared across issue types, " + (ent === "deal" ? "open deals and biggest value first" : "most recently updated first") + ". Every issue is in the fix list CSV next to this page. Counts on the Overview tab cover all of them.";
+    function key(r) { return r.e + ":" + r.id; }
+    p.render = function () {
+      var q = text.value.trim().toLowerCase(), iss = p.issue.value, dn = done.value, srt = sortSel.value;
+      var list = all.filter(function (r) {
+        if (state.owner && (r.o || NONE) !== state.owner) return false;
+        if (iss && !r.items.some(function (x) { return x.c === iss; })) return false;
+        if (dn === "open" && fixed[key(r)]) return false;
+        if (dn === "done" && !fixed[key(r)]) return false;
+        if (q && String(r.n).toLowerCase().indexOf(q) < 0 && String(r.id).indexOf(q) < 0) return false;
+        return true;
+      });
+      showRecipe();
+      if (srt === "value") list = list.slice().sort(function (a, b) { return (b.open ? 1 : 0) - (a.open ? 1 : 0) || (b.v || 0) - (a.v || 0); });
+      if (srt === "recent") list = list.slice().sort(function (a, b) { return a.u < b.u ? 1 : a.u > b.u ? -1 : 0; });
+      if (srt === "name") list = list.slice().sort(function (a, b) { return String(a.n).localeCompare(String(b.n)); });
+      var pages = Math.max(1, Math.ceil(list.length / PAGE));
+      if (p.page >= pages) p.page = pages - 1;
+      tbody.innerHTML = list.slice(p.page * PAGE, p.page * PAGE + PAGE).map(function (r) {
+        var kk = key(r), isDone = !!fixed[kk];
+        var cells = '<td><input type="checkbox" data-k="' + esc(kk) + '"' + (isDone ? " checked" : "") + ' aria-label="Mark fixed"></td>' +
+          '<td class="name">' + link(r.e, r.id, r.n || "(no name)") + ' <span class="id">#' + esc(r.id) + "</span></td>" +
+          "<td>" + r.items.map(function (x) { return esc(issueLabel(x)); }).join("<br>") + "</td><td>" +
+          r.items.map(function (x) { return esc((ISSUE[x.c] || ["", ""])[1]); }).join("<br>") + "</td>";
+        if (ent === "deal") cells += '<td class="num">' + (r.v ? esc(one(r.cur, r.v)) : "") + "</td><td>" + esc(pipeName[r.p] || "") + "</td>";
+        cells += "<td>" + esc(ownerName[r.o || NONE] || (r.o ? "User " + r.o : "No owner")) + "</td>";
+        return '<tr class="' + (isDone ? "done" : "") + '">' + cells + "</tr>";
+      }).join("") || '<tr><td colspan="' + cols.length + '" class="note">Nothing to fix here.</td></tr>';
+      pager.innerHTML = pagerHtml(p.page, list.length);
+      var marked = all.filter(function (r) { return fixed[key(r)]; }).length;
+      host.querySelector(".fixedCount").textContent = marked ? n(marked) + " marked fixed in this browser" : "";
     };
-    var body = document.getElementById("rows");
-    body.textContent = "";
-    var shown = 0, total = 0, done = 0;
-    issues.forEach(function (i) {
-      var k = rowKey(i), isDone = !!fixed[k];
-      if (isDone) done++;
-      if (f.e && i.entity !== f.e) return;
-      if (f.c && i.code !== f.c) return;
-      if (f.o && i.owner !== f.o) return;
-      if (f.d === "open" && isDone) return;
-      if (f.d === "done" && !isDone) return;
-      if (f.t && (String(i.name).toLowerCase().indexOf(f.t) < 0 && String(i.id) !== f.t)) return;
-      total++;
-      if (shown >= 200) return;
-      shown++;
-      var tr = el("tr", isDone ? { "class": "done" } : {});
-      var c = el("td"); var box = el("input", { type: "checkbox", id: "fx-" + k.replace(/[^a-z0-9]/gi, "-"), "aria-label": "Mark fixed" });
-      box.checked = isDone;
-      box.addEventListener("change", function () { if (box.checked) fixed[k] = D.date; else delete fixed[k]; save(); drawRows(); });
-      c.appendChild(box); tr.appendChild(c);
-      var n = el("td", { "class": "name" }); var url = link(i);
-      if (url) { var a = el("a", { href: url, target: "_blank", rel: "noopener" }, i.name || "(no name)"); n.appendChild(a); }
-      else n.appendChild(document.createTextNode(i.name || "(no name)"));
-      n.appendChild(el("span", { "class": "id" }, " #" + i.id));
-      tr.appendChild(n);
-      tr.appendChild(el("td", {}, ENT[i.entity]));
-      tr.appendChild(el("td", {}, i.issue));
-      tr.appendChild(el("td", { "class": "note" }, i.fix));
-      tr.appendChild(el("td", {}, owners[i.owner] || (i.owner ? "User " + i.owner : "")));
-      body.appendChild(tr);
+    pager.addEventListener("click", function (ev) { var b = ev.target.closest("[data-p]"); if (!b || b.disabled) return; p.page += +b.dataset.p; p.render(); host.scrollIntoView({ block: "start" }); });
+    tbody.addEventListener("change", function (ev) {
+      var kk = ev.target.dataset && ev.target.dataset.k; if (!kk) return;
+      if (ev.target.checked) fixed[kk] = D.date; else delete fixed[kk];
+      save(); p.render();
     });
-    if (!total) { var tr = el("tr"); tr.appendChild(el("td", { colspan: "6", "class": "note" }, "Nothing matches these filters.")); body.appendChild(tr); }
-    var note = total > shown ? "Showing " + shown + " of " + fmt(total) + ". Narrow the filters to see more." : "";
-    if (D.issues_truncated) note += (note ? " " : "") + fmt(D.issues_truncated) + " more issues are in the CSV fix list.";
-    document.getElementById("rowNote").textContent = note;
-    document.getElementById("fixedCount").textContent = fmt(done) + " of " + fmt(issues.length) + " marked fixed in this browser";
+    [p.issue, sortSel, done].forEach(function (el) { el.addEventListener("change", function () { p.page = 0; p.render(); }); });
+    text.addEventListener("input", function () { p.page = 0; p.render(); });
+    p.render();
+    return p;
+  });
+
+  // Duplicates
+  var dupes = D.dupes || [], dp = { page: 0 };
+  document.getElementById("dupeMeta").textContent = D.dupes_truncated ? "Showing " + n(dupes.length) + " of " + n(dupes.length + D.dupes_truncated) + " pairs, all in the fix list CSV" : n(dupes.length) + " pairs";
+  document.getElementById("dupeRecipe").innerHTML = dupes.length ? recipeHtml("duplicate", "merge duplicates") : "";
+  function renderDupes() {
+    var e = document.getElementById("dupEnt").value, q = document.getElementById("dupText").value.trim().toLowerCase();
+    var list = dupes.filter(function (d) {
+      if (e && d.e !== e) return false;
+      if (q && (d.na + " " + d.nb + " " + d.a + " " + d.b).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    var pages = Math.max(1, Math.ceil(list.length / PAGE));
+    if (dp.page >= pages) dp.page = pages - 1;
+    document.getElementById("dupeRows").innerHTML = list.slice(dp.page * PAGE, dp.page * PAGE + PAGE).map(function (d) {
+      return "<tr><td>" + ONE[d.e] + '</td><td class="name">' + link(d.e, d.a, d.na) + ' <span class="id">#' + esc(d.a) + '</span></td><td class="name">' +
+        link(d.e, d.b, d.nb) + ' <span class="id">#' + esc(d.b) + "</span></td><td>" + esc(d.why) + '</td><td class="num">' + esc(d.score) + "</td></tr>";
+    }).join("") || '<tr><td colspan="5" class="note">No duplicates found.</td></tr>';
+    document.getElementById("dupPager").innerHTML = pagerHtml(dp.page, list.length);
   }
-  ["fEntity", "fIssue", "fOwner", "fDone"].forEach(function (id) { document.getElementById(id).addEventListener("change", drawRows); });
-  document.getElementById("fText").addEventListener("input", drawRows);
-  drawRows();
+  document.getElementById("dupPager").addEventListener("click", function (ev) { var b = ev.target.closest("[data-p]"); if (!b || b.disabled) return; dp.page += +b.dataset.p; renderDupes(); });
+  document.getElementById("dupEnt").addEventListener("change", function () { dp.page = 0; renderDupes(); });
+  document.getElementById("dupText").addEventListener("input", function () { dp.page = 0; renderDupes(); });
+  renderDupes();
 })();
 </script>
 </body>

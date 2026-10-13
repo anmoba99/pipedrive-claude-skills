@@ -66,7 +66,7 @@ Start with `pd-advisor`. It picks the rest for you.
 | `pd-lead-qualifier` | "which leads are serious?" | Scored leads, missing info, next question |
 | `pd-pipeline-review` | "weekly digest" | Review by rep and stage, forecast check, owner summary |
 | `pd-win-loss` | "why are we losing deals?" | Win and loss patterns from lost reasons and notes |
-| `pd-data-hygiene` | "clean my CRM" | A data health page (field completeness, empty values, duplicates, no next step, trend), a fix list, CSV import cleanup |
+| `pd-data-hygiene` | "clean my CRM" | A data health page with tabs (field completeness, empty values, duplicates, no next step, value at risk, by owner and pipeline, trend), a fix list, CSV import cleanup. Works on large accounts: samples fields, checks every open deal, trends over runs |
 | `pd-access` | "what can Claude see?" | Connector permissions, whose deals are visible, owner-only deals, read-only fields, exact fixes |
 | `pd-account-health` | "renewals this quarter" | Account health, renewals, sales to customer success handoff |
 | `pd-ask` | "how many deals did we win in March?" | A straight answer from your CRM |
