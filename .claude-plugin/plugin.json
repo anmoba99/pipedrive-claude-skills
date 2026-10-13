@@ -1,0 +1,16 @@
+{
+  "name": "pipedrive-skills",
+  "version": "0.3.0",
+  "description": "Skills for using Claude with the Pipedrive MCP connector. Start with pd-advisor: describe your business, get a plan.",
+  "author": {
+    "name": "André Barreira"
+  },
+  "repository": "https://github.com/anmoba99/pipedrive-claude-skills",
+  "license": "MIT",
+  "keywords": [
+    "pipedrive",
+    "crm",
+    "sales",
+    "mcp"
+  ]
+}

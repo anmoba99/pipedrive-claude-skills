@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CRM Data Health</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: CRM settings page. Summary tiles, then fields table, then a filterable record list. */
+:root {
+  --bg: #f4f6f5; --surface: #ffffff; --line: #e1e6e3; --fg: #1b2420; --muted: #5c6b64;
+  --accent: #0a7a4b; --accent-soft: #e3f3ea;
+  --ok: #1f8a4c; --warn: #b26a00; --warn-soft: #fff3df; --bad: #c4321f; --bad-soft: #fde8e4;
+  --font: "Source Sans 3", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r: 6px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --surface: #1a221e; --line: #2b3631; --fg: #e6ece9; --muted: #98a8a0;
+  --accent: #3ccf8b; --accent-soft: #173527;
+  --ok: #4fd18a; --warn: #f0a83a; --warn-soft: #3a2b12; --bad: #ff7a66; --bad-soft: #3d1d18;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --surface: #1a221e; --line: #2b3631; --fg: #e6ece9; --muted: #98a8a0;
+  --accent: #3ccf8b; --accent-soft: #173527;
+  --ok: #4fd18a; --warn: #f0a83a; --warn-soft: #3a2b12; --bad: #ff7a66; --bad-soft: #3d1d18;
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 var(--font); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+h1 { font-size: 24px; font-weight: 700; margin: 0; text-wrap: balance; }
+h2 { font-size: 17px; font-weight: 700; margin: 0; }
+.meta { color: var(--muted); font-size: 13px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 2px; }
+.tile .n { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tile .l { color: var(--muted); font-size: 13px; }
+.tile .d { font-size: 12px; font-variant-numeric: tabular-nums; }
+.good { color: var(--ok); } .badc { color: var(--bad); }
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+tr.done td { opacity: .45; } tr.done td.name { text-decoration: line-through; }
+.bar { width: 120px; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.p-ok { background: var(--accent-soft); color: var(--ok); }
+.p-attention { background: var(--warn-soft); color: var(--warn); }
+.p-empty { background: var(--bad-soft); color: var(--bad); }
+.p-read_only, .p-not_returned { background: var(--bg); color: var(--muted); }
+.tag { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-left: 6px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+select, input[type=search] { font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; min-width: 0; }
+input[type=search] { flex: 1 1 180px; }
+button.link { font: inherit; font-size: 13px; color: var(--accent); background: none; border: 0; cursor: pointer; padding: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+.id { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.owners { display: flex; flex-wrap: wrap; gap: 8px; }
+.owner { border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; font-size: 13px; }
+.note { color: var(--muted); font-size: 13px; }
+footer { color: var(--muted); font-size: 12px; text-align: center; }
+@media (max-width: 560px) { .bar { width: 56px; } h1 { font-size: 21px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>CRM Data Health</h1>
+      <div class="meta" id="scope"></div>
+    </div>
+    <div class="meta" id="trend"></div>
+  </header>
+
+  <div class="tiles" id="tiles"></div>
+
+  <section class="card">
+    <div class="head">
+      <h2>Fields that need attention</h2>
+      <button class="link" id="toggleFields" type="button">Show all fields</button>
+    </div>
+    <div class="scroll"><table>
+      <thead><tr><th>Field</th><th>Item</th><th>Filled</th><th></th><th>Status</th><th>Suggestion</th></tr></thead>
+      <tbody id="fields"></tbody>
+    </table></div>
+    <div class="note">Read-only fields are set by Pipedrive. "Not returned" means the connector did not send that field, so it is not counted as empty.</div>
+  </section>
+
+  <section class="card">
+    <div class="head">
+      <h2>Records to fix</h2>
+      <span class="meta" id="fixedCount"></span>
+    </div>
+    <div class="owners" id="owners"></div>
+    <div class="filters">
+      <select id="fEntity" aria-label="Item type"><option value="">All items</option></select>
+      <select id="fIssue" aria-label="Issue"><option value="">All issues</option></select>
+      <select id="fOwner" aria-label="Owner"><option value="">All owners</option></select>
+      <select id="fDone" aria-label="Status"><option value="open">To fix</option><option value="done">Fixed</option><option value="">All</option></select>
+      <input type="search" id="fText" placeholder="Search name or ID" aria-label="Search">
+    </div>
+    <div class="scroll"><table>
+      <thead><tr><th>Fixed</th><th>Record</th><th>Item</th><th>Issue</th><th>Fix</th><th>Owner</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+    <div class="note" id="rowNote"></div>
+  </section>
+
+  <footer>Built by the pd-data-hygiene community skill. Not an official Pipedrive product. Fix data in Pipedrive; this page never changes your CRM.</footer>
+</div>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+(function () {
+  var D;
+  try { D = JSON.parse(document.getElementById("data").textContent); } catch (e) { D = null; }
+  if (!D || !D.kpis) {
+    document.getElementById("scope").textContent = "No data yet. Run pd-data-hygiene audit to fill this page.";
+    return;
+  }
+  var ENT = { deal: "Deal", person: "Person", org: "Organization" };
+  var PATH = { deal: "deal", person: "person", org: "organization" };
+  var STATUS = { ok: "Healthy", attention: "Needs attention", empty: "Never used", read_only: "Read-only", not_returned: "Not returned" };
+  var KEY = "pd-hygiene-fixed";
+  var fixed = {};
+  try { fixed = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { fixed = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(fixed)); } catch (e) {} }
+  function el(tag, attrs, text) {
+    var n = document.createElement(tag);
+    for (var k in attrs || {}) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function pct(x) { return x == null ? "n/a" : Math.round(x * 100) + "%"; }
+  function fmt(n) { return (n || 0).toLocaleString(); }
+  var owners = {};
+  (D.owners || []).forEach(function (o) { owners[o.id] = o.name; });
+
+  var s = D.scope || {};
+  document.getElementById("scope").textContent = "Audit " + D.date + " | " +
+    Object.keys(s).filter(function (k) { return s[k]; }).map(function (k) { return fmt(s[k]) + " " + ENT[k].toLowerCase() + "s"; }).join(", ");
+  if (D.trend && D.trend.date) document.getElementById("trend").textContent = "Compared with " + D.trend.date;
+
+  var td = (D.trend && D.trend.kpis) || {};
+  var tiles = [
+    ["completeness", pct(D.kpis.completeness), "Field completeness", true, true],
+    ["records_with_issues", fmt(D.kpis.records_with_issues), "Records with issues", false],
+    ["fields_attention", fmt(D.kpis.fields_attention), "Fields need attention", false],
+    ["duplicates", fmt(D.kpis.duplicates), "Possible duplicates", false],
+    ["no_next_step", fmt(D.kpis.no_next_step), "Open deals, no next step", false],
+    ["owner_only", fmt(D.kpis.owner_only), "Visible to owner only", false]
+  ];
+  var T = document.getElementById("tiles");
+  tiles.forEach(function (t) {
+    var box = el("div", { "class": "tile" });
+    box.appendChild(el("div", { "class": "n" }, t[1]));
+    box.appendChild(el("div", { "class": "l" }, t[2]));
+    var d = td[t[0]];
+    if (typeof d === "number" && (t[4] ? Math.round(d * 100) : d) !== 0) {
+      var better = t[3] ? d > 0 : d < 0;
+      var txt = t[4] ? (d > 0 ? "+" : "") + Math.round(d * 100) + " pts" : (d > 0 ? "+" : "") + d;
+      box.appendChild(el("div", { "class": "d " + (better ? "good" : "badc") }, txt + " since last run"));
+    }
+    T.appendChild(box);
+  });
+
+  var showAll = false;
+  function suggestion(f) {
+    if (f.status === "empty") return f.custom ? "Unused: remove or hide the field" : "Start filling it, or ignore";
+    if (f.status === "attention") return f.custom ? "Make it required in the stage, or drop it" : "Fill on key records";
+    return "";
+  }
+  function drawFields() {
+    var body = document.getElementById("fields");
+    body.textContent = "";
+    var list = (D.fields || []).filter(function (f) { return showAll || f.status === "attention" || f.status === "empty"; });
+    if (!list.length) {
+      var tr = el("tr"); var c = el("td", { colspan: "6", "class": "note" }, "Every field is above the target fill rate.");
+      tr.appendChild(c); body.appendChild(tr);
+    }
+    list.forEach(function (f) {
+      var tr = el("tr");
+      var name = el("td"); name.textContent = f.field;
+      if (f.custom) name.appendChild(el("span", { "class": "tag" }, "custom"));
+      tr.appendChild(name);
+      tr.appendChild(el("td", {}, ENT[f.entity]));
+      var n = el("td", { "class": "num" }, pct(f.fill) + " (" + fmt(f.filled) + "/" + fmt(f.total) + ")");
+      if (typeof f.delta === "number" && f.delta !== 0) n.appendChild(el("span", { "class": f.delta > 0 ? "good" : "badc" }, " " + (f.delta > 0 ? "+" : "") + Math.round(f.delta * 100)));
+      tr.appendChild(n);
+      var b = el("td"); var bar = el("div", { "class": "bar" }); var i = el("i"); i.style.width = Math.round(f.fill * 100) + "%"; bar.appendChild(i); b.appendChild(bar); tr.appendChild(b);
+      var st = el("td"); st.appendChild(el("span", { "class": "pill p-" + f.status }, STATUS[f.status])); tr.appendChild(st);
+      tr.appendChild(el("td", { "class": "note" }, suggestion(f)));
+      body.appendChild(tr);
+    });
+  }
+  document.getElementById("toggleFields").addEventListener("click", function () {
+    showAll = !showAll;
+    this.textContent = showAll ? "Show only fields to fix" : "Show all fields";
+    drawFields();
+  });
+  drawFields();
+
+  var O = document.getElementById("owners");
+  (D.owners || []).slice(0, 8).forEach(function (o) {
+    O.appendChild(el("span", { "class": "owner" }, o.name + ": " + fmt(o.issues) + " of " + fmt(o.records) + " with issues"));
+  });
+
+  function fill(id, values, label) {
+    var s = document.getElementById(id);
+    values.forEach(function (v) { s.appendChild(el("option", { value: v }, label(v))); });
+  }
+  var issues = D.issues || [];
+  function uniq(key) { var m = {}; issues.forEach(function (i) { m[i[key]] = 1; }); return m; }
+  var ISSUE = { no_contact: "No email or phone", no_org: "No organization", no_value: "No deal value",
+    no_close_date: "No close date", no_next_step: "No next activity", stale: "Idle too long",
+    duplicate: "Possible duplicate", owner_only: "Owner-only visibility" };
+  fill("fEntity", Object.keys(uniq("entity")), function (v) { return ENT[v]; });
+  fill("fIssue", Object.keys(uniq("code")), function (v) { return ISSUE[v] || v; });
+  fill("fOwner", Object.keys(uniq("owner")), function (v) { return owners[v] || "User " + v; });
+
+  function rowKey(i) { return i.entity + ":" + i.id + ":" + i.code; }
+  function link(i) {
+    if (!D.domain) return null;
+    return "https://" + encodeURIComponent(D.domain) + ".pipedrive.com/" + PATH[i.entity] + "/" + encodeURIComponent(i.id);
+  }
+  function drawRows() {
+    var f = {
+      e: document.getElementById("fEntity").value, c: document.getElementById("fIssue").value,
+      o: document.getElementById("fOwner").value, d: document.getElementById("fDone").value,
+      t: document.getElementById("fText").value.trim().toLowerCase()
+    };
+    var body = document.getElementById("rows");
+    body.textContent = "";
+    var shown = 0, total = 0, done = 0;
+    issues.forEach(function (i) {
+      var k = rowKey(i), isDone = !!fixed[k];
+      if (isDone) done++;
+      if (f.e && i.entity !== f.e) return;
+      if (f.c && i.code !== f.c) return;
+      if (f.o && i.owner !== f.o) return;
+      if (f.d === "open" && isDone) return;
+      if (f.d === "done" && !isDone) return;
+      if (f.t && (String(i.name).toLowerCase().indexOf(f.t) < 0 && String(i.id) !== f.t)) return;
+      total++;
+      if (shown >= 200) return;
+      shown++;
+      var tr = el("tr", isDone ? { "class": "done" } : {});
+      var c = el("td"); var box = el("input", { type: "checkbox", id: "fx-" + k.replace(/[^a-z0-9]/gi, "-"), "aria-label": "Mark fixed" });
+      box.checked = isDone;
+      box.addEventListener("change", function () { if (box.checked) fixed[k] = D.date; else delete fixed[k]; save(); drawRows(); });
+      c.appendChild(box); tr.appendChild(c);
+      var n = el("td", { "class": "name" }); var url = link(i);
+      if (url) { var a = el("a", { href: url, target: "_blank", rel: "noopener" }, i.name || "(no name)"); n.appendChild(a); }
+      else n.appendChild(document.createTextNode(i.name || "(no name)"));
+      n.appendChild(el("span", { "class": "id" }, " #" + i.id));
+      tr.appendChild(n);
+      tr.appendChild(el("td", {}, ENT[i.entity]));
+      tr.appendChild(el("td", {}, i.issue));
+      tr.appendChild(el("td", { "class": "note" }, i.fix));
+      tr.appendChild(el("td", {}, owners[i.owner] || (i.owner ? "User " + i.owner : "")));
+      body.appendChild(tr);
+    });
+    if (!total) { var tr = el("tr"); tr.appendChild(el("td", { colspan: "6", "class": "note" }, "Nothing matches these filters.")); body.appendChild(tr); }
+    var note = total > shown ? "Showing " + shown + " of " + fmt(total) + ". Narrow the filters to see more." : "";
+    if (D.issues_truncated) note += (note ? " " : "") + fmt(D.issues_truncated) + " more issues are in the CSV fix list.";
+    document.getElementById("rowNote").textContent = note;
+    document.getElementById("fixedCount").textContent = fmt(done) + " of " + fmt(issues.length) + " marked fixed in this browser";
+  }
+  ["fEntity", "fIssue", "fOwner", "fDone"].forEach(function (id) { document.getElementById(id).addEventListener("change", drawRows); });
+  document.getElementById("fText").addEventListener("input", drawRows);
+  drawRows();
+})();
+</script>
+</body>
+</html>
