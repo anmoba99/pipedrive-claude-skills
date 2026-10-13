@@ -32,7 +32,7 @@ Pipedrive stores your deals well. The work around them still eats your day. Thes
 |---|---|---|
 | **Monday, 8:30** | Open Pipedrive, scroll 60 deals, guess what matters | "brief me for today": overdue work, idle deals, your top 3 actions |
 | **Following up** | Write the same nudge email again | A draft built from the deal, waiting in Gmail or Outlook. Never sent for you |
-| **Which leads are real** | Gut feeling | Each lead scored with BANT, MEDDICC, CHAMP or your own checklist, plus the next question to ask |
+| **Which leads are real** | Gut feeling | Each lead checked for budget, decision maker, need and timing (or your own checklist), plus the next question to ask |
 | **Pipeline review** | Export to a sheet, chase reps for updates | "forecast check": stuck deals, slipping close dates, stage vs real activity |
 | **Why you lose** | Lost reason says "Price" | Patterns from the notes your team actually wrote |
 | **Messy data** | Find duplicates when reports break | A data health page: how full every field is, empty custom fields, duplicates, deals with no next step, and what improved since last time |
