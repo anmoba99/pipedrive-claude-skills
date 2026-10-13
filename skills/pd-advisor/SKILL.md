@@ -35,7 +35,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = <pack>
 2. <manual Pipedrive changes, if any: fields, stages>
-3. Export "Selectable options in fields" (Settings > Data fields > Export), add CSV to a Claude Project (claude.ai) or .pipedrive/ (Claude Code). MCP shows option IDs, not labels.
+3. <team of 2+: pd-access, so reports cover the whole team>
 Rhythm:
 - Daily: <who> "<prompt>" (<skill>)
 - Per call/deal: "<prompt>" (<skill>)
@@ -53,9 +53,9 @@ Keep it under about 25 lines. One idea per line.
 - Never duplicate native Pipedrive features. Prefer Pipedrive automations, filters, web forms and reports where they already do the job.
 - Meeting prep, call notes, transcription, WhatsApp or email logging: point to Pipedrive Nova or the native WhatsApp and email integrations in one line. Never propose a skill for it.
 - Only recommend skills that exist in `references/catalog.md`. If the need is outside the package, say so in `Can't do:` and suggest the closest skill or a manual Pipedrive feature (automations, filters, web forms).
-- Option fields: the connector returns single and multiple option values as option IDs, not the labels the user sees. If the plan reads or writes dropdown fields (labels, lost reasons, segments, qualification picklists), always include the export step in `Setup`: Pipedrive Settings > Data fields > Export > "Selectable options in fields", then add the CSV to a Claude Project (claude.ai, Desktop) so every chat has it, or save it in `.pipedrive/` (Claude Code).
+- Option fields: the connector gives field names and dropdown labels through the account context. Mention the "Selectable options in fields" export (Pipedrive Settings > Data fields > Export) only as a fallback, when pd-setup reports option fields without labels.
 - Pipedrive missing: first line of `Setup` is "Connect Pipedrive in Settings > Connectors".
-- Manager/owner reports need a Pipedrive user who can see the team's deals. Say so when the plan includes pd-pipeline-review or pd-win-loss for a team.
+- Manager/owner reports need a Pipedrive user who can see the team's deals. When the plan includes pd-pipeline-review or pd-win-loss for a team, add pd-access to `Setup`.
 - Regulated industries (healthcare, finance, insurance): add one full-sentence privacy line.
 - Team of 1: skip team rhythm, keep it personal.
 
@@ -72,7 +72,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = saas
 2. Add deal fields: Trial end date, Seats (manual)
-3. Export "Selectable options in fields" (Settings > Data fields), add CSV to a Claude Project. MCP shows option IDs, not labels.
+3. pd-access: check the manager's user sees every AE's deals
 Rhythm:
 - Daily: each AE "brief me for today" (pd-morning-brief)
 - After demo: Nova records, summarizes and proposes field updates; then "draft a follow-up for <deal>" (pd-follow-up)

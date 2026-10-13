@@ -6,6 +6,7 @@ description: Win-loss analysis from Pipedrive closed deals: themes behind wins a
 # pd-win-loss
 
 Follow pd-core rules (load pd-core if not loaded).
+Team scope: if `.pipedrive/access.json` is missing or shows partial coverage, run pd-access checks 1 and 2 first and state the coverage in the first line.
 
 Requires: Pipedrive
 Optional: Google Docs (report)
