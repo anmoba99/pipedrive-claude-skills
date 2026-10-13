@@ -1,109 +1,91 @@
+<div align="center">
+
 # Pipedrive Skills for Claude
 
-Free, open skills that turn Claude and the Pipedrive connector into a sales assistant shaped around your business.
+**Tell Claude about your business. Get a sales assistant that works inside your Pipedrive.**
 
-Describe your business in plain English. Claude replies with a short plan (which skills to use, what to set up once, what to run daily or weekly) and then runs it for you.
+<a href="https://github.com/anmoba99/pipedrive-claude-skills/releases/latest"><img src="https://img.shields.io/github/v/release/anmoba99/pipedrive-claude-skills?style=flat-square&color=1A7F37&label=release" alt="Latest release"></a>
+<a href="./INSTALL.md"><img src="https://img.shields.io/badge/works_with-Claude_app_%26_Claude_Code-D97757?style=flat-square" alt="Works with Claude app and Claude Code"></a>
+<a href="#license"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT license"></a>
+
+<table>
+<tr>
+<td align="center" width="33%"><h3>1 message</h3>to start: describe your business,<br>get a plan built for it</td>
+<td align="center" width="33%"><h3>0 changes</h3>to your CRM<br>without your yes</td>
+<td align="center" width="33%"><h3>14 skills</h3>plus 12 industry packs,<br>free and open</td>
+</tr>
+</table>
+
+**[What changes](#what-changes) · [Install](#install) · [What you get](#what-you-get) · [How it starts](#how-it-starts) · [Safety](#safety)**
+
+</div>
 
 > **Disclaimer:** these skills were built by me in a personal capacity. They are not an official Pipedrive product and are not endorsed, maintained or supported by Pipedrive. Always review changes before letting Claude update your CRM.
 
-## Contents
+---
 
-- [Quick start](#quick-start)
-- [Install](#install)
-- [The skills](#the-skills)
-- [How a skill folder works](#how-a-skill-folder-works)
-- [Dropdown fields](#dropdown-fields-export-your-options)
-- [Example](#example)
-- [Safety](#safety)
-- [Known limits](#known-limits)
-- [FAQ](#faq)
+## What changes
 
-## Quick start
+Pipedrive stores your deals well. The work around them still eats your day. These skills hand that work to Claude.
 
-1. Install the skills (see [Install](#install)).
-2. Connect **Pipedrive** in Claude. Optional: Slack or Teams, Gmail or Outlook, Google Drive, Google Calendar.
-3. Export your dropdown options from Pipedrive (**Settings > Data fields > Export > Selectable options in fields**) and give the CSV to Claude. See [Dropdown fields](#dropdown-fields-export-your-options).
-4. Start a chat and describe your business. `pd-advisor` replies with your plan.
-5. Run `pd-setup` once. It caches your pipelines, stages and fields so later requests are faster and cheaper.
-6. Ask in normal words: "brief me for today", "prep my call with Acme", "review the pipeline for this week".
+| Moment | Without | With these skills |
+|---|---|---|
+| **Monday, 8:30** | Open Pipedrive, scroll 60 deals, guess what matters | "brief me for today": overdue work, idle deals, your top 3 actions |
+| **Before a call** | Click through notes, emails and history | "prep my call with Acme": one page with history, people, open questions, risks |
+| **After a call** | Rewrite notes, update fields, remember the next step | Paste your notes. Claude shows the field updates and next step, you say yes |
+| **Following up** | Write the same nudge email again | A draft built from the deal, waiting in Gmail or Outlook. Never sent for you |
+| **Which leads are real** | Gut feeling | Each lead scored with BANT, MEDDICC, CHAMP or your own checklist, plus the next question to ask |
+| **Pipeline review** | Export to a sheet, chase reps for updates | "forecast check": stuck deals, slipping close dates, stage vs real activity |
+| **Why you lose** | Lost reason says "Price" | Patterns from the notes your team actually wrote |
+| **Messy data** | Find duplicates when reports break | A fix list of duplicates, missing fields and deals with no next step |
+
+Ask in your own words and your own language. No setup screens, no code.
 
 ## Install
 
-### Claude app (claude.ai, Desktop, Cowork)
+**Claude app** (claude.ai, Desktop, Cowork): download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest), upload them in **Settings > Capabilities > Skills**, then connect Pipedrive in **Settings > Connectors**.
 
-1. Download the skill zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest).
-2. In Claude, open **Settings > Capabilities > Skills** and upload each zip. At minimum: `pd-core`, `pd-advisor`, `pd-setup`. Add any others you want.
-3. Open **Settings > Connectors** and connect **Pipedrive** with your own account.
-
-On Team and Enterprise plans an admin can upload skills and enable connectors for the whole organization.
-
-### Claude Code
+**Claude Code:**
 
 ```bash
 claude plugin marketplace add anmoba99/pipedrive-claude-skills
 claude plugin install pipedrive-skills@pipedrive-claude-skills
 ```
 
-Connectors added on claude.ai also work in Claude Code when you sign in with the same account. Otherwise add a Pipedrive MCP server with `claude mcp add` and keep any API token in an environment variable.
+**One extra step that pays off:** in Pipedrive, go to **Settings > Data fields > Export > Selectable options in fields** and give the CSV to Claude (add it to a Claude Project on claude.ai). Without it, Claude sees your dropdown values as numbers instead of names.
 
-## The skills
+Full steps, team rollout and troubleshooting: [INSTALL.md](./INSTALL.md).
 
-All skills live in [`skills/`](skills). Start with `pd-advisor`; it picks the rest for you.
+## What you get
 
-| Skill | What it does | Writes to Pipedrive | Optional connectors |
-|---|---|---|---|
-| `pd-advisor` | Reads your business case, returns a plan | No | |
-| `pd-core` | Shared rules for every skill: cheap queries, short output, safe writes | No | |
-| `pd-setup` | One-time setup and health check; caches pipelines, stages, fields, users | No | |
-| `pd-ask` | Answers any question about your CRM | No | |
-| `pd-morning-brief` | Today's activities, overdue work, idle deals, top 3 actions | No | Calendar, Slack |
-| `pd-call-prep` | One-page brief before a call or meeting | No | Calendar |
-| `pd-call-to-crm` | Turns a conversation into field updates, next steps and a stage suggestion; builds on Nova call summaries | After you confirm | |
-| `pd-follow-up` | Drafts follow-up emails from deal context; never sends | Optional note | Gmail, Outlook |
-| `pd-lead-qualifier` | Scores leads with BANT, MEDDICC, CHAMP or your own checklist | After you confirm | |
-| `pd-pipeline-review` | Manager review, forecast check, weekly owner digest | No | Slack, Teams, Docs |
-| `pd-win-loss` | Why you win and lose, from lost reasons and notes | No | Docs |
-| `pd-data-hygiene` | Duplicates, missing fields, deals with no next step, CSV import cleanup | Fills blanks, after you confirm | |
-| `pd-account-health` | Account health, renewals, sales to customer success handoff | Optional note | Docs |
-| `pd-industry` | Industry packs: vocabulary, stage templates, qualification, signals | No | |
+Start with `pd-advisor`. It picks the rest for you.
 
-Pipedrive is the only required connector. If an optional one is missing, the skill still works and puts the output in the chat, a Pipedrive note or a file.
+| Skill | Say something like | You get |
+|---|---|---|
+| `pd-advisor` | "We're a 6 person agency, deals go quiet after proposals" | A short plan: which skills, what to set up once, daily and weekly rhythm |
+| `pd-setup` | "set up Pipedrive" | Claude learns your pipelines, stages, users and fields once, so every later ask is faster |
+| `pd-morning-brief` | "brief me for today" | Today's activities, overdue work, idle deals, top 3 actions |
+| `pd-call-prep` | "prep my call with Acme" | One-page brief before the meeting |
+| `pd-call-to-crm` | "log this call" | Field updates, next step and stage suggestion from your notes or Nova summary |
+| `pd-follow-up` | "draft a follow-up for Acme" | An email draft from the deal context |
+| `pd-lead-qualifier` | "which leads are serious?" | Scored leads, missing info, next question |
+| `pd-pipeline-review` | "weekly digest" | Review by rep and stage, forecast check, owner summary |
+| `pd-win-loss` | "why are we losing deals?" | Win and loss patterns from lost reasons and notes |
+| `pd-data-hygiene` | "clean my CRM" | Duplicates, missing fields, deals with no next step, CSV import cleanup |
+| `pd-account-health` | "renewals this quarter" | Account health, renewals, sales to customer success handoff |
+| `pd-ask` | "how many deals did we win in March?" | A straight answer from your CRM |
+| `pd-industry` | (used by the others) | How your industry sells: stages, vocabulary, qualification, risk signals |
+| `pd-core` | (used by the others) | Shared rules: cheap queries, short answers, safe writes |
 
-**Industry packs:** real estate, SaaS, agencies, manufacturing and wholesale, recruiting, financial services and insurance, construction and home services, education, healthcare and medtech, events and hospitality, nonprofits, logistics. Each is a small file loaded only when needed.
+**Industry packs:** real estate, SaaS, agencies, manufacturing and wholesale, recruiting, financial services and insurance, construction and home services, education, healthcare and medtech, events and hospitality, nonprofits, logistics.
 
-**Built to save tokens:** setup is cached, every query is filtered at the source, daily and weekly runs fetch only what changed, and totals and duplicate matching run in small Python scripts instead of in Claude's head.
-
-## How a skill folder works
-
-Each skill is one folder in `skills/`, named after the skill:
-
-```
-skills/pd-advisor/
-  SKILL.md          the skill itself: when to use it and the steps Claude follows
-  references/       extra detail Claude reads only when needed (saves tokens)
-skills/pd-core/
-  SKILL.md
-  scripts/          small Python helpers (totals, duplicates, field options import)
-```
-
-The file is always called `SKILL.md`. That name is required by the Claude skill format, so the folder name is what tells skills apart. `references/` and `scripts/` are optional and only appear where a skill needs them.
-
-## Dropdown fields: export your options
-
-Through the connector Claude sees dropdown values (single and multiple option fields) as option IDs, not the labels you see in Pipedrive. Give Claude the real list once:
-
-1. In Pipedrive, open **Settings > Data fields**, click **Export** and choose **Selectable options in fields**. You get a CSV (`data_fields_options_<date>.csv`) with option name and ID, field name and API key for every single and multiple option field. Other field types are not included and are not needed.
-2. **claude.ai or Desktop:** create a Project, add the export to the Project's files, and chat inside that Project. Every chat in the Project can see it.
-3. **Claude Code:** save the export in `.pipedrive/` in your working folder.
-4. Run `pd-setup`. It matches the export to the field API keys and saves the mapping, so Claude can read and set dropdown values by name.
-
-## Example
+## How it starts
 
 You type:
 
 > We are a 6 person real estate agency in Lisbon. Agents forget to follow up after viewings and I have no idea which buyers are serious. We use Pipedrive and Gmail.
 
-Claude replies (short on purpose):
+Claude replies:
 
 ```
 Case: 6-agent real estate agency, follow-up gaps after viewings, weak buyer qualification.
@@ -114,7 +96,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = real-estate.
 2. Add custom fields: Budget, Mortgage pre-approved, Move-in date (manual in Pipedrive).
-3. Export "Selectable options in fields" (Settings > Data fields), add CSV to a Claude Project. MCP shows option IDs, not labels.
+3. Export "Selectable options in fields" (Settings > Data fields), add CSV to a Claude Project.
 Rhythm:
 - Daily: each agent "brief me for today" (pd-morning-brief).
 - After each viewing: paste notes, "log this viewing" (pd-call-to-crm).
@@ -122,37 +104,34 @@ Rhythm:
 Try now: "Run pd-setup for a real estate agency"
 ```
 
+Short on purpose. Say "normal mode" for full sentences.
+
 ## Safety
 
-- Claude never writes to Pipedrive without showing you the change first and getting a yes.
-- Every note Claude writes starts with `[Claude]`, so your team can filter and review them.
-- No deletes. Hygiene skills give you a fix list; you merge or delete in Pipedrive.
-- Nothing is posted to Slack or sent by email unless you turn it on. Email is always a draft.
-- Claude sees only what your Pipedrive user can see. Team reports need a manager or admin account.
-- Skills never see or store passwords or tokens. Each user signs in to each connector with their own account.
+- Claude **never writes to Pipedrive without showing you the change first** and getting a yes.
+- Every note Claude writes starts with `[Claude]`, so your team can find and review them.
+- No deletes. Cleanup skills give you a fix list; you merge or delete in Pipedrive.
+- Email is always a draft. Nothing goes to Slack unless you turn it on.
+- Claude sees only what your Pipedrive user can see. Skills never see or store passwords.
 
-## Known limits
+## Good to know
 
-- The connector cannot create pipelines, stages or custom fields. Skills tell you what to add by hand.
-- Large pipelines (thousands of open deals) are slower. Filter by pipeline or rep.
-- On claude.ai the setup cache lasts one conversation. Keep your options export in a Project so each chat starts with it. In Claude Code, Desktop and Cowork the cache is saved to `.pipedrive/`.
-
-## FAQ
-
-**Do I need to code?** No. Install, connect, and talk to Claude in normal words.
-
-**Does it work in my language?** Yes. Write in your language and Claude answers in it.
-
-**I only want one skill.** Install `pd-core` plus that skill.
-
-**Can I customize it?** Yes. Each skill is a plain text `SKILL.md` plus reference files. Edit them.
-
-**Why are the advisor answers so short?** Short answers cost less and read faster. Say "normal mode" for full sentences.
-
-## Contributing
-
-Issues and pull requests are welcome: new industry packs, translations, skill improvements. Keep skills short, never hardcode MCP tool names, and confirm every write.
+- Pipedrive is the only connector you need. Slack, Teams, Gmail, Outlook, Google Drive and Calendar are optional; without them, output lands in the chat or a Pipedrive note.
+- Call transcription stays with Pipedrive Nova. These skills build on its summaries.
+- The connector cannot create pipelines, stages or custom fields. Claude tells you what to add by hand.
+- Built to keep costs low: setup is cached, queries are filtered, answers are short, and math runs in small scripts.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](./LICENSE). Want to add an industry pack or improve a skill? See [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+---
+
+<div align="center">
+<sub>
+<a href="./INSTALL.md">Install</a> ·
+<a href="./CONTRIBUTING.md">Contributing</a> ·
+<a href="./SECURITY.md">Security</a> ·
+<a href="https://github.com/anmoba99/pipedrive-claude-skills/issues">Issues</a>
+</sub>
+</div>
