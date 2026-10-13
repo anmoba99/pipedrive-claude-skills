@@ -215,7 +215,7 @@ def main():
 
     flagged = [r for r in rows if r["flags"]]
     print(f"Open deals {len(rows)} | flagged {len(flagged)} | single-threaded "
-          f"{sum('single-threaded' in r['flags'] for r in rows)} | won deals touched p50 contacts {won_p50}")
+          f"{sum('single-threaded' in r['flags'] for r in rows)} | won deals touched p50 contacts {won_p50 if won_p50 is not None else '-'}")
     for r in flagged[:args.top]:
         print(f"{r['id']} | {r['title'][:40]} | {r['value']:.0f} {r['currency']} | contacts {r['contacts']} "
               f"active90 {r['active_90d']} | {'; '.join(r['flags'])}")

@@ -74,8 +74,8 @@ def load_stages(path):
         out[str(st.get("id"))] = (st.get("order_nr") or 0, st.get("name") or str(st.get("id")))
     for pipe in ctx.get("pipelines") or []:
         if isinstance(pipe, dict):
-            for st in pipe.get("stages") or []:
-                out[str(st.get("id"))] = (st.get("order_nr") or 0, st.get("name") or str(st.get("id")))
+            for i, st in enumerate(pipe.get("stages") or []):  # listed in pipeline order
+                out[str(st.get("id"))] = (st.get("order_nr") or i + 1, st.get("name") or str(st.get("id")))
     return out
 
 

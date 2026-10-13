@@ -77,8 +77,8 @@ def load_context(path):
     raw_pipes = ctx.get("pipelines") or []
     for p in raw_pipes if isinstance(raw_pipes, list) else []:
         pipes[str(p.get("id"))] = p.get("name")
-        for st in p.get("stages") or []:
-            stages[str(st.get("id"))] = {"name": st.get("name"), "order": st.get("order_nr") or 0,
+        for i, st in enumerate(p.get("stages") or []):  # listed in pipeline order
+            stages[str(st.get("id"))] = {"name": st.get("name"), "order": st.get("order_nr") or i + 1,
                                          "pipeline": str(p.get("id"))}
     if isinstance(raw_pipes, dict):
         pipes = {str(k): (v.get("name") if isinstance(v, dict) else v) for k, v in raw_pipes.items()}
@@ -89,11 +89,17 @@ def load_context(path):
     for st in raw_stages:
         stages.setdefault(str(st.get("id")), {"name": st.get("name"), "order": st.get("order_nr") or 0,
                                               "pipeline": str(st.get("pipeline_id") or "")})
+    # The context lists standard fields too; only hash keys are custom fields.
     fields = {fd.get("field_code"): fd.get("field_name") or fd.get("name")
-              for fd in (ctx.get("custom_fields") or {}).get("deal") or []}
+              for fd in (ctx.get("custom_fields") or {}).get("deal") or []
+              if is_custom(fd.get("field_code"))}
     types = ctx.get("activity_types") or ctx.get("activityTypes") or []
     types = [t.get("key_string") or t.get("key") or t.get("name") if isinstance(t, dict) else t for t in types]
     return stages, pipes, fields, [t for t in types if t]
+
+
+def is_custom(key):
+    return isinstance(key, str) and len(key) == 40 and all(c in "0123456789abcdef" for c in key)
 
 
 def filled(v):
@@ -142,8 +148,8 @@ def main():
         no_org += not d.get("org_id")
         no_value += not val
         cf = d.get("custom_fields") if isinstance(d.get("custom_fields"), dict) else {}
-        keys = set(cf) | {k for k in d if len(k) == 40 and all(c in "0123456789abcdef" for c in k)}
-        for k in keys | set(field_names):
+        keys = {k for k in set(cf) | set(d) if is_custom(k)}
+        for k in keys:  # only fields present in the fetched data; absent ones were not requested
             cf_seen.add(k)
             if filled(cf.get(k, d.get(k))):
                 cf_fill[k] += 1
@@ -184,10 +190,11 @@ def main():
     result = {
         "today": today.isoformat(), "deals": len(deals), "stages": stage_rows,
         "lost_reasons": {"lost": lost_total, "distinct": distinct,
-                         "free_text_like": distinct > 15 or (lost_total and distinct / lost_total > 0.3),
+                         "free_text_like": distinct > 15 or (lost_total >= 20 and distinct / lost_total > 0.3),
                          "empty_share": round(100 * reasons.get("(empty)", 0) / lost_total) if lost_total else 0,
                          "top": reasons.most_common(15)},
         "fields": fields, "near_empty_fields": [f for f in fields if f["fill"] < 5],
+        "not_fetched": sorted(field_names.get(k, k) for k in set(field_names) - cf_seen),
         "gaps": {"no_person": round(100 * no_person / n), "no_org": round(100 * no_org / n),
                  "no_value": round(100 * no_value / n)},
         "activity_types": {"used": acts.most_common(),
@@ -198,10 +205,11 @@ def main():
             json.dump(result, f, indent=1, ensure_ascii=False)
 
     print(f"Deals {len(deals)} | stages {len(stage_rows)} | custom fields {len(fields)} "
-          f"({len(result['near_empty_fields'])} under 5% filled)")
+          f"({len(result['near_empty_fields'])} under 5% filled"
+          f"{', ' + str(len(result['not_fetched'])) + ' not fetched, pass custom_fields' if result['not_fetched'] else ''})")
     for r in stage_rows:
         print(f"{r['pipeline']} | {r['stage']} | open {r['open']} ({r['open_value']}) | won {r['won_from']} "
-              f"lost {r['lost_from']} | p50 {r['open_days_p50'] if r['open_days_p50'] is not None else '-'}d | {', '.join(r['flags']) or '-'}")
+              f"lost {r['lost_from']} | p50 {str(r['open_days_p50']) + 'd' if r['open_days_p50'] is not None else '-'} | {', '.join(r['flags']) or '-'}")
     lr = result["lost_reasons"]
     print(f"Lost reasons: {lr['distinct']} distinct for {lr['lost']} losses, empty {lr['empty_share']}%"
           f"{' (free text, needs a picklist)' if lr['free_text_like'] else ''}")

@@ -206,7 +206,8 @@ def main():
                 "avg_won_value": round(s["won_value"] / s["won"]) if s["won"] else 0,
                 "won_cycle_p50": cyc[len(cyc) // 2] if cyc else None}
 
-    singles = [seg(k, s) for k, s in stats.items() if not isinstance(k[0], tuple) and s["n"] >= args.min_n]
+    singles = [seg(k, s) for k, s in stats.items() if not isinstance(k[0], tuple) and s["n"] >= args.min_n
+               and k[1] != "(empty)"]
     pairs = [seg(k, s) for k, s in stats.items() if isinstance(k[0], tuple) and s["n"] >= args.min_n
              and "(empty)" not in str(k)]
     singles.sort(key=lambda r: r["lift"] or 0, reverse=True)
@@ -216,7 +217,7 @@ def main():
         total = 0.0
         for k, v in a.items():
             s = stats.get((k, v))
-            if not s or v == "(empty)":
+            if not s or v == "(empty)" or s["n"] < args.min_n:  # same evidence bar as fits/misfits
                 continue
             rate = (s["won"] + prior * base) / (s["n"] + prior)
             total += math.log(rate / (1 - rate)) - math.log(base / (1 - base)) if 0 < base < 1 else 0
@@ -255,14 +256,16 @@ def main():
 
     print(f"Closed {len(rows)} | won {won_n} | base win rate {result['base_win_rate']}% | min sample {args.min_n}")
     print("Best segments:")
-    for r in singles[:8]:
+    for r in [r for r in singles if (r["lift"] or 0) > 1][:8] or [{"segment": "none above base rate", "deals": "-",
+                                                                  "win_rate": "-", "lift": "-", "avg_won_value": "-",
+                                                                  "won_cycle_p50": "-"}]:
         print(f"- {r['segment']} | {r['deals']} deals | win {r['win_rate']}% | lift {r['lift']} | "
               f"avg won {r['avg_won_value']} | cycle {r['won_cycle_p50']}d")
     print("Best combinations:")
-    for r in pairs[:5]:
+    for r in [r for r in pairs if (r["lift"] or 0) > 1][:5]:
         print(f"- {r['segment']} | {r['deals']} deals | win {r['win_rate']}% | lift {r['lift']}")
     print("Worst segments:")
-    for r in sorted(singles, key=lambda r: r["lift"] or 0)[:4]:
+    for r in sorted((r for r in singles if r["lift"] is not None and r["lift"] < 1), key=lambda r: r["lift"])[:4]:
         print(f"- {r['segment']} | {r['deals']} deals | win {r['win_rate']}% | lift {r['lift']}")
     if scored:
         print(f"Scored {len(scored)} open deals and leads. Top fit:")
