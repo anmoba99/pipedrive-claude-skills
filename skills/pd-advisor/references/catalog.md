@@ -8,8 +8,6 @@ Format: skill: purpose. Triggers. Needs. Output. Cost (low/med/high Pipedrive ca
 
 ## Rep
 - pd-morning-brief: today's activities, overdue, idle deals, deals with no next step, top 3 actions. Triggers: "brief me", "what should I do today". Needs Pipedrive. Optional Slack DM, Calendar. Output chat. Cost low.
-- pd-call-prep: one-page brief before a call: history, people, open questions, risks, industry questions. Triggers: "prep my call with X". Needs Pipedrive. Optional Calendar. Reuses Nova call summaries. Output chat. Cost low.
-- pd-call-to-crm: conversation -> field updates, next-step activities, stage suggestion, new contacts. Nova-recorded calls: delta only (no summary, Nova owns that). Other meetings, voice memos, emails, pasted notes: also a [Claude] note. Triggers: "log this call", "update the CRM from this meeting". Needs Pipedrive. Output Pipedrive (after confirm). Cost low.
 - pd-follow-up: draft follow-up email from deal context. Never sends. Triggers: "draft follow-up", "nudge X". Needs Pipedrive. Optional Gmail/Outlook draft. Fallback chat or Pipedrive note. Cost low.
 - pd-lead-qualifier: score leads with BANT/MEDDICC/CHAMP/custom; missing info; next question; optional convert lead to deal. Triggers: "qualify my leads", "which leads are serious". Needs Pipedrive. Output chat + optional field/note (after confirm). Cost med.
 - pd-ask: any plain-English question about the CRM. Triggers: questions like "which clients in Porto haven't heard from us in 60 days". Needs Pipedrive. Output chat. Cost low to med.
@@ -40,8 +38,8 @@ Files in pd-industry/references/. Set once via pd-setup; other skills load the m
 - logistics-freight: lanes, rate quotes, contract expiry.
 
 ## Common combos
-- Solo founder: pd-morning-brief, pd-call-to-crm, pd-pipeline-review digest.
-- Rep team: pd-morning-brief, pd-call-prep, pd-call-to-crm, pd-follow-up.
+- Solo founder: pd-morning-brief, pd-follow-up, pd-pipeline-review digest.
+- Rep team: pd-morning-brief, pd-follow-up, pd-lead-qualifier.
 - Manager: pd-pipeline-review review + forecast, pd-win-loss.
 - Messy CRM: pd-setup, pd-data-hygiene audit first, then everything else.
 - Inbound-heavy: pd-lead-qualifier, pd-follow-up.

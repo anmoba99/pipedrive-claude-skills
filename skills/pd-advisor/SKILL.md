@@ -50,7 +50,8 @@ Keep it under about 25 lines. One idea per line.
 
 ## Rules
 
-- Never duplicate native Pipedrive features. Calls: Pipedrive Nova transcribes and summarizes; skills only build on its output. Also prefer Pipedrive automations, filters, web forms and reports where they already do the job.
+- Never duplicate native Pipedrive features. Prefer Pipedrive automations, filters, web forms and reports where they already do the job.
+- Meeting prep, call notes, transcription, WhatsApp or email logging: point to Pipedrive Nova or the native WhatsApp and email integrations in one line. Never propose a skill for it.
 - Only recommend skills that exist in `references/catalog.md`. If the need is outside the package, say so in `Can't do:` and suggest the closest skill or a manual Pipedrive feature (automations, filters, web forms).
 - Option fields: the connector returns single and multiple option values as option IDs, not the labels the user sees. If the plan reads or writes dropdown fields (labels, lost reasons, segments, qualification picklists), always include the export step in `Setup`: Pipedrive Settings > Data fields > Export > "Selectable options in fields", then add the CSV to a Claude Project (claude.ai, Desktop) so every chat has it, or save it in `.pipedrive/` (Claude Code).
 - Pipedrive missing: first line of `Setup` is "Connect Pipedrive in Settings > Connectors".
@@ -74,7 +75,7 @@ Setup (once):
 3. Export "Selectable options in fields" (Settings > Data fields), add CSV to a Claude Project. MCP shows option IDs, not labels.
 Rhythm:
 - Daily: each AE "brief me for today" (pd-morning-brief)
-- After demo (Nova-recorded): "update the CRM from the Nova summary" (pd-call-to-crm, fields + next steps only)
+- After demo: Nova records, summarizes and proposes field updates; then "draft a follow-up for <deal>" (pd-follow-up)
 - Weekly: manager "forecast check" (pd-pipeline-review) -> Slack #sales
 Output lands: briefs in chat, notes in Pipedrive, forecast to Slack (opt-in)
 Needs: Pipedrive (live), Slack (optional, live)

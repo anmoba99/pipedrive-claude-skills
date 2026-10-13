@@ -12,7 +12,7 @@
 <tr>
 <td align="center" width="33%"><h3>1 message</h3>to start: describe your business,<br>get a plan built for it</td>
 <td align="center" width="33%"><h3>0 changes</h3>to your CRM<br>without your yes</td>
-<td align="center" width="33%"><h3>14 skills</h3>plus 12 industry packs,<br>free and open</td>
+<td align="center" width="33%"><h3>12 skills</h3>plus 12 industry packs,<br>free and open</td>
 </tr>
 </table>
 
@@ -31,8 +31,6 @@ Pipedrive stores your deals well. The work around them still eats your day. Thes
 | Moment | Without | With these skills |
 |---|---|---|
 | **Monday, 8:30** | Open Pipedrive, scroll 60 deals, guess what matters | "brief me for today": overdue work, idle deals, your top 3 actions |
-| **Before a call** | Click through notes, emails and history | "prep my call with Acme": one page with history, people, open questions, risks |
-| **After a call** | Rewrite notes, update fields, remember the next step | Paste your notes. Claude shows the field updates and next step, you say yes |
 | **Following up** | Write the same nudge email again | A draft built from the deal, waiting in Gmail or Outlook. Never sent for you |
 | **Which leads are real** | Gut feeling | Each lead scored with BANT, MEDDICC, CHAMP or your own checklist, plus the next question to ask |
 | **Pipeline review** | Export to a sheet, chase reps for updates | "forecast check": stuck deals, slipping close dates, stage vs real activity |
@@ -65,8 +63,6 @@ Start with `pd-advisor`. It picks the rest for you.
 | `pd-advisor` | "We're a 6 person agency, deals go quiet after proposals" | A short plan: which skills, what to set up once, daily and weekly rhythm |
 | `pd-setup` | "set up Pipedrive" | Claude learns your pipelines, stages, users and fields once, so every later ask is faster |
 | `pd-morning-brief` | "brief me for today" | Today's activities, overdue work, idle deals, top 3 actions |
-| `pd-call-prep` | "prep my call with Acme" | One-page brief before the meeting |
-| `pd-call-to-crm` | "log this call" | Field updates, next step and stage suggestion from your notes or Nova summary |
 | `pd-follow-up` | "draft a follow-up for Acme" | An email draft from the deal context |
 | `pd-lead-qualifier` | "which leads are serious?" | Scored leads, missing info, next question |
 | `pd-pipeline-review` | "weekly digest" | Review by rep and stage, forecast check, owner summary |
@@ -90,7 +86,7 @@ Claude replies:
 ```
 Case: 6-agent real estate agency, follow-up gaps after viewings, weak buyer qualification.
 Pain -> fix:
-- No follow-up after viewing: pd-call-to-crm logs viewing notes, creates next-step activity same day.
+- No follow-up after viewing: pd-follow-up drafts the nudge from the deal, pd-morning-brief flags deals with no next step.
 - Unknown serious buyers: pd-lead-qualifier scores buyers (budget, financing, timeline).
 - Owner blind spot: pd-pipeline-review digest every Monday.
 Setup (once):
@@ -99,7 +95,7 @@ Setup (once):
 3. Export "Selectable options in fields" (Settings > Data fields), add CSV to a Claude Project.
 Rhythm:
 - Daily: each agent "brief me for today" (pd-morning-brief).
-- After each viewing: paste notes, "log this viewing" (pd-call-to-crm).
+- After each viewing: "draft a follow-up for <buyer>" (pd-follow-up).
 - Weekly: "weekly digest" (pd-pipeline-review).
 Try now: "Run pd-setup for a real estate agency"
 ```
@@ -117,7 +113,7 @@ Short on purpose. Say "normal mode" for full sentences.
 ## Good to know
 
 - Pipedrive is the only connector you need. Slack, Teams, Gmail, Outlook, Google Drive and Calendar are optional; without them, output lands in the chat or a Pipedrive note.
-- Call transcription stays with Pipedrive Nova. These skills build on its summaries.
+- Meetings, calls, WhatsApp and email: use Pipedrive's native tools (Nova, WhatsApp and email integrations). These skills build on the data they leave in Pipedrive.
 - The connector cannot create pipelines, stages or custom fields. Claude tells you what to add by hand.
 - Built to keep costs low: setup is cached, queries are filtered, answers are short, and math runs in small scripts.
 

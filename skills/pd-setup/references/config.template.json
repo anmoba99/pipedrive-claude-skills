@@ -6,8 +6,6 @@
   "qualification_framework": "BANT",
   "outputs": {
     "pd-morning-brief": ["chat"],
-    "pd-call-prep": ["chat"],
-    "pd-call-to-crm": ["pipedrive"],
     "pd-follow-up": ["gmail-draft", "chat"],
     "pd-lead-qualifier": ["chat"],
     "pd-pipeline-review": ["chat", "file"],
@@ -17,6 +15,5 @@
   },
   "team_channel": null,
   "renewal_field": null,
-  "call_ai": "nova",
   "notes_tag": "[Claude]"
 }
