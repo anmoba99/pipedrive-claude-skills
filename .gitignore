@@ -1,0 +1,6 @@
+# Local CRM cache and outputs: contain customer data, never commit
+.pipedrive/
+pipedrive-out/
+__pycache__/
+.DS_Store
+dist/
