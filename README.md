@@ -12,7 +12,7 @@ Describe your business in plain English. Claude replies with a short plan (which
 - [Install](#install)
 - [The skills](#the-skills)
 - [How a skill folder works](#how-a-skill-folder-works)
-- [Custom fields](#custom-fields-export-your-field-list)
+- [Dropdown fields](#dropdown-fields-export-your-options)
 - [Example](#example)
 - [Safety](#safety)
 - [Known limits](#known-limits)
@@ -22,7 +22,7 @@ Describe your business in plain English. Claude replies with a short plan (which
 
 1. Install the skills (see [Install](#install)).
 2. Connect **Pipedrive** in Claude. Optional: Slack or Teams, Gmail or Outlook, Google Drive, Google Calendar.
-3. Export your field list from Pipedrive (**Settings > Data fields**) and give it to Claude. See [Custom fields](#custom-fields-export-your-field-list).
+3. Export your dropdown options from Pipedrive (**Settings > Data fields > Export > Selectable options in fields**) and give the CSV to Claude. See [Dropdown fields](#dropdown-fields-export-your-options).
 4. Start a chat and describe your business. `pd-advisor` replies with your plan.
 5. Run `pd-setup` once. It caches your pipelines, stages and fields so later requests are faster and cheaper.
 6. Ask in normal words: "brief me for today", "prep my call with Acme", "review the pipeline for this week".
@@ -83,19 +83,19 @@ skills/pd-advisor/
   references/       extra detail Claude reads only when needed (saves tokens)
 skills/pd-core/
   SKILL.md
-  scripts/          small Python helpers for totals and duplicate matching
+  scripts/          small Python helpers (totals, duplicates, field options import)
 ```
 
 The file is always called `SKILL.md`. That name is required by the Claude skill format, so the folder name is what tells skills apart. `references/` and `scripts/` are optional and only appear where a skill needs them.
 
-## Custom fields: export your field list
+## Dropdown fields: export your options
 
-Through the connector Claude sees custom fields as long hash keys and option IDs, not the names and values you see in Pipedrive. Give Claude the real list once:
+Through the connector Claude sees dropdown values (single and multiple option fields) as option IDs, not the labels you see in Pipedrive. Give Claude the real list once:
 
-1. In Pipedrive, open **Settings > Data fields** and export the fields (deals, people, organizations).
+1. In Pipedrive, open **Settings > Data fields**, click **Export** and choose **Selectable options in fields**. You get a CSV (`data_fields_options_<date>.csv`) with option name and ID, field name and API key for every single and multiple option field. Other field types are not included and are not needed.
 2. **claude.ai or Desktop:** create a Project, add the export to the Project's files, and chat inside that Project. Every chat in the Project can see it.
 3. **Claude Code:** save the export in `.pipedrive/` in your working folder.
-4. Run `pd-setup`. It matches the export to the field keys and saves the mapping.
+4. Run `pd-setup`. It matches the export to the field API keys and saves the mapping, so Claude can read and set dropdown values by name.
 
 ## Example
 
@@ -114,7 +114,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = real-estate.
 2. Add custom fields: Budget, Mortgage pre-approved, Move-in date (manual in Pipedrive).
-3. Export field list (Settings > Data fields), add to a Claude Project. MCP shows keys, not names.
+3. Export "Selectable options in fields" (Settings > Data fields), add CSV to a Claude Project. MCP shows option IDs, not labels.
 Rhythm:
 - Daily: each agent "brief me for today" (pd-morning-brief).
 - After each viewing: paste notes, "log this viewing" (pd-call-to-crm).
@@ -135,7 +135,7 @@ Try now: "Run pd-setup for a real estate agency"
 
 - The connector cannot create pipelines, stages or custom fields. Skills tell you what to add by hand.
 - Large pipelines (thousands of open deals) are slower. Filter by pipeline or rep.
-- On claude.ai the setup cache lasts one conversation. Keep your field export in a Project so each chat starts with it. In Claude Code, Desktop and Cowork the cache is saved to `.pipedrive/`.
+- On claude.ai the setup cache lasts one conversation. Keep your options export in a Project so each chat starts with it. In Claude Code, Desktop and Cowork the cache is saved to `.pipedrive/`.
 
 ## FAQ
 

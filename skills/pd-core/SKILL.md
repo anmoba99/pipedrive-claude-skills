@@ -12,7 +12,7 @@ Rules every pd-* skill follows. Short on purpose; details in `references/`.
 - Look for `.pipedrive/context.json` (written by pd-setup). If present and under 7 days old, use it for pipeline, stage, user and custom field IDs.
 - If missing, stale, or no filesystem (claude.ai chat): call `getAccountContext` once per conversation and reuse the result. Never call it twice in one conversation.
 - A "field not found" or unknown stage error means the cache is stale: refresh once, then retry.
-- Custom fields are hash keys. Map names to keys with `.pipedrive/field-map.json` or the context. Never guess a key. Prefer names and option labels from the user's field export (Pipedrive Settings > Data fields) when present.
+- Custom fields are hash keys. Map names to keys with `.pipedrive/field-map.json` or the context. Never guess a key. Option labels come from the user's "Selectable options in fields" export (Pipedrive Settings > Data fields), merged into `field-map.json` by pd-setup. Match by API key, never by field name.
 
 ## 2. Cheapest query wins
 

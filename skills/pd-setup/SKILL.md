@@ -15,7 +15,10 @@ Fallback: no filesystem (claude.ai chat) -> keep context in this conversation on
 
 1. **Connectors.** List which integrations are live in this session by checking available tools: Pipedrive, Slack, Teams, Gmail, Outlook, Google Drive, Google Calendar. Ask once whether the team uses Pipedrive Nova for calls; save `"call_ai": "nova"` or `null` in config. Pipedrive missing: stop and say "Connect Pipedrive in Settings > Connectors (or `claude mcp add` in Claude Code), then run pd-setup again."
 2. **Account context.** Call `getAccountContext` once.
-3. **Field export.** The connector returns custom fields as hash keys and option IDs, not the names and labels the user sees. Look for the user's field export from Pipedrive Settings > Data fields: Project files, a chat attachment, or `.pipedrive/fields.*` (CSV or XLSX). Found: match each row to a field by key, else by name, and take name, type and option labels from it. Not found and the account has custom fields: ask once, "Export your fields from Pipedrive Settings > Data fields and upload the file (add it to a Claude Project so every chat has it)." Continue without it if the user skips.
+3. **Field options export.** The connector returns option fields as option IDs, not the labels the user sees. Look for the user's export: Project files, a chat attachment, or `.pipedrive/data_fields_options_*.csv`. It is a CSV with columns `Option ID, Option name, Item type, Field name, Field type, Field API key`, one row per option, single and multiple option fields only (other field types are not in it; take those from `getAccountContext`).
+   - Found, shell available: `python3 scripts/field_options.py <export.csv> --merge .pipedrive/field-map.json --out .pipedrive/field-map.json` after step 4 writes the base map. Pass the duplicate-name warning from stderr to the report.
+   - Found, no shell: read it and fill `options` in `field-map.json` (or keep in conversation). Match by `Field API key`, never by name: names can repeat and have trailing spaces.
+   - Not found and the account has option fields: ask once, "In Pipedrive go to Settings > Data fields, click Export, choose **Selectable options in fields**, and upload the CSV (add it to a Claude Project so every chat has it)." Continue without it if the user skips.
 4. **Write cache** (if filesystem available) to `.pipedrive/` in the working folder:
    - `context.json`: slim version only:
      ```json
@@ -37,7 +40,7 @@ Fallback: no filesystem (claude.ai chat) -> keep context in this conversation on
 
 ```
 Setup done. Cache: .pipedrive/ (fields: 34, pipelines: 2, users: 6)
-Fields: from export (34) | from MCP only, upload export for real names
+Option fields: from export (34) | from MCP only, upload "Selectable options in fields" export
 Connectors: Pipedrive live | Slack live | Gmail missing | Calendar missing
 Ready: pd-morning-brief, pd-call-prep, pd-call-to-crm, pd-pipeline-review, ...
 Fallback: pd-follow-up -> drafts in chat (connect Gmail for drafts)
