@@ -27,4 +27,4 @@ No match: pick the closest by sales motion (short transactional -> construction-
 ## Uses
 
 - **Pipeline design** ("set up Pipedrive for my <industry>"): show the template stages, fields and qualification checks, then compare with the real account (cached context). Output as manual steps; the connector cannot create pipelines, stages or fields.
-- **Other skills**: pd-call-prep (open questions), pd-call-to-crm (fields to extract), pd-lead-qualifier (custom checks), pd-pipeline-review and pd-account-health (signals).
+- **Other skills**: pd-lead-qualifier (custom checks), pd-follow-up (vocabulary), pd-pipeline-review and pd-account-health (signals).

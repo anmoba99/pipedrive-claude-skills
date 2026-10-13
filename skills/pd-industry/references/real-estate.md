@@ -6,5 +6,5 @@ Qualify: budget range, financing (cash / mortgage pre-approved), timeline to mov
 Risk signals: no viewing in 21 days after inquiry, viewing done with no follow-up in 48h, mortgage not started, offer below asking with no counter, seller mandate expiring.
 Upsell signals: buyer also selling, investor buying multiple, landlord with portfolio, referral mentioned.
 Custom fields worth adding: Budget min, Budget max, Financing status, Move-in date, Areas, Bedrooms, Property type, Mandate expiry date, Listing ID.
-Best skills: pd-call-to-crm (log viewings), pd-lead-qualifier (serious buyers), pd-morning-brief (follow-ups), pd-follow-up (after viewing), pd-pipeline-review digest.
+Best skills: pd-lead-qualifier (serious buyers), pd-morning-brief (follow-ups), pd-follow-up (after viewing), pd-pipeline-review digest.
 Watch-outs: many duplicate persons from portals; run pd-data-hygiene monthly. Keep ID documents and financial details out of notes.

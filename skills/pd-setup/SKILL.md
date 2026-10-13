@@ -13,7 +13,7 @@ Fallback: no filesystem (claude.ai chat) -> keep context in this conversation on
 
 ## Steps
 
-1. **Connectors.** List which integrations are live in this session by checking available tools: Pipedrive, Slack, Teams, Gmail, Outlook, Google Drive, Google Calendar. Ask once whether the team uses Pipedrive Nova for calls; save `"call_ai": "nova"` or `null` in config. Pipedrive missing: stop and say "Connect Pipedrive in Settings > Connectors (or `claude mcp add` in Claude Code), then run pd-setup again."
+1. **Connectors.** List which integrations are live in this session by checking available tools: Pipedrive, Slack, Teams, Gmail, Outlook, Google Drive, Google Calendar. Pipedrive missing: stop and say "Connect Pipedrive in Settings > Connectors (or `claude mcp add` in Claude Code), then run pd-setup again."
 2. **Account context.** Call `getAccountContext` once.
 3. **Field options export.** The connector returns option fields as option IDs, not the labels the user sees. Look for the user's export: Project files, a chat attachment, or `.pipedrive/data_fields_options_*.csv`. It is a CSV with columns `Option ID, Option name, Item type, Field name, Field type, Field API key`, one row per option, single and multiple option fields only (other field types are not in it; take those from `getAccountContext`).
    - Found, shell available: `python3 scripts/field_options.py <export.csv> --merge .pipedrive/field-map.json --out .pipedrive/field-map.json` after step 4 writes the base map. Pass the duplicate-name warning from stderr to the report.
@@ -42,7 +42,7 @@ Fallback: no filesystem (claude.ai chat) -> keep context in this conversation on
 Setup done. Cache: .pipedrive/ (fields: 34, pipelines: 2, users: 6)
 Option fields: from export (34) | from MCP only, upload "Selectable options in fields" export
 Connectors: Pipedrive live | Slack live | Gmail missing | Calendar missing
-Ready: pd-morning-brief, pd-call-prep, pd-call-to-crm, pd-pipeline-review, ...
+Ready: pd-morning-brief, pd-follow-up, pd-pipeline-review, ...
 Fallback: pd-follow-up -> drafts in chat (connect Gmail for drafts)
 Manual Pipedrive steps for <industry>:
 1. Add deal field "Trial end date" (date)

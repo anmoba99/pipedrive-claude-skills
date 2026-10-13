@@ -6,5 +6,5 @@ Qualify: MEDDICC for deals above your average value, BANT below. Plus: use case 
 Risk signals: trial active with no touch in 5 days, trial end date passed with no proposal, champion silent, security or legal review not started, close date pushed twice, single-threaded (one contact).
 Upsell signals: "more seats", "another team", "other office", usage limits hit, new use case, hiring growth.
 Custom fields worth adding: Trial end date, Seats, Plan, ARR or MRR, Renewal date, Champion, Competitor, Security review status.
-Best skills: pd-morning-brief (trial nudges), pd-call-to-crm (demo notes), pd-pipeline-review forecast, pd-win-loss, pd-account-health renewals.
+Best skills: pd-morning-brief (trial nudges), pd-lead-qualifier (demo to trial fit), pd-pipeline-review forecast, pd-win-loss, pd-account-health renewals.
 Watch-outs: product usage data lives outside Pipedrive; add a usage field or connect an analytics connector for health scores.

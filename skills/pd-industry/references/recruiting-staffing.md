@@ -6,5 +6,5 @@ Qualify (roles): salary range, urgency, exclusivity, fee agreed, hiring manager 
 Risk signals: shortlist sent with no feedback in 5 days, hiring manager unreachable, role open 60+ days, candidate with competing offers, fee terms unsigned.
 Upsell signals: client hiring for more roles, expansion news, placed candidate becomes hiring manager, retained search potential.
 Custom fields worth adding: Salary range, Fee %, Exclusive (yes/no), Openings, Start date, Guarantee end date, Candidate source.
-Best skills: pd-call-to-crm (intake calls), pd-pipeline-review (fee forecast), pd-morning-brief, pd-account-health (repeat clients).
+Best skills: pd-lead-qualifier (role intake gaps), pd-pipeline-review (fee forecast), pd-morning-brief, pd-account-health (repeat clients).
 Watch-outs: candidate data is personal data; keep only what is needed, follow local privacy law, no sensitive data in notes.
