@@ -4,13 +4,15 @@ Free, open skills that turn Claude and the Pipedrive connector into a sales assi
 
 Describe your business in plain English. Claude replies with a short plan (which skills to use, what to set up once, what to run daily or weekly) and then runs it for you.
 
-> Community project. Not an official Pipedrive or Anthropic product. Review every change before Claude writes to your CRM.
+> **Disclaimer:** these skills were built by me in a personal capacity. They are not an official Pipedrive product and are not endorsed, maintained or supported by Pipedrive. Always review changes before letting Claude update your CRM.
 
 ## Contents
 
 - [Quick start](#quick-start)
 - [Install](#install)
 - [The skills](#the-skills)
+- [How a skill folder works](#how-a-skill-folder-works)
+- [Custom fields](#custom-fields-export-your-field-list)
 - [Example](#example)
 - [Safety](#safety)
 - [Known limits](#known-limits)
@@ -20,9 +22,10 @@ Describe your business in plain English. Claude replies with a short plan (which
 
 1. Install the skills (see [Install](#install)).
 2. Connect **Pipedrive** in Claude. Optional: Slack or Teams, Gmail or Outlook, Google Drive, Google Calendar.
-3. Start a chat and describe your business. `pd-advisor` replies with your plan.
-4. Run `pd-setup` once. It caches your pipelines, stages and fields so later requests are faster and cheaper.
-5. Ask in normal words: "brief me for today", "prep my call with Acme", "review the pipeline for this week".
+3. Export your field list from Pipedrive (**Settings > Data fields**) and give it to Claude. See [Custom fields](#custom-fields-export-your-field-list).
+4. Start a chat and describe your business. `pd-advisor` replies with your plan.
+5. Run `pd-setup` once. It caches your pipelines, stages and fields so later requests are faster and cheaper.
+6. Ask in normal words: "brief me for today", "prep my call with Acme", "review the pipeline for this week".
 
 ## Install
 
@@ -70,6 +73,30 @@ Pipedrive is the only required connector. If an optional one is missing, the ski
 
 **Built to save tokens:** setup is cached, every query is filtered at the source, daily and weekly runs fetch only what changed, and totals and duplicate matching run in small Python scripts instead of in Claude's head.
 
+## How a skill folder works
+
+Each skill is one folder in `skills/`, named after the skill:
+
+```
+skills/pd-advisor/
+  SKILL.md          the skill itself: when to use it and the steps Claude follows
+  references/       extra detail Claude reads only when needed (saves tokens)
+skills/pd-core/
+  SKILL.md
+  scripts/          small Python helpers for totals and duplicate matching
+```
+
+The file is always called `SKILL.md`. That name is required by the Claude skill format, so the folder name is what tells skills apart. `references/` and `scripts/` are optional and only appear where a skill needs them.
+
+## Custom fields: export your field list
+
+Through the connector Claude sees custom fields as long hash keys and option IDs, not the names and values you see in Pipedrive. Give Claude the real list once:
+
+1. In Pipedrive, open **Settings > Data fields** and export the fields (deals, people, organizations).
+2. **claude.ai or Desktop:** create a Project, add the export to the Project's files, and chat inside that Project. Every chat in the Project can see it.
+3. **Claude Code:** save the export in `.pipedrive/` in your working folder.
+4. Run `pd-setup`. It matches the export to the field keys and saves the mapping.
+
 ## Example
 
 You type:
@@ -87,6 +114,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = real-estate.
 2. Add custom fields: Budget, Mortgage pre-approved, Move-in date (manual in Pipedrive).
+3. Export field list (Settings > Data fields), add to a Claude Project. MCP shows keys, not names.
 Rhythm:
 - Daily: each agent "brief me for today" (pd-morning-brief).
 - After each viewing: paste notes, "log this viewing" (pd-call-to-crm).
@@ -107,7 +135,7 @@ Try now: "Run pd-setup for a real estate agency"
 
 - The connector cannot create pipelines, stages or custom fields. Skills tell you what to add by hand.
 - Large pipelines (thousands of open deals) are slower. Filter by pipeline or rep.
-- On claude.ai the setup cache lasts one conversation. In Claude Code, Desktop and Cowork it is saved to `.pipedrive/`.
+- On claude.ai the setup cache lasts one conversation. Keep your field export in a Project so each chat starts with it. In Claude Code, Desktop and Cowork the cache is saved to `.pipedrive/`.
 
 ## FAQ
 

@@ -35,6 +35,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = <pack>
 2. <manual Pipedrive changes, if any: fields, stages>
+3. Export field list (Settings > Data fields), add to a Claude Project (claude.ai) or .pipedrive/ (Claude Code). MCP shows keys, not names.
 Rhythm:
 - Daily: <who> "<prompt>" (<skill>)
 - Per call/deal: "<prompt>" (<skill>)
@@ -51,6 +52,7 @@ Keep it under about 25 lines. One idea per line.
 
 - Never duplicate native Pipedrive features. Calls: Pipedrive Nova transcribes and summarizes; skills only build on its output. Also prefer Pipedrive automations, filters, web forms and reports where they already do the job.
 - Only recommend skills that exist in `references/catalog.md`. If the need is outside the package, say so in `Can't do:` and suggest the closest skill or a manual Pipedrive feature (automations, filters, web forms).
+- Custom fields: the connector returns hash keys and option IDs, not the names and values the user sees. If the plan reads or writes custom fields, always include the field export step in `Setup`: export from Pipedrive Settings > Data fields, then add the file to a Claude Project (claude.ai, Desktop) so every chat has it, or save it in `.pipedrive/` (Claude Code).
 - Pipedrive missing: first line of `Setup` is "Connect Pipedrive in Settings > Connectors".
 - Manager/owner reports need a Pipedrive user who can see the team's deals. Say so when the plan includes pd-pipeline-review or pd-win-loss for a team.
 - Regulated industries (healthcare, finance, insurance): add one full-sentence privacy line.
@@ -69,6 +71,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = saas
 2. Add deal fields: Trial end date, Seats (manual)
+3. Export field list (Settings > Data fields), add to a Claude Project. MCP shows keys, not names.
 Rhythm:
 - Daily: each AE "brief me for today" (pd-morning-brief)
 - After demo (Nova-recorded): "update the CRM from the Nova summary" (pd-call-to-crm, fields + next steps only)
