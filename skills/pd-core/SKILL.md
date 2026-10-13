@@ -22,6 +22,7 @@ Load `references/query-playbook.md` when planning anything beyond a single looku
 - Ask only for needed custom fields (`custom_fields`, max 15) and `include_fields`.
 - Pull notes only for the few deals that need them, never for a whole pipeline.
 - Cap each run at about 15 Pipedrive calls. Need more? Tell the user and narrow the scope (one pipeline, one rep, last 30 days).
+- Large dataset (size check shows more than one batch): always run in batches, with a plan, partial results and a stop after each batch. Load `references/batches.md`.
 
 ## 3. Compact output
 

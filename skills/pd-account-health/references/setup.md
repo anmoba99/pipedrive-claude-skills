@@ -37,7 +37,7 @@ pd-setup asks "Do you manage existing customers in Pipedrive?" On yes, it maps t
 
 ## Fetching (portfolio)
 
-Use the slim calls below, cursor through every page, and save each page to `pipedrive-out/pd-account-health/raw/<entity>-<n>.json`. In Claude Code, one subagent per entity (or per account manager when one entity passes about 20,000 records), each replying with one line. On claude.ai, cap about 1,000 orgs and say so.
+Large books run in batches by account manager (`pd-core/references/batches.md`). Use the slim calls below, cursor through every page, and save each page to `pipedrive-out/pd-account-health/raw/<entity>-<n>.json`. In Claude Code, one subagent per entity (or per account manager when one entity passes about 20,000 records), each replying with one line. On claude.ai, cap about 1,000 orgs and say so.
 - Orgs: `getOrganizations limit=500 include_fields=[people_count,open_deals_count,won_deals_count,next_activity_id]`, `custom_fields=[<mapped org keys>]`. Large accounts: `owner_id=<csm>` slices.
 - Deals: `getDeals status=[won,open] limit=500`, `custom_fields` only the mapped deal keys (max 15), else omit.
 - Activities: `getActivities done=true updated_since=<today minus 180 days> limit=500`.

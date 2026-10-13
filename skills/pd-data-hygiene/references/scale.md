@@ -14,6 +14,8 @@ About <N> calls. Go, or limit to one owner or pipeline?
 
 Caps per entity in scope: about 20,000 records in Claude Code or Cowork, about 1,000 on claude.ai or Desktop. Over the cap: split by owner or pipeline and run the biggest slices first, or ask the user to narrow.
 
+More than one batch of records in scope: run in batches (`pd-core/references/batches.md`). The sample pass is batch 1 for every entity. Scope pass batches follow, open deals first, biggest pipelines first. Record issues on a partial run are exact for the slices done; duplicates are final only after the last batch.
+
 ## 2. Two passes
 
 1. **Sample pass (field completeness).** The 1,000 most recently updated records per entity, all fields: `sort_by=update_time sort_direction=desc limit=500`, 2 pages. Pass as `--sample-deals/--sample-persons/--sample-orgs`. The tracker says the rates come from that sample.

@@ -4,7 +4,8 @@ Book of business for one account manager, a team, or the whole company. Built fo
 
 1. Load `accounts` from config (see `../setup.md`). Scope: "my book" = `csm_field` or org owner = me; team or all needs manager visibility (pd-access).
 2. Size check: one `getOrganizations limit=500` page. More than one page: tell the user the rough call count (orgs, deals, activities, people, products) and continue unless they stop.
-3. Fetch as in `../setup.md` "Fetching". Save raw pages to files. Never paste raw pages into chat. Large accounts: follow `pd-data-hygiene/references/scale.md` (subagents, slices, caps).
+3. More than one batch of records (see `pd-core/references/batches.md`): run in batches by account manager, biggest book first. One batch = orgs, deals and activities of the same account managers, so each account is scored from its own data. Scores of accounts with deals or activities owned by someone in a later batch can still move; peer medians and whitespace are final after the last batch. Say so on partial results.
+   Fetch as in `../setup.md` "Fetching". Save raw pages to files. Never paste raw pages into chat. Large accounts: follow `pd-data-hygiene/references/scale.md` (subagents, slices, caps).
 4. Run:
 ```bash
 python3 scripts/account_rollup.py \
