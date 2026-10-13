@@ -11,9 +11,25 @@
     "pd-pipeline-review": ["chat", "file"],
     "pd-win-loss": ["chat", "file"],
     "pd-data-hygiene": ["file"],
-    "pd-account-health": ["chat"]
+    "pd-account-health": ["chat", "file"]
   },
   "team_channel": null,
   "renewal_field": null,
+  "accounts": {
+    "enabled": false,
+    "customer_rule": "won",
+    "csm_field": null,
+    "tier_field": null,
+    "segment_field": null,
+    "arr_field": null,
+    "renewal_field": null,
+    "renewal_pipeline_id": null,
+    "expansion_pipeline_id": null,
+    "health_field": null,
+    "health_date_field": null,
+    "role_field": null,
+    "anniversary_renewals": true,
+    "weights": {"touch": 30, "trend": 20, "next_step": 20, "coverage": 20, "breadth": 10}
+  },
   "notes_tag": "[Claude]"
 }

@@ -8,5 +8,6 @@ Ask only what changes the plan. Max 3, one message. Pick from:
 4. Typical sales cycle? (days, weeks, months)
 5. Which other tools do you use daily? (Slack, Teams, Gmail, Outlook, Google Drive)
 6. One-off sales or recurring (subscriptions, renewals, reorders)?
+7. Do you also manage existing customers in Pipedrive? How many accounts, and who owns them (account managers, CS)?
 
 Skip any question the case already answers. If the user does not want questions, assume and say so in `Assume:`.

@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Account Portfolio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: same shell as the data health tracker. Header, tab bar, one panel per tab, paginated tables. */
+:root {
+  --bg: #f4f6f5; --surface: #ffffff; --line: #e1e6e3; --fg: #1b2420; --muted: #5c6b64;
+  --accent: #0a7a4b; --accent-soft: #e3f3ea;
+  --ok: #1f8a4c; --warn: #b26a00; --warn-soft: #fff3df; --bad: #c4321f; --bad-soft: #fde8e4;
+  --font: "Source Sans 3", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r: 6px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121815; --surface: #1a221e; --line: #2b3631; --fg: #e6ece9; --muted: #98a8a0;
+  --accent: #3ccf8b; --accent-soft: #173527;
+  --ok: #4fd18a; --warn: #f0a83a; --warn-soft: #3a2b12; --bad: #ff7a66; --bad-soft: #3d1d18;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121815; --surface: #1a221e; --line: #2b3631; --fg: #e6ece9; --muted: #98a8a0;
+  --accent: #3ccf8b; --accent-soft: #173527;
+  --ok: #4fd18a; --warn: #f0a83a; --warn-soft: #3a2b12; --bad: #ff7a66; --bad-soft: #3d1d18;
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 var(--font); }
+.wrap { max-width: 1160px; margin: 0 auto; padding: 24px 16px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; }
+h1 { font-size: 24px; font-weight: 700; margin: 0; text-wrap: balance; }
+h2 { font-size: 17px; font-weight: 700; margin: 0; }
+.meta { color: var(--muted); font-size: 13px; }
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: thin; }
+.tabs button { font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); background: none; border: 0; border-bottom: 2px solid transparent; padding: 10px 14px; cursor: pointer; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.tabs .cnt { font-weight: 400; font-size: 12px; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; display: grid; gap: 2px; align-content: start; }
+.tile .n { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tile .l { color: var(--muted); font-size: 13px; }
+.tile .d { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; min-width: 0; align-content: start; }
+.head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 16px; align-items: start; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.mid { min-width: 520px; }
+table.wide { min-width: 820px; }
+th { text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th.num { text-align: right; }
+td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+td.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+tr.click { cursor: pointer; } tr.click:hover td { background: var(--bg); }
+tr.sel td { background: var(--accent-soft); }
+.split { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--line); min-width: 90px; }
+.split i { display: block; height: 100%; }
+.s-red { background: var(--bad); } .s-amber { background: var(--warn); } .s-green { background: var(--ok); }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.b-green { background: var(--accent-soft); color: var(--ok); }
+.b-amber { background: var(--warn-soft); color: var(--warn); }
+.b-red { background: var(--bad-soft); color: var(--bad); }
+.delta { font-size: 12px; color: var(--muted); margin-left: 4px; font-variant-numeric: tabular-nums; }
+.why { color: var(--muted); font-size: 13px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+select, input[type=search] { font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; min-width: 0; max-width: 100%; }
+input[type=search] { flex: 1 1 180px; }
+button.link { font: inherit; font-size: 13px; color: var(--accent); background: none; border: 0; cursor: pointer; padding: 0; text-align: left; }
+button.pg { font: inherit; font-size: 13px; border: 1px solid var(--line); border-radius: var(--r); padding: 4px 10px; color: var(--fg); background: var(--surface); cursor: pointer; }
+button.pg:disabled { opacity: .4; cursor: default; }
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 2px 12px; font-size: 13px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+.id { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.note { color: var(--muted); font-size: 13px; }
+dl.weights { display: grid; grid-template-columns: max-content max-content; gap: 2px 16px; margin: 0; font-size: 14px; }
+dl.weights dt { color: var(--muted); } dl.weights dd { margin: 0; font-variant-numeric: tabular-nums; }
+.bar { width: 120px; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); }
+#wsDetail { display: grid; gap: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
+footer { color: var(--muted); font-size: 12px; text-align: center; }
+@media (max-width: 560px) { h1 { font-size: 21px; } .tabs button { padding: 10px; } .bar { width: 56px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Account Portfolio</h1>
+      <div class="meta" id="scope"></div>
+    </div>
+    <div class="meta" id="asof"></div>
+  </header>
+
+  <div id="csmChip" hidden></div>
+
+  <nav class="tabs" role="tablist" aria-label="Sections" id="tabs"></nav>
+
+  <div class="panel" role="tabpanel" id="p-portfolio" aria-labelledby="t-portfolio">
+    <div class="tiles" id="tiles"></div>
+    <div class="note" id="coverage"></div>
+    <section class="card">
+      <div class="head"><h2>By account manager</h2><span class="meta">Click a row to filter every tab</span></div>
+      <div class="scroll"><table class="wide">
+        <thead><tr><th>Account manager</th><th class="num">Accounts</th><th>Health mix</th><th class="num">Avg score</th><th class="num">Revenue</th><th class="num">Revenue at risk</th><th class="num">Renewals 90d</th><th class="num">Single-threaded</th></tr></thead>
+        <tbody id="csms"></tbody>
+      </table></div>
+      <div class="pager" id="csmMore" hidden><span class="note" id="csmNote"></span><button class="pg" type="button" id="csmToggle"></button></div>
+    </section>
+    <div class="grid2">
+      <section class="card" id="tierCard">
+        <div class="head"><h2>By tier</h2></div>
+        <div class="scroll"><table class="mid">
+          <thead><tr><th>Tier</th><th class="num">Accounts</th><th>Health mix</th><th class="num">Avg score</th><th class="num">Revenue at risk</th></tr></thead>
+          <tbody id="tiers"></tbody>
+        </table></div>
+      </section>
+      <section class="card">
+        <div class="head"><h2>How the score works</h2><span class="meta">Same rules every run</span></div>
+        <dl class="weights" id="weights"></dl>
+        <div class="note">Green 70 and up, amber 40 to 69, red under 40. A driver with no data is left out and the others are reweighted. Claude reads notes only for the accounts you ask about.</div>
+      </section>
+    </div>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-accounts" aria-labelledby="t-accounts" hidden>
+    <section class="card">
+      <div class="head"><h2>Accounts</h2><span class="meta" id="accMeta"></span></div>
+      <div class="filters">
+        <select id="aBucket" aria-label="Health"><option value="risk">Red and amber</option><option value="red">Red</option><option value="amber">Amber</option><option value="green">Green</option><option value="">All</option></select>
+        <select id="aTier" aria-label="Tier"></select>
+        <select id="aSort" aria-label="Sort"><option value="risk">Biggest at risk first</option><option value="score">Lowest score first</option><option value="drop">Biggest drop first</option><option value="name">Name</option></select>
+        <input type="search" id="aText" placeholder="Search name or ID" aria-label="Search accounts">
+      </div>
+      <div class="scroll"><table class="wide">
+        <thead><tr><th>Account</th><th>Health</th><th class="num">Revenue</th><th>Tier</th><th class="num">Last touch</th><th>Why</th><th>Manager</th></tr></thead>
+        <tbody id="accRows"></tbody>
+      </table></div>
+      <div class="pager" id="accPager"></div>
+      <div class="note" id="accTrunc"></div>
+    </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-renewals" aria-labelledby="t-renewals" hidden>
+    <section class="card">
+      <div class="head"><h2>Renewals in the next 90 days</h2><span class="meta" id="renMeta"></span></div>
+      <div class="filters">
+        <select id="rBucket" aria-label="Health"><option value="">All</option><option value="risk">Red and amber</option><option value="green">Green</option></select>
+        <select id="rPlan" aria-label="Plan"><option value="">Any</option><option value="none">Nothing planned</option></select>
+      </div>
+      <div class="scroll"><table class="wide">
+        <thead><tr><th>Renewal</th><th>Account</th><th>Health</th><th class="num">Revenue</th><th>Next step</th><th>Source</th><th>Manager</th></tr></thead>
+        <tbody id="renRows"></tbody>
+      </table></div>
+      <div class="pager" id="renPager"></div>
+      <div class="note">Source: date field on the organization, an open deal in the renewals pipeline, or a yearly anniversary of the first won deal.</div>
+    </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-coverage" aria-labelledby="t-coverage" hidden>
+    <section class="card">
+      <div class="head"><h2>Relationship coverage</h2><span class="meta" id="covMeta"></span></div>
+      <div class="filters">
+        <select id="cKind" aria-label="Gap"><option value="single">One person or none</option><option value="cold">Nobody touched in 90 days</option><option value="noroles">No roles set</option><option value="">All accounts</option></select>
+        <input type="search" id="cText" placeholder="Search name or ID" aria-label="Search accounts">
+      </div>
+      <div class="scroll"><table class="wide">
+        <thead><tr><th>Account</th><th>Health</th><th class="num">Revenue</th><th class="num">People</th><th class="num">Touched 90d</th><th>Roles present</th><th>Manager</th></tr></thead>
+        <tbody id="covRows"></tbody>
+      </table></div>
+      <div class="pager" id="covPager"></div>
+      <div class="note">Fix in Pipedrive: open the organization, add the missing people and set their role. An account with one contact is lost when that person leaves.</div>
+    </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-whitespace" aria-labelledby="t-whitespace" hidden>
+    <section class="card">
+      <div class="head"><h2>Whitespace</h2><span class="meta" id="wsMeta"></span></div>
+      <div class="note" id="wsNote"></div>
+      <div class="scroll"><table class="wide">
+        <thead><tr><th>Product</th><th>Peer group</th><th class="num">Peers who have it</th><th></th><th class="num">Accounts without it</th><th></th></tr></thead>
+        <tbody id="wsRows"></tbody>
+      </table></div>
+      <div id="wsDetail" hidden></div>
+    </section>
+  </div>
+
+  <footer>Built by the pd-account-health community skill. Not an official Pipedrive product. Scores are a starting point for a conversation, not a verdict. This page never changes your CRM.</footer>
+</div>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+(function () {
+  var D;
+  try { D = JSON.parse(document.getElementById("data").textContent); }
+  catch (e) { document.getElementById("scope").textContent = "No data yet. Run pd-account-health portfolio."; return; }
+
+  var PAGE = 50, NONE = "_none";
+  var nf = new Intl.NumberFormat();
+  function n(x) { return x == null ? "n/a" : nf.format(x); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function money(byCur) {
+    var parts = [];
+    Object.keys(byCur || {}).sort(function (a, b) { return byCur[b] - byCur[a]; }).forEach(function (cur) {
+      var v = byCur[cur]; if (!v) return;
+      try { parts.push(new Intl.NumberFormat(undefined, { style: "currency", currency: cur, maximumFractionDigits: 0 }).format(v)); }
+      catch (e) { parts.push(nf.format(Math.round(v)) + (cur ? " " + cur : "")); }
+    });
+    return parts.join(" + ");
+  }
+  function one(cur, v) { var o = {}; o[cur || ""] = v; return money(o); }
+  function link(id, label) {
+    var t = esc(label || "#" + id);
+    return D.domain ? '<a href="https://' + esc(D.domain) + ".pipedrive.com/organization/" + esc(id) + '" target="_blank" rel="noopener">' + t + "</a>" : t;
+  }
+  var BL = { red: "Red", amber: "Amber", green: "Green" };
+  function health(a) {
+    var d = a.prev_score != null && a.prev_score !== a.score ? '<span class="delta">' + (a.score > a.prev_score ? "+" : "") + (a.score - a.prev_score) + "</span>" : "";
+    return '<span class="pill b-' + a.bucket + '">' + a.score + " " + BL[a.bucket] + "</span>" + d;
+  }
+  function split(o) {
+    var t = (o.red + o.amber + o.green) || 1;
+    return '<div class="split" title="' + o.red + " red, " + o.amber + " amber, " + o.green + ' green"><i class="s-red" style="width:' + (o.red / t * 100) + '%"></i><i class="s-amber" style="width:' + (o.amber / t * 100) + '%"></i><i class="s-green" style="width:' + (o.green / t * 100) + '%"></i></div>';
+  }
+  function days(x) { return x == null ? "none in 180d" : x === 0 ? "today" : n(x) + "d ago"; }
+  function pagerHtml(page, total) {
+    var pages = Math.max(1, Math.ceil(total / PAGE));
+    var from = total ? page * PAGE + 1 : 0, to = Math.min(total, (page + 1) * PAGE);
+    return '<span class="note">' + n(from) + " to " + n(to) + " of " + n(total) + '</span><span class="filters">' +
+      '<button class="pg" type="button" data-p="-1"' + (page === 0 ? " disabled" : "") + ">Previous</button>" +
+      '<button class="pg" type="button" data-p="1"' + (page >= pages - 1 ? " disabled" : "") + ">Next</button></span>";
+  }
+
+  var csmName = {};
+  (D.csms || []).forEach(function (c) { csmName[c.id] = c.name; });
+  function mgr(a) { return esc(csmName[a.csm] || (a.csm === NONE ? "No owner" : "User " + a.csm)); }
+  var accounts = D.accounts || [];
+  var byId = {};
+  accounts.forEach(function (a) { byId[a.id] = a; });
+  var state = { csm: "" };
+  var tables = [];
+
+  // Header
+  var k = D.kpis || {}, cov = D.coverage || {};
+  document.getElementById("scope").textContent = n(k.accounts) + " accounts | " + (money(k.arr) || "no revenue mapped");
+  document.getElementById("asof").textContent = "As of " + D.date;
+  var bits = [];
+  if (cov.note) bits.push("Scope: " + cov.note + ".");
+  bits.push("Read " + n(cov.orgs_read) + " organizations, " + n(cov.deals) + " deals, " + n(cov.activities) + " done activities, " + n(cov.persons) + " people" + (cov.products ? ", won deal products" : "") + ".");
+  if (!cov.products) bits.push("No product data, so product breadth and whitespace are off.");
+  if (D.accounts_truncated) bits.push("Tables show the " + n(accounts.length) + " accounts most at risk; all " + n(k.accounts) + " are in the CSV.");
+  document.getElementById("coverage").textContent = bits.join(" ");
+
+  // Tabs
+  var renewals = (D.renewals || []).map(function (id) { return byId[id]; }).filter(Boolean);
+  var TABS = [
+    ["portfolio", "Portfolio", null],
+    ["accounts", "Accounts", (k.red || 0) + (k.amber || 0)],
+    ["renewals", "Renewals", k.renewals_90],
+    ["coverage", "Coverage", k.single_threaded],
+    ["whitespace", "Whitespace", (D.whitespace || []).length]
+  ];
+  var ALIAS = { risk: "accounts", "at-risk": "accounts", renewal: "renewals", upsell: "whitespace" };
+  var tabsEl = document.getElementById("tabs"), current = "portfolio";
+  TABS.forEach(function (t) {
+    var b = document.createElement("button");
+    b.type = "button"; b.id = "t-" + t[0]; b.setAttribute("role", "tab"); b.setAttribute("aria-controls", "p-" + t[0]);
+    b.innerHTML = esc(t[1]) + (t[2] != null ? '<span class="cnt">' + n(t[2]) + "</span>" : "");
+    b.addEventListener("click", function () { show(t[0], true); });
+    tabsEl.appendChild(b);
+  });
+  tabsEl.addEventListener("keydown", function (ev) {
+    var ids = TABS.map(function (t) { return t[0]; }), i = ids.indexOf(current);
+    if (ev.key === "ArrowRight") i = (i + 1) % ids.length;
+    else if (ev.key === "ArrowLeft") i = (i - 1 + ids.length) % ids.length;
+    else if (ev.key === "Home") i = 0;
+    else if (ev.key === "End") i = ids.length - 1;
+    else return;
+    ev.preventDefault(); show(ids[i], true); document.getElementById("t-" + ids[i]).focus();
+  });
+  function show(id, push) {
+    current = id;
+    TABS.forEach(function (t) {
+      var on = t[0] === id, b = document.getElementById("t-" + t[0]);
+      b.setAttribute("aria-selected", on ? "true" : "false"); b.tabIndex = on ? 0 : -1;
+      document.getElementById("p-" + t[0]).hidden = !on;
+    });
+    if (push) { try { history.replaceState(null, "", "#" + id); } catch (e) {} }
+  }
+  var start = (location.hash || "").slice(1).toLowerCase();
+  start = ALIAS[start] || start;
+  show(TABS.some(function (t) { return t[0] === start; }) ? start : "portfolio", false);
+
+  // Tiles
+  var tiles = [
+    [n(k.accounts), "Accounts", k.avg != null ? "Average score " + k.avg : ""],
+    [n(k.red), "Red", n(k.amber) + " amber"],
+    [money(k.arr_risk) || "n/a", "Revenue in red or amber", money(k.arr) ? "of " + money(k.arr) : "No revenue field mapped"],
+    [n(k.renewals_90), "Renewals in 90 days", n(k.renewals_90_risk) + " not green"],
+    [n(k.single_threaded), "One person or none", "Single-threaded accounts"],
+    [n(k.no_touch_90), "No touch in 90 days", "No done activity"]
+  ];
+  document.getElementById("tiles").innerHTML = tiles.map(function (t) {
+    return '<div class="tile"><span class="n">' + esc(t[0]) + '</span><span class="l">' + esc(t[1]) + '</span><span class="d">' + esc(t[2]) + "</span></div>";
+  }).join("");
+
+  // Weights
+  var DRV = { touch: "Last touch", trend: "Activity trend, 90d vs previous 90d", next_step: "Next step planned", coverage: "People covered", breadth: "Product breadth vs peers" };
+  var W = D.weights || {};
+  document.getElementById("weights").innerHTML = Object.keys(DRV).filter(function (d) { return W[d]; }).map(function (d) {
+    return "<dt>" + esc(DRV[d]) + "</dt><dd>" + W[d] + "%" + (d === "breadth" && !cov.products ? " (off)" : "") + "</dd>";
+  }).join("");
+
+  // Manager table
+  var showAllCsm = false;
+  function renderCsms() {
+    var list = D.csms || [], shown = showAllCsm ? list : list.slice(0, 10);
+    document.getElementById("csms").innerHTML = shown.map(function (c) {
+      return '<tr class="click' + (state.csm === c.id ? " sel" : "") + '" data-c="' + esc(c.id) + '"><td>' + esc(c.name) + '</td><td class="num">' + n(c.accounts) +
+        "</td><td>" + split(c) + '</td><td class="num">' + n(c.avg) + '</td><td class="num">' + esc(money(c.arr)) + '</td><td class="num">' + esc(money(c.arr_risk)) +
+        '</td><td class="num">' + n(c.ren90) + '</td><td class="num">' + n(c.single) + "</td></tr>";
+    }).join("") || '<tr><td colspan="8" class="note">No accounts.</td></tr>';
+    var more = document.getElementById("csmMore");
+    more.hidden = list.length <= 10;
+    document.getElementById("csmNote").textContent = showAllCsm ? "" : "Top 10 of " + n(list.length) + " by accounts at risk";
+    document.getElementById("csmToggle").textContent = showAllCsm ? "Show top 10" : "Show all";
+  }
+  document.getElementById("csmToggle").addEventListener("click", function () { showAllCsm = !showAllCsm; renderCsms(); });
+  document.getElementById("csms").addEventListener("click", function (ev) { var tr = ev.target.closest("[data-c]"); if (tr) setCsm(tr.dataset.c); });
+  function setCsm(id) {
+    state.csm = state.csm === id ? "" : id;
+    var chip = document.getElementById("csmChip");
+    if (state.csm) {
+      chip.hidden = false;
+      chip.innerHTML = '<span class="chip">Account manager: ' + esc(csmName[state.csm] || state.csm) + ' <button class="link" type="button" id="clearCsm">Clear</button></span>';
+      document.getElementById("clearCsm").addEventListener("click", function () { setCsm(state.csm); });
+    } else { chip.hidden = true; chip.innerHTML = ""; }
+    renderCsms();
+    tables.forEach(function (t) { t.page = 0; t.render(); });
+  }
+  renderCsms();
+
+  // Tier table
+  var tiersList = D.tiers || [];
+  document.getElementById("tierCard").hidden = !tiersList.length;
+  document.getElementById("tiers").innerHTML = tiersList.map(function (t) {
+    return "<tr><td>" + esc(t.name || "No tier") + '</td><td class="num">' + n(t.accounts) + "</td><td>" + split(t) + '</td><td class="num">' + n(t.avg) + '</td><td class="num">' + esc(money(t.arr_risk)) + "</td></tr>";
+  }).join("");
+
+  // Generic paginated table
+  function table(opts) {
+    var t = { page: 0 };
+    var body = document.getElementById(opts.body), pager = document.getElementById(opts.pager);
+    t.render = function () {
+      var list = opts.rows().filter(function (a) { return !state.csm || a.csm === state.csm; });
+      if (opts.meta) document.getElementById(opts.meta).textContent = n(list.length) + " accounts";
+      var pages = Math.max(1, Math.ceil(list.length / PAGE));
+      if (t.page >= pages) t.page = pages - 1;
+      body.innerHTML = list.slice(t.page * PAGE, t.page * PAGE + PAGE).map(opts.row).join("") || '<tr><td colspan="7" class="note">' + esc(opts.empty) + "</td></tr>";
+      pager.innerHTML = pagerHtml(t.page, list.length);
+    };
+    pager.addEventListener("click", function (ev) { var b = ev.target.closest("[data-p]"); if (!b || b.disabled) return; t.page += +b.dataset.p; t.render(); body.closest("section").scrollIntoView({ block: "start" }); });
+    (opts.inputs || []).forEach(function (id) {
+      var el = document.getElementById(id);
+      el.addEventListener(el.tagName === "INPUT" ? "input" : "change", function () { t.page = 0; t.render(); });
+    });
+    tables.push(t);
+    t.render();
+    return t;
+  }
+  function match(a, q) { return !q || String(a.n).toLowerCase().indexOf(q) >= 0 || String(a.id).indexOf(q) >= 0; }
+  function bucketOk(a, v) { return !v || (v === "risk" ? a.bucket !== "green" : a.bucket === v); }
+
+  // Accounts
+  var tierSel = document.getElementById("aTier");
+  var tierNames = [];
+  accounts.forEach(function (a) { if (a.tier && tierNames.indexOf(a.tier) < 0) tierNames.push(a.tier); });
+  tierSel.innerHTML = '<option value="">All tiers</option>' + tierNames.sort().map(function (t) { return '<option value="' + esc(t) + '">' + esc(t) + "</option>"; }).join("");
+  tierSel.hidden = !tierNames.length;
+  if (D.accounts_truncated) document.getElementById("accTrunc").textContent = "This page holds the " + n(accounts.length) + " accounts most at risk. " + n(D.accounts_truncated) + " more, lower risk or smaller, are in the CSV next to this page. Tab counts cover all accounts.";
+  table({
+    body: "accRows", pager: "accPager", meta: "accMeta", empty: "No accounts match.", inputs: ["aBucket", "aTier", "aSort", "aText"],
+    rows: function () {
+      var b = document.getElementById("aBucket").value, tr = tierSel.value, q = document.getElementById("aText").value.trim().toLowerCase(), s = document.getElementById("aSort").value;
+      var list = accounts.filter(function (a) { return bucketOk(a, b) && (!tr || a.tier === tr) && match(a, q); });
+      if (s === "score") list = list.slice().sort(function (x, y) { return x.score - y.score; });
+      if (s === "drop") list = list.slice().sort(function (x, y) { return ((x.score - (x.prev_score == null ? x.score : x.prev_score)) - (y.score - (y.prev_score == null ? y.score : y.prev_score))); });
+      if (s === "name") list = list.slice().sort(function (x, y) { return String(x.n).localeCompare(String(y.n)); });
+      return list;
+    },
+    row: function (a) {
+      return '<tr><td>' + link(a.id, a.n) + ' <span class="id">#' + esc(a.id) + "</span></td><td>" + health(a) + '</td><td class="num">' + (a.arr ? esc(one(a.cur, a.arr)) : "") +
+        "</td><td>" + esc(a.tier) + '</td><td class="num">' + days(a.lt) + '</td><td class="why">' + esc((a.why || []).join(", ")) + "</td><td>" + mgr(a) + "</td></tr>";
+    }
+  });
+
+  // Renewals
+  var SRC = { field: "Renewal date field", renewal_deal: "Renewal deal", anniversary: "Anniversary" };
+  table({
+    body: "renRows", pager: "renPager", meta: "renMeta", empty: "No renewals in the next 90 days.", inputs: ["rBucket", "rPlan"],
+    rows: function () {
+      var b = document.getElementById("rBucket").value, p = document.getElementById("rPlan").value;
+      return renewals.filter(function (a) { return bucketOk(a, b) && (!p || !a.next); });
+    },
+    row: function (a) {
+      return '<tr><td class="num">' + esc(a.ren) + ' <span class="delta">' + n(a.ren_days) + "d</span></td><td>" + link(a.id, a.n) + ' <span class="id">#' + esc(a.id) + "</span></td><td>" + health(a) +
+        '</td><td class="num">' + (a.arr ? esc(one(a.cur, a.arr)) : "") + "</td><td>" + (a.next ? "Planned" : '<span class="pill b-red">Nothing planned</span>') + "</td><td>" + esc(SRC[a.ren_src] || "") + "</td><td>" + mgr(a) + "</td></tr>";
+    }
+  });
+
+  // Coverage
+  table({
+    body: "covRows", pager: "covPager", meta: "covMeta", empty: "No gaps of this kind.", inputs: ["cKind", "cText"],
+    rows: function () {
+      var kd = document.getElementById("cKind").value, q = document.getElementById("cText").value.trim().toLowerCase();
+      return accounts.filter(function (a) {
+        if (!match(a, q)) return false;
+        if (kd === "single") return a.people <= 1;
+        if (kd === "cold") return a.people > 0 && !a.touched90;
+        if (kd === "noroles") return a.people > 0 && !(a.roles || []).length;
+        return true;
+      });
+    },
+    row: function (a) {
+      return '<tr><td>' + link(a.id, a.n) + ' <span class="id">#' + esc(a.id) + "</span></td><td>" + health(a) + '</td><td class="num">' + (a.arr ? esc(one(a.cur, a.arr)) : "") +
+        '</td><td class="num">' + n(a.people) + '</td><td class="num">' + n(a.touched90) + "</td><td>" + esc((a.roles || []).join(", ") || "None") + "</td><td>" + mgr(a) + "</td></tr>";
+    }
+  });
+
+  // Whitespace
+  var ws = D.whitespace || [];
+  document.getElementById("wsMeta").textContent = ws.length ? n(ws.length) + " gaps" : "";
+  document.getElementById("wsNote").textContent = !cov.products ? "Needs products on won deals. Run again with deal products to see what similar accounts buy." :
+    "Products most accounts in the same " + (cov.group_by === "seg" ? "segment" : cov.group_by === "tier" ? "tier" : "portfolio") + " already have, and who does not. Peer groups of 5 or more, products at least half of them have. Facts from won deals only.";
+  document.getElementById("wsRows").innerHTML = ws.map(function (w, i) {
+    var rate = w.have / w.total;
+    return "<tr><td>" + esc(w.product) + "</td><td>" + esc(w.group) + '</td><td class="num">' + n(w.have) + " of " + n(w.total) + '</td><td><div class="bar"><i style="width:' + Math.round(rate * 100) + '%"></i></div></td><td class="num">' + n(w.missing_count) +
+      '</td><td><button class="link" type="button" data-w="' + i + '">Show accounts</button></td></tr>';
+  }).join("") || '<tr><td colspan="6" class="note">No clear gaps yet.</td></tr>';
+  document.getElementById("wsRows").addEventListener("click", function (ev) {
+    var b = ev.target.closest("[data-w]"); if (!b) return;
+    var w = ws[+b.dataset.w], det = document.getElementById("wsDetail");
+    var list = w.missing.map(function (id) { return byId[id] || { id: id, n: "", bucket: "", score: "" }; }).filter(function (a) { return !state.csm || a.csm === state.csm; });
+    det.hidden = false;
+    det.innerHTML = '<div class="head"><h2>' + esc(w.group) + " accounts without " + esc(w.product) + '</h2><button class="link" type="button" id="wsClose">Close</button></div>' +
+      '<div class="scroll"><table class="mid"><thead><tr><th>Account</th><th>Health</th><th class="num">Revenue</th><th>Manager</th></tr></thead><tbody>' +
+      list.map(function (a) { return "<tr><td>" + link(a.id, a.n) + ' <span class="id">#' + esc(a.id) + "</span></td><td>" + (a.bucket ? health(a) : "") + '</td><td class="num">' + (a.arr ? esc(one(a.cur, a.arr)) : "") + "</td><td>" + (a.csm ? mgr(a) : "") + "</td></tr>"; }).join("") +
+      "</tbody></table></div>" + (w.missing_count > w.missing.length ? '<div class="note">Showing the ' + n(w.missing.length) + " with the most revenue of " + n(w.missing_count) + ".</div>" : "");
+    document.getElementById("wsClose").addEventListener("click", function () { det.hidden = true; });
+    det.scrollIntoView({ block: "start" });
+  });
+})();
+</script>
+</body>
+</html>

@@ -36,6 +36,7 @@ Pipedrive stores your deals well. The work around them still eats your day. Thes
 | **Pipeline review** | Export to a sheet, chase reps for updates | "forecast check": stuck deals, slipping close dates, stage vs real activity |
 | **Why you lose** | Lost reason says "Price" | Patterns from the notes your team actually wrote |
 | **Messy data** | Find duplicates when reports break | A data health page: how full every field is, empty custom fields, duplicates, deals with no next step, and what improved since last time |
+| **Account management** | A spreadsheet of customers, renewals found too late | "show my book": every account scored, renewals in the next 90 days, single-threaded accounts, what peers buy that they do not. Optional health score saved back to Pipedrive |
 | **Who sees what** | Reports quietly miss deals you cannot see | "what can Claude see?": missing permissions, owner-only deals, and the exact fix |
 
 Ask in your own words and your own language. No setup screens, no code.
@@ -68,7 +69,7 @@ Start with `pd-advisor`. It picks the rest for you.
 | `pd-win-loss` | "why are we losing deals?" | Win and loss patterns from lost reasons and notes |
 | `pd-data-hygiene` | "clean my CRM" | A data health page with tabs (field completeness, empty values, duplicates, no next step, value at risk, by owner and pipeline, trend), a fix list, CSV import cleanup. Works on large accounts: samples fields, checks every open deal, trends over runs |
 | `pd-access` | "what can Claude see?" | Connector permissions, whose deals are visible, owner-only deals, read-only fields, exact fixes |
-| `pd-account-health` | "renewals this quarter" | Account health, renewals, sales to customer success handoff |
+| `pd-account-health` | "show my book" | A portfolio page per account manager (health score, revenue, renewals, coverage, upsell whitespace), QBR briefs, sales to customer success handoff. Optional health score write-back to a Pipedrive field you choose |
 | `pd-ask` | "how many deals did we win in March?" | A straight answer from your CRM |
 | `pd-industry` | (used by the others) | How your industry sells: stages, vocabulary, qualification, risk signals |
 | `pd-core` | (used by the others) | Shared rules: cheap queries, short answers, safe writes |

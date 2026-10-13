@@ -21,7 +21,7 @@ Format: skill: purpose. Triggers. Needs. Output. Cost (low/med/high Pipedrive ca
 - pd-data-hygiene: modes audit (field completeness per standard and custom field, empty values, duplicates, no next step, stale, owner-only visibility; tabbed data health tracker with value at risk, owners, pipelines, bulk fix recipes and trend since last run; large accounts via sampling, scoped checks and incremental runs) and import-clean (CSV before import). Triggers: "clean my CRM", "find duplicates", "clean this CSV". Needs Pipedrive (audit) or nothing (import-clean). Output tracker HTML (artifact on claude.ai), CSV fix list, optional fill-blank updates (after confirm). Cost med to high.
 
 ## Customer success / account management
-- pd-account-health: modes health (org score), renewals (upcoming renewal deals), handoff (sales -> CS brief). Triggers: "account health", "renewals this quarter", "handoff for X". Needs Pipedrive. Optional Google Docs. Output chat/file/optional pinned note. Cost med.
+- pd-account-health: account management on orgs. Modes portfolio (book per account manager: health score, revenue, renewals, coverage, whitespace; tabbed page, scales to thousands of accounts), health (score with drivers, note signals for top 10), renewals (next 90 days with risk), coverage (single-threaded, missing roles), whitespace (products peers in the same tier buy), review (QBR brief), handoff (sales -> CS brief). Optional health score write-back to an opt-in org field (after confirm, max 200 per run). Triggers: "show my book", "accounts at risk", "renewals this quarter", "who do we know at X", "upsell", "QBR for X", "handoff for X". Needs Pipedrive, `accounts` in config (pd-setup). Optional Google Docs. Output portfolio HTML (artifact on claude.ai), CSV, chat, optional pinned note. Cost med to high.
 
 ## Industry packs (pd-industry)
 Files in pd-industry/references/. Set once via pd-setup; other skills load the matching file.
@@ -45,3 +45,4 @@ Files in pd-industry/references/. Set once via pd-setup; other skills load the m
 - Messy CRM: pd-setup, pd-data-hygiene audit first, then everything else.
 - Inbound-heavy: pd-lead-qualifier, pd-follow-up.
 - Recurring revenue: pd-account-health renewals, pd-win-loss.
+- CS / account team: pd-setup accounts mapping, pd-access, pd-account-health portfolio weekly + renewals monthly + review before QBRs, pd-data-hygiene for org and contact gaps.

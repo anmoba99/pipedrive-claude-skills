@@ -34,6 +34,7 @@ Fallback: no filesystem (claude.ai chat) -> keep context in this conversation on
    - Your role: rep, manager, owner, ops, CS.
    - Where team posts go, if Slack/Teams is live (channel name or "chat only").
    - Stale threshold in days (default 14).
+   - "Do you manage existing customers in Pipedrive (account management, renewals, upsell)?" On yes, map `accounts` in `config.json` from the cached fields: account manager, tier, revenue, renewal date, health score (optional write-back), person role. Follow `pd-account-health/references/setup.md`, show the mapping, confirm. Missing fields go to the manual steps in step 8.
 6. **Industry check.** If an industry is chosen, load `pd-industry/references/<industry>.md`. Compare its "Custom fields worth adding" and pipeline template with the real account. List what is missing as manual steps (the connector cannot create fields or stages).
 7. **Access check.** Run pd-access checks 1 to 4 (connector permissions, coverage, read-only fields, role fit) and save `.pipedrive/access.json`. If the context `errors` show missing permissions, `me` or `users` stay empty in `context.json`; pd-access fills `me` from the user's own deals.
 8. **Report** in this format:
