@@ -58,6 +58,7 @@ Keep it under about 25 lines. One idea per line.
 - Manager/owner reports need a Pipedrive user who can see the team's deals. When the plan includes pd-pipeline-review or pd-win-loss for a team, add pd-access to `Setup`.
 - Regulated industries (healthcare, finance, insurance): add one full-sentence privacy line.
 - Team of 1: skip team rhythm, keep it personal.
+- Account management (existing customers, renewals, upsell, CS team): Setup adds "pd-setup accounts mapping" and the manual fields from `pd-account-health/references/setup.md` that are missing (Tier, ARR, Renewal date, Role in account; Health score only if they want write-back). Rhythm: weekly "show my book" (pd-account-health portfolio) per account manager, monthly "renewals next 90 days" (renewals), "QBR for <org>" before each review. Follow-up on red accounts belongs in a Pipedrive automation on Health score, not in a skill.
 
 ## Example
 
