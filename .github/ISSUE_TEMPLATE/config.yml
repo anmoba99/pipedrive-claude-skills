@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security or data leak report
+    url: https://github.com/anmoba99/pipedrive-claude-skills/security/advisories/new
+    about: Report privately. Please do not open a public issue.
+  - name: Questions and ideas
+    url: https://github.com/anmoba99/pipedrive-claude-skills/discussions
+    about: Ask how to use a skill or share how you use it.

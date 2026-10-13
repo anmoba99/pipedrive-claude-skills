@@ -38,7 +38,7 @@ Re-export when you add or rename dropdown options.
 
 1. Describe your business. `pd-advisor` replies with a plan.
 2. Say "run pd-setup". It caches your pipelines, stages, users and fields, and checks what Claude can see (`pd-access`).
-3. Use the plan: "brief me for today", "prep my call with Acme", "weekly digest".
+3. Use the plan: "brief me for today", "draft a follow-up for Acme", "weekly digest".
 
 ## Only want one skill?
 

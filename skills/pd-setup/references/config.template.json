@@ -15,7 +15,7 @@
     "pd-premortem": ["chat", "file"],
     "pd-playbook-miner": ["chat", "file"],
     "pd-thread-map": ["chat"],
-    "pd-ghost-reviver": ["gmail-draft", "chat"],
+    "pd-win-back": ["gmail-draft", "chat"],
     "pd-icp-discovery": ["chat", "file"],
     "pd-crm-architect": ["chat", "file"]
   },

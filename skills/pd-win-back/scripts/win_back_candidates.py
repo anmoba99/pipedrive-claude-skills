@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Rank lost deals that are worth reopening now, and say why now.
+"""Rank lost deals that are worth a new deal now, and say why now.
+
+The lost deal itself is never changed: the output is a list of chances to
+create a new deal for the same organization and person.
 
 Each lost deal gets a reason class from a map Claude builds from the
 account's own lost reasons (timing, budget, competitor, no_decision,
@@ -7,12 +10,12 @@ went_silent, price, product_gap, bad_fit, other). Triggers are then checked
 from data: the timing window has come around, a competitor contract is near
 its likely anniversary, the contact is now linked to another organization,
 the organization shows new activity since the loss. Bad fit and do not
-contact are never revived. Standard library only, no network, no LLM.
+contact are never suggested. Standard library only, no network, no LLM.
 
 Usage:
-  python3 revival_candidates.py --lost lost*.json [--reason-map reasons.json]
+  python3 win_back_candidates.py --lost lost*.json [--reason-map reasons.json]
       [--persons persons*.json] [--open open*.json] [--orgs orgs*.json]
-      [--min-days 60] [--top 25] [--today YYYY-MM-DD] [--out revive.json]
+      [--min-days 60] [--top 25] [--today YYYY-MM-DD] [--out candidates.json]
 
 Reason map: {"<lost reason text, lowercase>": "<class>"}. Missing reasons
 fall back to a small multilingual keyword match, then "other".
@@ -121,7 +124,7 @@ def main():
             open_orgs.setdefault(str(ref_id(d["org_id"])), []).append(d.get("id"))
     orgs = {str(o.get("id")): o for o in load_records(args.orgs)}
 
-    rows, skipped = [], {"bad_fit": 0, "too_recent": 0, "reopened": 0}
+    rows, skipped = [], {"bad_fit": 0, "too_recent": 0, "has_open_deal": 0}
     for d in load_records(args.lost):
         if d.get("status") != "lost":
             continue
@@ -135,7 +138,7 @@ def main():
             skipped["bad_fit"] += 1
             continue
         if org and org in open_orgs:
-            skipped["reopened"] += 1
+            skipped["has_open_deal"] += 1
             continue
         if days < args.min_days:
             skipped["too_recent"] += 1
@@ -180,7 +183,7 @@ def main():
         with open(args.out, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=1, ensure_ascii=False)
     print(f"Candidates {len(rows)} | skipped: bad fit {skipped['bad_fit']}, too recent "
-          f"{skipped['too_recent']}, org has open deal {skipped['reopened']}")
+          f"{skipped['too_recent']}, org has open deal {skipped['has_open_deal']}")
     for r in rows[:args.top]:
         print(f"{r['id']} | {r['title'][:40]} | {r['value']:.0f} {r['currency']} | {r['class']} | "
               f"{'; '.join(r['triggers'])}")

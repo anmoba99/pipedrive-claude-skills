@@ -4,3 +4,7 @@ pipedrive-out/
 __pycache__/
 .DS_Store
 dist/
+# Reports and exports saved outside pipedrive-out/
+*.csv
+*.png
+*-report.html

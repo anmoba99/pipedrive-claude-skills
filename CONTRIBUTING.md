@@ -1,6 +1,6 @@
 # Contributing
 
-Issues and pull requests are welcome: new industry packs, translations, fixes, better skills.
+Issues and pull requests are welcome: new industry packs, translations, fixes, better skills. Questions and ideas: use [Discussions](https://github.com/anmoba99/pipedrive-claude-skills/discussions). By contributing you agree your work is licensed under MIT, like the rest of the repo, and to follow the [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## How a skill folder works
 
