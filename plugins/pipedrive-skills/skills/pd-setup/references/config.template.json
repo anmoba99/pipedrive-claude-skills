@@ -1,0 +1,22 @@
+{
+  "industry": "generic",
+  "role": "rep",
+  "language": "auto",
+  "stale_days": 14,
+  "qualification_framework": "BANT",
+  "outputs": {
+    "pd-morning-brief": ["chat"],
+    "pd-call-prep": ["chat"],
+    "pd-call-to-crm": ["pipedrive"],
+    "pd-follow-up": ["gmail-draft", "chat"],
+    "pd-lead-qualifier": ["chat"],
+    "pd-pipeline-review": ["chat", "file"],
+    "pd-win-loss": ["chat", "file"],
+    "pd-data-hygiene": ["file"],
+    "pd-account-health": ["chat"]
+  },
+  "team_channel": null,
+  "renewal_field": null,
+  "call_ai": "nova",
+  "notes_tag": "[Claude]"
+}

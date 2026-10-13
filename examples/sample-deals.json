@@ -1,0 +1,7 @@
+{"data": [
+  {"id": 1042, "title": "Acme rollout", "value": 25000, "currency": "EUR", "stage_id": 3, "owner_id": 1, "status": "open", "update_time": "2026-09-20T10:00:00Z", "expected_close_date": "2026-10-01", "next_activity_id": null, "undone_activities_count": 0},
+  {"id": 1043, "title": "Beta Corp pilot", "value": 8000, "currency": "EUR", "stage_id": 2, "owner_id": 2, "status": "open", "update_time": "2026-10-10T09:00:00Z", "expected_close_date": "2026-11-15", "next_activity_id": 551, "undone_activities_count": 1},
+  {"id": 1044, "title": "Gamma Ltd expansion", "value": 40000, "currency": "USD", "stage_id": 4, "owner_id": 1, "status": "open", "update_time": "2026-08-30T14:00:00Z", "expected_close_date": "2026-12-01", "next_activity_id": 552, "undone_activities_count": 2},
+  {"id": 1045, "title": "Delta SA", "value": 3000, "currency": "EUR", "stage_id": 1, "owner_id": 2, "status": "open", "update_time": "2026-10-12T16:00:00Z", "expected_close_date": null, "next_activity_id": null, "undone_activities_count": 0},
+  {"id": 1046, "title": "Epsilon renewal", "value": 12000, "currency": "EUR", "stage_id": 3, "owner_id": 1, "status": "open", "update_time": "2026-10-01T08:00:00Z", "expected_close_date": "2026-10-31", "next_activity_id": 553, "undone_activities_count": 1}
+]}
