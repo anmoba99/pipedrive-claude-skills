@@ -6,6 +6,7 @@ description: Pipeline review for managers and owners in three modes: review (by 
 # pd-pipeline-review
 
 Follow pd-core rules (load pd-core if not loaded).
+Team scope: if `.pipedrive/access.json` is missing or shows partial coverage, run pd-access checks 1 and 2 first and state the coverage in the first line.
 
 Requires: Pipedrive (manager/admin visibility for team results)
 Optional: Slack/Teams (post digest, opt-in), Google Docs (report)

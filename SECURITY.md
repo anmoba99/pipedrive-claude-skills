@@ -2,7 +2,7 @@
 
 ## What the skills do with your data
 
-- The skills are plain text instructions plus two small Python scripts. They run inside Claude and send nothing anywhere else.
+- The skills are plain text instructions plus a few small Python scripts (Python standard library only). They run inside Claude and send nothing anywhere else.
 - Claude reads your CRM through the Pipedrive connector, with your own Pipedrive login and permissions.
 - Nothing is written to Pipedrive without your confirmation. Nothing is deleted.
 - Email is always a draft. Slack or Teams posts happen only when you turn them on.

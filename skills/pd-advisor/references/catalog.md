@@ -5,6 +5,7 @@ Format: skill: purpose. Triggers. Needs. Output. Cost (low/med/high Pipedrive ca
 ## Foundation
 - pd-core: shared rules (cached context, cheap queries, compact output, safe writes). Loaded by other skills. No direct use.
 - pd-setup: one-time setup and health check; caches pipelines, stages, users, fields; writes config; sets industry. Triggers: "set up", "doctor", "something broke", new connector. Needs Pipedrive. Output: capability report in chat, `.pipedrive/` files. Cost low.
+- pd-access: what Claude can see and change with this connection: connector permissions, who "me" is, owners and deals visible, owner-only deals, read-only fields, exact fixes. Triggers: "what can Claude see", "team report looks incomplete", "Claude doesn't know who I am". Needs Pipedrive. Output chat + `.pipedrive/access.json`. Read-only. Cost low.
 
 ## Rep
 - pd-morning-brief: today's activities, overdue, idle deals, deals with no next step, top 3 actions. Triggers: "brief me", "what should I do today". Needs Pipedrive. Optional Slack DM, Calendar. Output chat. Cost low.
@@ -17,7 +18,7 @@ Format: skill: purpose. Triggers. Needs. Output. Cost (low/med/high Pipedrive ca
 - pd-win-loss: themes behind won and lost deals from lost reasons and note text; actions. Triggers: "why do we lose", "win-loss". Needs Pipedrive. Output chat/file. Cost med.
 
 ## Ops / admin
-- pd-data-hygiene: modes audit (duplicates, missing fields, no next step, stale) and import-clean (CSV before import). Triggers: "clean my CRM", "find duplicates", "clean this CSV". Needs Pipedrive (audit) or nothing (import-clean). Output CSV fix list, optional fill-blank updates (after confirm). Cost med to high.
+- pd-data-hygiene: modes audit (field completeness per standard and custom field, empty values, duplicates, no next step, stale, owner-only visibility; data health tracker page with trend since last run) and import-clean (CSV before import). Triggers: "clean my CRM", "find duplicates", "clean this CSV". Needs Pipedrive (audit) or nothing (import-clean). Output tracker HTML (artifact on claude.ai), CSV fix list, optional fill-blank updates (after confirm). Cost med to high.
 
 ## Customer success / account management
 - pd-account-health: modes health (org score), renewals (upcoming renewal deals), handoff (sales -> CS brief). Triggers: "account health", "renewals this quarter", "handoff for X". Needs Pipedrive. Optional Google Docs. Output chat/file/optional pinned note. Cost med.
@@ -40,7 +41,7 @@ Files in pd-industry/references/. Set once via pd-setup; other skills load the m
 ## Common combos
 - Solo founder: pd-morning-brief, pd-follow-up, pd-pipeline-review digest.
 - Rep team: pd-morning-brief, pd-follow-up, pd-lead-qualifier.
-- Manager: pd-pipeline-review review + forecast, pd-win-loss.
+- Manager: pd-access first, then pd-pipeline-review review + forecast, pd-win-loss.
 - Messy CRM: pd-setup, pd-data-hygiene audit first, then everything else.
 - Inbound-heavy: pd-lead-qualifier, pd-follow-up.
 - Recurring revenue: pd-account-health renewals, pd-win-loss.

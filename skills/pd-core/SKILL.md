@@ -12,7 +12,7 @@ Rules every pd-* skill follows. Short on purpose; details in `references/`.
 - Look for `.pipedrive/context.json` (written by pd-setup). If present and under 7 days old, use it for pipeline, stage, user and custom field IDs.
 - If missing, stale, or no filesystem (claude.ai chat): call `getAccountContext` once per conversation and reuse the result. Never call it twice in one conversation.
 - A "field not found" or unknown stage error means the cache is stale: refresh once, then retry.
-- Custom fields are hash keys. Map names to keys with `.pipedrive/field-map.json` or the context. Never guess a key. Option labels come from the user's "Selectable options in fields" export (Pipedrive Settings > Data fields), merged into `field-map.json` by pd-setup. Match by API key, never by field name.
+- Custom fields are hash keys. Map names to keys with `.pipedrive/field-map.json` or the context. Never guess a key. Option labels come from the account context (`options` per field) and are cached in `field-map.json`; when showing option values, add `include_option_labels=true` to `getDeals`/`getPersons`. The "Selectable options in fields" export is a fallback merged by pd-setup. Match by API key, never by field name. Skip fields with `is_writable=false` when writing.
 
 ## 2. Cheapest query wins
 
@@ -51,6 +51,6 @@ If `.pipedrive/config.json` has `industry`, load only `pd-industry/references/<i
 
 ## 7. Privacy
 
-- Pipedrive access equals the user's own permissions. Do not imply team-wide coverage if the user cannot see other reps' deals.
+- Pipedrive access equals the user's own permissions plus the connector's granted permissions. Read `.pipedrive/access.json` if present (written by pd-access). Coverage `partial` or `own_only`: say so in the first line of any team report. Never present partial coverage as team-wide.
 - Do not copy sensitive personal data (health, government IDs, bank details) into notes, files or messages.
 - Never put CRM data in URLs.

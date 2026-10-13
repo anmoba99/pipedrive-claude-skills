@@ -1,6 +1,6 @@
 ---
 name: pd-data-hygiene
-description: Pipedrive data quality in two modes: audit (duplicate persons and organizations, missing key fields, open deals with no next step, stale records) producing a fix list, and import-clean (normalize and dedupe a CSV against existing data before import). Use when the user wants to clean the CRM, find duplicates, or prepare an import.
+description: Pipedrive data quality in two modes: audit (field completeness, empty custom fields, duplicate persons and organizations, open deals with no next step, stale records, owner-only visibility) producing a data health tracker and a fix list, and import-clean (normalize and dedupe a CSV against existing data before import). Use when the user wants to clean the CRM, find duplicates, or prepare an import.
 ---
 
 # pd-data-hygiene
@@ -15,12 +15,25 @@ The connector cannot delete or merge. Output is a fix list; the user merges in P
 ## Mode: audit
 
 1. Scope: persons, orgs, open deals. Large account: ask to limit (one owner, or `updated_since` last 12 months).
-2. Fetch: `getPersons limit=500` (cursor for more, cap 2000), `getOrganizations limit=500`, `getDeals status=open limit=500 include_fields=[next_activity_id,undone_activities_count]`.
+2. Fetch: `getPersons limit=500` (cursor for more, cap 2000), `getOrganizations limit=500`, `getDeals status=open limit=500 include_fields=[next_activity_id,undone_activities_count]`. Save each raw result to a file. Field names come from the account context (cached or `getAccountContext`).
 3. Duplicates: save results to files and run `scripts/find_dupes.py persons.json` and `scripts/find_dupes.py orgs.json --kind org`. No shell: compare exact email/phone and normalized names only.
 4. Gaps: persons without email and phone, orgs without owner or address (if the industry needs it), deals without value, expected close date, or next activity. Required fields from the industry pack.
 5. Stale: open deals idle more than 90 days (suggest close or revive), persons with no activity in 12 months.
-6. Output a summary + `pipedrive-out/pd-data-hygiene/<date>-fixlist.csv` with columns `type,id,name,issue,suggested_fix,related_id`.
-7. Offer safe fills only: missing org on a person when the email domain matches exactly one org; missing country from phone prefix. Show change set, write on yes.
+6. Field health and tracker: run
+   ```
+   python3 scripts/field_health.py --deals deals.json --persons persons.json --orgs orgs.json \
+     --context <account context or .pipedrive/context.json> --dupes-person dupes_p.csv --dupes-org dupes_o.csv \
+     --prev <latest pipedrive-out/pd-data-hygiene/*-summary.json, if any> --stale-days 90 \
+     --summary-out pipedrive-out/pd-data-hygiene/<date>-summary.json \
+     --html references/tracker.html --html-out pipedrive-out/pd-data-hygiene/<date>-tracker.html
+   ```
+   Add `--domain <company>` only if the user's Pipedrive address (`<company>.pipedrive.com`) is known, for record links. It shows fill rate per standard and custom field (under 50% = needs attention, 0% = never used), records with issues, duplicates, deals with no next step, stale deals, owner-only visibility, by owner, and the change since the last run.
+   - Claude Code or Cowork: give the file path and offer to open it.
+   - claude.ai or Desktop with code execution: run the same command and show the HTML as an artifact. No code execution: build the artifact from `references/tracker.html` by putting the computed JSON in place of `/*DATA*/` (same shape as the script's `--out`).
+   - Read-only fields (set by Pipedrive) and fields the connector did not return are listed apart, never as empty. Records the user cannot see are not in the audit; say so if pd-access shows partial coverage.
+   - The "Fixed" ticks live only in that browser. The next audit is the real check.
+7. Fix list: `pipedrive-out/pd-data-hygiene/<date>-fixlist.csv` with columns `type,id,name,issue,suggested_fix,related_id` (all rows, the tracker shows up to 500).
+8. Offer safe fills only: missing org on a person when the email domain matches exactly one org; missing country from phone prefix. Show change set, write on yes.
 
 ## Mode: import-clean
 
@@ -33,9 +46,12 @@ The connector cannot delete or merge. Output is a fix list; the user merges in P
 
 ```
 Audit <date> | persons 1,240 | orgs 410 | open deals 186
+Field completeness 62% (+4 pts since 2026-09-13) | 9 fields need attention
+Never used: Legacy score, Partner tier (custom, deal)
 Likely duplicates: 37 person pairs, 9 org pairs
 Missing: 112 persons no email/phone, 41 deals no next step, 18 deals no value
-Stale: 23 open deals idle 90+ days
+Stale: 23 open deals idle 90+ days | Owner-only visibility: 14 deals
+Tracker: pipedrive-out/pd-data-hygiene/2026-10-13-tracker.html
 Fix list: pipedrive-out/pd-data-hygiene/2026-10-13-fixlist.csv
 Safe fills available: 14 persons -> org by email domain. Apply?
 ```

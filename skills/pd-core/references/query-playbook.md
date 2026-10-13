@@ -16,6 +16,7 @@ Search only when you have a name and no ID. Use `exact_match: true` when the use
 - `owner_id`, `pipeline_id`, `stage_id`, `status` (open, won, lost), `org_id`, `person_id`
 - `updated_since` / `updated_until` (RFC3339) for incremental runs and date windows
 - `custom_fields`: only the keys you need (max 15)
+- `include_option_labels: true`: dropdown values come back as `{id, label}` instead of bare IDs. Use it whenever option values are shown to the user.
 - `include_fields`: `next_activity_id`, `last_activity_id`, `undone_activities_count`, `notes_count`, `last_incoming_mail_time`, `last_outgoing_mail_time`, `products_count`
 - `sort_by` (`update_time`, `add_time`, `id`) + `sort_direction`
 - `limit` up to 500, `cursor` for next page

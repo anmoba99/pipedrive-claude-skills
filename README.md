@@ -12,7 +12,7 @@
 <tr>
 <td align="center" width="33%"><h3>1 message</h3>to start: describe your business,<br>get a plan built for it</td>
 <td align="center" width="33%"><h3>0 changes</h3>to your CRM<br>without your yes</td>
-<td align="center" width="33%"><h3>12 skills</h3>plus 12 industry packs,<br>free and open</td>
+<td align="center" width="33%"><h3>13 skills</h3>plus 12 industry packs,<br>free and open</td>
 </tr>
 </table>
 
@@ -35,7 +35,8 @@ Pipedrive stores your deals well. The work around them still eats your day. Thes
 | **Which leads are real** | Gut feeling | Each lead scored with BANT, MEDDICC, CHAMP or your own checklist, plus the next question to ask |
 | **Pipeline review** | Export to a sheet, chase reps for updates | "forecast check": stuck deals, slipping close dates, stage vs real activity |
 | **Why you lose** | Lost reason says "Price" | Patterns from the notes your team actually wrote |
-| **Messy data** | Find duplicates when reports break | A fix list of duplicates, missing fields and deals with no next step |
+| **Messy data** | Find duplicates when reports break | A data health page: how full every field is, empty custom fields, duplicates, deals with no next step, and what improved since last time |
+| **Who sees what** | Reports quietly miss deals you cannot see | "what can Claude see?": missing permissions, owner-only deals, and the exact fix |
 
 Ask in your own words and your own language. No setup screens, no code.
 
@@ -49,8 +50,6 @@ Ask in your own words and your own language. No setup screens, no code.
 claude plugin marketplace add anmoba99/pipedrive-claude-skills
 claude plugin install pipedrive-skills@pipedrive-claude-skills
 ```
-
-**One extra step that pays off:** in Pipedrive, go to **Settings > Data fields > Export > Selectable options in fields** and give the CSV to Claude (add it to a Claude Project on claude.ai). Without it, Claude sees your dropdown values as numbers instead of names.
 
 Full steps, team rollout and troubleshooting: [INSTALL.md](./INSTALL.md).
 
@@ -67,7 +66,8 @@ Start with `pd-advisor`. It picks the rest for you.
 | `pd-lead-qualifier` | "which leads are serious?" | Scored leads, missing info, next question |
 | `pd-pipeline-review` | "weekly digest" | Review by rep and stage, forecast check, owner summary |
 | `pd-win-loss` | "why are we losing deals?" | Win and loss patterns from lost reasons and notes |
-| `pd-data-hygiene` | "clean my CRM" | Duplicates, missing fields, deals with no next step, CSV import cleanup |
+| `pd-data-hygiene` | "clean my CRM" | A data health page (field completeness, empty values, duplicates, no next step, trend), a fix list, CSV import cleanup |
+| `pd-access` | "what can Claude see?" | Connector permissions, whose deals are visible, owner-only deals, read-only fields, exact fixes |
 | `pd-account-health` | "renewals this quarter" | Account health, renewals, sales to customer success handoff |
 | `pd-ask` | "how many deals did we win in March?" | A straight answer from your CRM |
 | `pd-industry` | (used by the others) | How your industry sells: stages, vocabulary, qualification, risk signals |
@@ -92,7 +92,7 @@ Pain -> fix:
 Setup (once):
 1. pd-setup, industry = real-estate.
 2. Add custom fields: Budget, Mortgage pre-approved, Move-in date (manual in Pipedrive).
-3. Export "Selectable options in fields" (Settings > Data fields), add CSV to a Claude Project.
+3. pd-access, so the Monday digest covers every agent's deals.
 Rhythm:
 - Daily: each agent "brief me for today" (pd-morning-brief).
 - After each viewing: "draft a follow-up for <buyer>" (pd-follow-up).
@@ -108,7 +108,7 @@ Short on purpose. Say "normal mode" for full sentences.
 - Every note Claude writes starts with `[Claude]`, so your team can find and review them.
 - No deletes. Cleanup skills give you a fix list; you merge or delete in Pipedrive.
 - Email is always a draft. Nothing goes to Slack unless you turn it on.
-- Claude sees only what your Pipedrive user can see. Skills never see or store passwords.
+- Claude sees only what your Pipedrive user can see. `pd-access` tells you what that is before a team report goes out. Skills never see or store passwords.
 
 ## Good to know
 
