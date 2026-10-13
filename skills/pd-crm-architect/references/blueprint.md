@@ -28,7 +28,7 @@ Free text (many distinct values) or 30%+ empty: propose a picklist of 6 to 9 opt
 Only Pipedrive's own automations, built by an admin. Good candidates:
 - Deal enters a stage -> create the activity that stage always needs.
 - Deal idle N days (from playbook or premortem numbers) -> activity for the owner.
-- Deal lost with reason timing or budget -> activity on the restart date (pairs with pd-ghost-reviver).
+- Deal lost with reason timing or budget -> activity on the restart date (pairs with pd-win-back).
 - Deal won -> handoff activity for customer success.
 Write each as `Trigger: ... | Conditions: ... | Action: ...`. Never build the workflow in Claude.
 

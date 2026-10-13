@@ -1,6 +1,6 @@
 ---
 name: pd-account-health
-description: Account management on Pipedrive organizations. Modes portfolio (book of business per account manager with health, revenue, renewals, coverage and whitespace, scales to thousands of accounts), health, renewals, coverage (single-threaded accounts), whitespace (products peers buy), review (account review or QBR brief) and handoff (sales to customer success). Optional write-back of a health score to an opt-in organization field. Use for account health, churn risk, renewals, upsell, QBR or handoff requests.
+description: Account management on Pipedrive organizations: book of business per account manager, health scores, renewals, accounts with only one contact, products similar customers buy, account review (QBR) briefs and sales to customer success handoff. Optional health score saved to an organization field. Use for account health, churn risk, renewals, upsell, QBR or handoff requests.
 ---
 
 # pd-account-health

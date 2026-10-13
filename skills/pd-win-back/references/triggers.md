@@ -30,7 +30,7 @@ Days after the loss when a new conversation usually makes sense. Used by the scr
 | Budget cycle | "New budget year at <org>. Worth a 15 minute look at <their goal>?" |
 | Competitor anniversary | "Your <competitor or current setup> agreement is likely up for review around now." Only name the competitor if notes name it. |
 | Moved company | "Congrats on the move to <new org>. What we did for <old goal> may fit there too." |
-| Went silent | "Closing the loop on <topic>. Should I keep this open or close it?" |
+| Went silent | "Closing the loop on <topic> from <month>. Worth a fresh look now, or should I check back later?" |
 | Product gap closed | "You needed <gap>. We have it now." Only if the user confirms. |
 
 ## Rules

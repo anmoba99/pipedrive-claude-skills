@@ -16,7 +16,7 @@
 </tr>
 </table>
 
-**[What changes](#what-changes) · [Install](#install) · [What you get](#what-you-get) · [How it starts](#how-it-starts) · [Safety](#safety)**
+**[What changes](#what-changes) · [Install](#install) · [What you get](#what-you-get) · [How it starts](#how-it-starts) · [Safety](#safety) · [Tested](#tested-and-what-the-skills-can-see)**
 
 </div>
 
@@ -36,11 +36,11 @@ Pipedrive stores your deals well. The work around them still eats your day. Thes
 | **Pipeline review** | Export to a sheet, chase reps for updates | "forecast check": stuck deals, slipping close dates, stage vs real activity |
 | **Why you lose** | Lost reason says "Price" | Patterns from the notes your team actually wrote |
 | **Messy data** | Find duplicates when reports break | A data health page: how full every field is, empty custom fields, duplicates, deals with no next step, and what improved since last time |
-| **Account management** | A spreadsheet of customers, renewals found too late | "show my book": every account scored, renewals in the next 90 days, single-threaded accounts, what peers buy that they do not. Optional health score saved back to Pipedrive |
-| **Which deals will slip** | Find out at quarter end | "premortem": each open deal matched to the lost deals it looks like, how it will most likely die, and the move that saves it |
+| **Account management** | A spreadsheet of customers, renewals found too late | "show my book": every account scored, renewals in the next 90 days, accounts where you know only one person, what similar customers buy that they do not. Optional health score saved back to Pipedrive |
+| **Which deals will slip** | Find out at quarter end | "which deals will we lose?": each open deal matched to the lost deals it looks like, how it will most likely die, and the move that saves it |
 | **What actually wins** | A playbook nobody follows, written from memory | The path your won deals really took: steps, order, timing, contacts. Open deals that are off it |
-| **One contact per deal** | Your champion leaves, the deal dies | Who is involved, their role read from notes, single-threaded deals, past champions now at other companies |
-| **Lost deals** | Gone forever | Which lost deals to reopen now and why now (timing came around, contract renewal, contact moved), with a draft built from the old conversation |
+| **One contact per deal** | Your champion leaves, the deal dies | Who is involved, their role read from notes, deals that depend on one person, past champions now at other companies |
+| **Lost deals** | Gone forever | Lost deals that are a chance for a new deal now and why now (timing came around, contract renewal, contact moved), with a draft built from the old conversation. The lost deal stays as it is |
 | **Who to target** | ICP written in a workshop | The customer profile your wins point to, the segments that waste time, and every open deal and lead scored by fit |
 | **CRM setup** | Stages and fields nobody questions | A blueprint from real usage: stages to merge or split, fields nobody fills, fields hiding in notes, lost reason picklist, automations worth building |
 | **Who sees what** | Reports quietly miss deals you cannot see | "what can Claude see?": missing permissions, owner-only deals, and the exact fix |
@@ -49,7 +49,7 @@ Ask in your own words and your own language. No setup screens, no code.
 
 ## Install
 
-**Claude app** (claude.ai, Desktop, Cowork): download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest), upload them in **Settings > Capabilities > Skills**, then connect Pipedrive in **Settings > Connectors**.
+**Claude app** (claude.ai, Desktop, and Cowork, the Claude desktop workspace): download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest), upload them in **Settings > Capabilities > Skills**, then connect Pipedrive in **Settings > Connectors**.
 
 **Claude Code:**
 
@@ -73,13 +73,13 @@ Start with `pd-advisor`. It picks the rest for you.
 | `pd-lead-qualifier` | "which leads are serious?" | Scored leads, missing info, next question |
 | `pd-pipeline-review` | "weekly digest" | Review by rep and stage, forecast check, owner summary |
 | `pd-win-loss` | "why are we losing deals?" | Win and loss patterns from lost reasons and notes |
-| `pd-data-hygiene` | "clean my CRM" | A data health page with tabs (field completeness, empty values, duplicates, no next step, value at risk, by owner and pipeline, trend), a fix list, CSV import cleanup. Works on large accounts: samples fields, checks every open deal, trends over runs |
+| `pd-data-hygiene` | "clean my CRM" | A data health page: how full each field is, duplicates, deals with no next step, open value at risk, by owner and pipeline, progress since last run. Plus a fix list and CSV import cleanup. Works on large accounts |
 | `pd-access` | "what can Claude see?" | Connector permissions, whose deals are visible, owner-only deals, read-only fields, exact fixes |
-| `pd-account-health` | "show my book" | A portfolio page per account manager (health score, revenue, renewals, coverage, upsell whitespace), QBR briefs, sales to customer success handoff. Optional health score write-back to a Pipedrive field you choose |
+| `pd-account-health` | "show my book" | A page per account manager: health score, revenue, renewals, contacts per account, products similar customers buy that this one does not. Quarterly account review briefs, sales to customer success handoff. Optional health score saved to a Pipedrive field you choose |
 | `pd-premortem` | "which deals will we lose?" | Each open deal vs the lost deals it resembles: cause of death, proof, likely date, save move |
 | `pd-playbook-miner` | "what do our wins have in common?" | A playbook mined from won deals (steps, order, timing, contacts), what losses skipped, open deals off track |
-| `pd-thread-map` | "who is involved in the Acme deal?" | Buying group with roles from notes, single-threaded deals, silent champions, past champions at new companies |
-| `pd-ghost-reviver` | "which lost deals should we reopen?" | Lost deals worth a call now, the reason why now, a re-opener draft from the old conversation |
+| `pd-thread-map` | "who is involved in the Acme deal?" | Buying group with roles from notes, deals that depend on one person, silent champions, past champions at new companies |
+| `pd-win-back` | "which lost deals could become new deals?" | Lost deals worth a new conversation now, the reason why now, a draft from the old conversation, and a new deal for the same company after your yes. Never reopens the lost deal |
 | `pd-icp-discovery` | "who is our ideal customer?" | Win rate, value and cycle by segment, the profile that wins, the segments to stop chasing, fit score for open deals and leads |
 | `pd-crm-architect` | "is our Pipedrive set up right?" | A before and after blueprint: stages, fields, picklists, required fields, automations, with manual steps for the admin |
 | `pd-ask` | "how many deals did we win in March?" | A straight answer from your CRM |
@@ -123,10 +123,18 @@ Short on purpose. Say "normal mode" for full sentences.
 - Email is always a draft. Nothing goes to Slack unless you turn it on.
 - Claude sees only what your Pipedrive user can see. `pd-access` tells you what that is before a team report goes out. Skills never see or store passwords.
 
+## Tested, and what the skills can see
+
+- The scripts were checked on generated sample data, and several skills on my own Pipedrive account.
+- None of that data is in this repo, its history or the release zips. Downloading gives you instructions and small scripts only, no CRM data from anyone.
+- When you run a skill, it reads only what your own Pipedrive connector can see, inside your own Claude session. Nothing is sent to me or anyone else.
+- Results stay in your chat, your email drafts, or a local `pipedrive-out/` folder you control.
+- More detail in [SECURITY.md](./SECURITY.md).
+
 ## Good to know
 
 - Pipedrive is the only connector you need. Slack, Teams, Gmail, Outlook, Google Drive and Calendar are optional; without them, output lands in the chat or a Pipedrive note.
-- Meetings, calls, WhatsApp and email: use Pipedrive's native tools (Nova, WhatsApp and email integrations). These skills build on the data they leave in Pipedrive.
+- Meetings, calls, WhatsApp and email: use Pipedrive's native tools (Nova, the Pipedrive AI assistant for meetings and calls, plus WhatsApp and email integrations). These skills build on the data they leave in Pipedrive.
 - The connector cannot create pipelines, stages or custom fields. Claude tells you what to add by hand.
 - Built to keep costs low: setup is cached, queries are filtered, answers are short, and math runs in small scripts.
 

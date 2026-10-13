@@ -8,8 +8,9 @@
     {
       "name": "pipedrive-skills",
       "source": "./",
-      "description": "Skills that turn Claude and the Pipedrive MCP connector into a sales assistant: advisor, setup, briefs, follow-ups, qualification, pipeline review, win-loss, premortem, playbook mining, buying group maps, lost deal revival, ICP discovery, CRM design review, hygiene, account health and industry packs.",
-      "version": "0.6.0"
+      "description": "Skills that turn Claude and the Pipedrive connector into a sales assistant: a plan for your business, daily brief, follow-up drafts, lead checks, pipeline review, win and loss patterns, deals at risk, what your wins have in common, who is involved in each deal, new deals from lost ones, ideal customer profile, CRM setup review, data cleanup, account health and industry packs.",
+      "category": "productivity",
+      "version": "0.6.1"
     }
   ]
 }
