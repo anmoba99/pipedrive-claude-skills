@@ -42,7 +42,7 @@ Search only when you have a name and no ID. Use `exact_match: true` when the use
 - "Everything about one deal": `getDeal`, then `getNotes deal_id limit=10`, `getActivities deal_id`, `getPersons deal_id`. Four calls total.
 - "Account rollup": `getOrganization`, `getDeals org_id`, `getNotes org_id limit=10`.
 - Many known IDs: one `getDeals ids=[...]` call.
-- Big pipeline (500+ open deals): split by owner or stage. In Claude Code, run one subagent per slice and have each return at most 10 summary lines so raw data stays out of the main context.
+- Big pipeline (500+ open deals): split by owner or stage. In Claude Code, run one subagent per slice and have each return at most 10 summary lines so raw data stays out of the main context. Thousands of records (data audits, portfolio roll-ups): follow `skills/pd-data-hygiene/references/scale.md` (sample pass, scope pass, raw pages saved to files, incremental runs with `updated_since`).
 
 ## What a call returns
 

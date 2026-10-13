@@ -18,7 +18,7 @@ Format: skill: purpose. Triggers. Needs. Output. Cost (low/med/high Pipedrive ca
 - pd-win-loss: themes behind won and lost deals from lost reasons and note text; actions. Triggers: "why do we lose", "win-loss". Needs Pipedrive. Output chat/file. Cost med.
 
 ## Ops / admin
-- pd-data-hygiene: modes audit (field completeness per standard and custom field, empty values, duplicates, no next step, stale, owner-only visibility; data health tracker page with trend since last run) and import-clean (CSV before import). Triggers: "clean my CRM", "find duplicates", "clean this CSV". Needs Pipedrive (audit) or nothing (import-clean). Output tracker HTML (artifact on claude.ai), CSV fix list, optional fill-blank updates (after confirm). Cost med to high.
+- pd-data-hygiene: modes audit (field completeness per standard and custom field, empty values, duplicates, no next step, stale, owner-only visibility; tabbed data health tracker with value at risk, owners, pipelines, bulk fix recipes and trend since last run; large accounts via sampling, scoped checks and incremental runs) and import-clean (CSV before import). Triggers: "clean my CRM", "find duplicates", "clean this CSV". Needs Pipedrive (audit) or nothing (import-clean). Output tracker HTML (artifact on claude.ai), CSV fix list, optional fill-blank updates (after confirm). Cost med to high.
 
 ## Customer success / account management
 - pd-account-health: modes health (org score), renewals (upcoming renewal deals), handoff (sales -> CS brief). Triggers: "account health", "renewals this quarter", "handoff for X". Needs Pipedrive. Optional Google Docs. Output chat/file/optional pinned note. Cost med.
