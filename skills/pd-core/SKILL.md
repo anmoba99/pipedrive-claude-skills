@@ -1,6 +1,9 @@
 ---
 name: pd-core
 description: Shared rules for all pd-* Pipedrive skills (cached account context, cheapest queries, compact output, safe writes, output routing). Load before any other pd-* skill does Pipedrive work.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-core

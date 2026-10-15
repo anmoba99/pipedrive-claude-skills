@@ -53,7 +53,7 @@ The daily work, done faster.
 
 | skill | what it does |
 | --- | --- |
-| `pd-advisor` | Start here. One message about your business, back comes a plan: which skills, what to set up once, a daily and weekly rhythm. |
+| `pd-advisor` | Start here. One message about your business, back comes a plan: which skills, what to set up once, a daily and weekly rhythm. Share your website and it reads what you sell first. |
 | `pd-setup` | Learns your account once: pipelines, stages, users, custom fields and dropdown labels. |
 | `pd-morning-brief` | "Brief me for today." Activities, overdue work, idle deals, your top 3 actions. |
 | `pd-follow-up` | A follow-up email drafted from the deal's history, waiting in Gmail or Outlook. Never sent for you. |
@@ -65,7 +65,7 @@ The daily work, done faster.
 
 ## The Intelligence
 
-New ways to measure the data you already have, so you know where the next deal comes from.
+Each one measures your Pipedrive history in a new way: lookalike risk, win paths, segment lift, buying roles. Claude fetches the records through the connector and a small script on your machine does the math, so the numbers come from your data and nothing is uploaded.
 
 | skill | what it does |
 | --- | --- |
@@ -79,38 +79,6 @@ New ways to measure the data you already have, so you know where the next deal c
 | `pd-crm-architect` | A blueprint from real usage: stages to merge or split, fields nobody fills, fields hiding in notes, a lost reason picklist, automations worth building in Pipedrive. |
 
 Two helpers run underneath: `pd-core` (cheap queries, short answers, safe writes) and `pd-industry`, with [12 industry packs](skills/pd-industry/references/): real estate, SaaS, agencies, manufacturing and wholesale, recruiting, financial services and insurance, construction and home services, education, healthcare and medtech, events and hospitality, nonprofits, logistics.
-
-## How the intelligence works
-
-The Intelligence skills ship small Python scripts with no dependencies. Claude fetches the records through your connector, saves them on your machine, and the script does the math there. Nothing is uploaded, and the numbers come from your data, not from a language model guessing.
-
-| skill | what it measures |
-| --- | --- |
-| `pd-premortem` | Distance from each open deal to closed deals: stage, value, age, days in stage, idle days, activity pace, next step, unanswered email. Risk is the share of its nearest neighbours that were lost. |
-| `pd-icp-discovery` | Win rate per attribute against your base rate (lift), with a minimum sample, then the strongest two-attribute combinations. Open deals get a 0 to 100 fit score. |
-| `pd-playbook-miner` | Which activity types show up in wins vs losses, in what order, first-touch speed and the longest gap between touches. |
-| `pd-thread-map` | Contacts per deal, how many were active in the last 90 days, people who sit on several open deals. |
-| `pd-win-back` | Days since the loss against the window for its reason class, and whether the company already has an open deal. |
-| `pd-account-health` | Revenue, activity, contact coverage and renewal dates rolled up per organization, compared with similar accounts. |
-| `pd-data-hygiene` | Fill rate for every field, duplicates by email, phone and similar names, open value sitting on deals with no next step. |
-
-Here is `icp_lift.py` on generated sample data (320 closed deals, made up for this demo, trimmed):
-
-```
-Closed 320 | won 155 | base win rate 48% | min sample 8
-Best segments:
-- origin=Referral | 88 deals | win 70% | lift 1.44 | avg won 11661 | cycle 45d
-- Industry=Healthcare | 83 deals | win 65% | lift 1.34 | avg won 11963 | cycle 51d
-Best combinations:
-- Industry=Healthcare + origin=Referral | 29 deals | win 79% | lift 1.6
-Worst segments:
-- origin=Outbound | 79 deals | win 30% | lift 0.64
-- Industry=Education | 97 deals | win 40% | lift 0.83
-Scored 45 open deals and leads. Top fit:
-deal 364 | Org 3 deal | fit 100 | origin=Referral, Industry=Healthcare
-```
-
-Claude turns that into the plain version: referrals from healthcare close at 79%, outbound at 30%, so here is where to spend next quarter, and here are the open deals that fit.
 
 ## How it starts
 

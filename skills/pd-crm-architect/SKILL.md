@@ -1,6 +1,9 @@
 ---
 name: pd-crm-architect
 description: "Redesigns your Pipedrive setup from how the team really uses it: stages nobody uses or where deals pile up, fields nobody fills, information that keeps appearing in notes but has no field, lost reasons that need a picklist, and automations worth building. Returns a before and after blueprint with exact manual steps. Use when the user asks to improve, redesign or audit their Pipedrive setup, pipeline stages, fields, \"is our CRM set up right\", or onboarding a new team to Pipedrive."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-crm-architect

@@ -1,6 +1,9 @@
 ---
 name: pd-premortem
 description: "Pre-mortem for open Pipedrive deals: matches each open deal to the lost deals it looks like, writes how it will most likely die, and the one move that changes the ending. Use when the user asks which deals will slip, a pre-mortem, \"how could this deal die\", deal risk, or what to save this week."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-premortem

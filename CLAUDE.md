@@ -20,4 +20,4 @@ Rules for AI agents editing this repo.
 
 ## Skills
 
-Follow [CONTRIBUTING.md](./CONTRIBUTING.md). Run `claude plugin validate .` after changes (one expected warning: this CLAUDE.md is for repo editors, not shipped plugin context). Bump `version` in both files in `.claude-plugin/` for a release.
+Follow [CONTRIBUTING.md](./CONTRIBUTING.md). Run `claude plugin validate .` after changes (one expected warning: this CLAUDE.md is for repo editors, not shipped plugin context). Bump `version` in both files in `.claude-plugin/` and `metadata.version` in every `SKILL.md` for a release.

@@ -1,6 +1,9 @@
 ---
 name: pd-win-back
 description: Finds lost Pipedrive deals that are a chance for a new deal now, says why now (timing window came around, competitor contract up for renewal, contact moved to a new company, account active again), and drafts an outreach email built from the old conversation. Creates a new deal linked to the same organization and person after confirmation; never reopens or edits the lost deal. Never sends. Use when the user asks to win back lost deals, find new opportunities in lost deals, or "who should we call back".
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-win-back

@@ -1,6 +1,9 @@
 ---
 name: pd-follow-up
 description: Draft follow-up or nudge emails for Pipedrive deals using deal history and last notes; saves as Gmail or Outlook draft if connected, never sends. Use when the user asks to draft a follow-up, nudge, recap email or re-engage a quiet deal.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-follow-up

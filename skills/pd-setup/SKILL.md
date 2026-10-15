@@ -1,6 +1,9 @@
 ---
 name: pd-setup
 description: One-time setup and health check ("doctor") for the pd-* Pipedrive skills. Caches pipelines, stages, users and custom fields, records industry and output preferences, and reports which skills are ready. Use on first install, when something breaks, or after adding a connector.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-setup

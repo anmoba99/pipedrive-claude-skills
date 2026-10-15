@@ -1,6 +1,9 @@
 ---
 name: pd-lead-qualifier
 description: Score Pipedrive leads or early-stage deals against BANT, MEDDICC, CHAMP or a custom checklist, list missing info and the next question to ask, and optionally write the score or convert leads to deals after confirmation. Use when the user asks which leads are serious, to qualify or score leads, or to clean the lead inbox.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-lead-qualifier

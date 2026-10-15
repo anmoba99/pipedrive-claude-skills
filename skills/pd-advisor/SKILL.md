@@ -1,6 +1,9 @@
 ---
 name: pd-advisor
-description: Start here for Pipedrive + Claude. User describes their business or sales problem in plain English; returns a short, concrete plan built from the pd-* skills (which skills, setup, daily/weekly rhythm, where output lands, gaps).
+description: Start here for Pipedrive + Claude. User describes their business or sales problem in plain English, or shares their company website; returns a short, concrete plan built from the pd-* skills (which skills, setup, daily/weekly rhythm, where output lands, gaps).
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-advisor
@@ -10,6 +13,7 @@ Turn a plain-English business case into a plan that uses the skills in this pack
 ## Steps
 
 1. Read the case. Extract: industry, team size, roles (rep, manager, owner, ops, CS), sales motion (inbound/outbound, short/long cycle, one-off/recurring), main pains, tools already used.
+1b. Website or domain given: read it with the live web tool (web fetch or web search), homepage plus at most 2 linked pages (pricing, about). Extract what they sell, to whom (B2B or B2C), likely sales motion and the matching industry pack. Put it in `Assume:` as "from <domain>". Use only what the site says, never invent. No web tool or the site fails: say so in one line and use the intake questions.
 2. If a critical fact is missing, ask at most 3 short questions from `references/intake.md`, in one message. If the case is clear enough, do not ask: state assumptions in the `Assume:` line.
 3. Load `references/catalog.md`. Pick the 3 to 6 skills that fix the stated pains. Fewer is better. Never list every skill.
 4. Match an industry pack (pd-industry). If none fits, say "generic" and use role skills only.
