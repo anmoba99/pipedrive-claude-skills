@@ -24,7 +24,7 @@ The connector cannot delete or merge. Output is a fix list; the user merges in P
    python3 scripts/field_health.py --deals deals.json --persons persons.json --orgs orgs.json \
      [--sample-deals ... --sample-persons ... --sample-orgs ...] [--snapshot snapshot.json] \
      --snapshot-out pipedrive-out/pd-data-hygiene/snapshot.json --scope-note "<what was checked>" \
-     --context <account context or .pipedrive/context.json> --dupes-person dupes_p.csv --dupes-org dupes_o.csv \
+     --context <.pipedrive/account_context.json or a fresh getAccountContext result> --dupes-person dupes_p.csv --dupes-org dupes_o.csv \
      --prev <latest pipedrive-out/pd-data-hygiene/*-summary.json, if any> --stale-days 90 \
      --summary-out pipedrive-out/pd-data-hygiene/<date>-summary.json \
      --fixlist-out pipedrive-out/pd-data-hygiene/<date>-fixlist.csv \

@@ -9,9 +9,10 @@ Rules every pd-* skill follows. Short on purpose; details in `references/`.
 
 ## 1. Context first, once
 
-- Look for `.pipedrive/context.json` (written by pd-setup). If present and under 7 days old, use it for pipeline, stage, user and custom field IDs.
+- Look for `.pipedrive/context.json` (written by pd-setup). If present and under 7 days old, use it for pipeline, stage and user IDs. Custom fields and stage order live in `.pipedrive/account_context.json`; pass that file to scripts that take `--context`.
 - If missing, stale, or no filesystem (claude.ai chat): call `getAccountContext` once per conversation and reuse the result. Never call it twice in one conversation.
 - A "field not found" or unknown stage error means the cache is stale: refresh once, then retry.
+- Never invent numbers, names or results. If an answer needs data the CRM does not have, say it is missing.
 - Custom fields are hash keys. Map names to keys with `.pipedrive/field-map.json` or the context. Never guess a key. Option labels come from the account context (`options` per field) and are cached in `field-map.json`; when showing option values, add `include_option_labels=true` to `getDeals`/`getPersons`. The "Selectable options in fields" export is a fallback merged by pd-setup. Match by API key, never by field name. Skip fields with `is_writable=false` when writing.
 
 ## 2. Cheapest query wins
@@ -44,7 +45,7 @@ No deletes exist in the connector. Never try to work around that.
 
 ## 5. Output routing
 
-Load `references/output-routing.md` when a skill produces something to keep or share. Read `.pipedrive/config.json` for user preferences. Optional connector missing: fall back, never fail. Posting to Slack/Teams or creating email drafts requires the user to have opted in (config or explicit request).
+Load `references/output-routing.md` when a skill produces something to keep or share. Read `.pipedrive/config.json` for user preferences. Optional connector missing: fall back, never fail. Posting to Slack/Teams requires the user to have opted in (config or explicit request). Email drafts are allowed when the skill's route in config includes them (default for pd-follow-up and pd-win-back); drafts are never sent.
 
 ## 6. Industry
 

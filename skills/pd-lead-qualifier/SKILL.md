@@ -17,7 +17,7 @@ Fallback: no score field in Pipedrive -> score goes in a `[Claude]` note (after 
 3. Evidence per lead: lead/deal fields plus `getNotes lead_id|deal_id limit=5`. Do not fetch notes for more than 25 records per run; say how many remain.
 4. Score each criterion 0 (unknown), 1 (weak), 2 (confirmed), only from evidence. Total as a percentage. Grade: A >= 75%, B 50-74%, C 25-49%, D < 25%.
 5. For each lead: biggest gap and the single next question that closes it.
-6. Offer writes (safe-write): score to a custom field if one exists (field map: "Lead score", "Qualification"), else a note; `convertLeadToDeal` for A leads only if the user asks.
+6. Offer writes (safe-write): for deals, score to a custom field if one exists (field map: "Lead score", "Qualification"), else a note; for leads, a note (the connector cannot set lead custom fields); `convertLeadToDeal` for A leads only if the user asks.
 
 ## Output
 

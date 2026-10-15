@@ -1,6 +1,6 @@
 ---
 name: pd-morning-brief
-description: Daily brief for a Pipedrive user: today's and overdue activities, idle deals, deals with no next step, and a ranked top 3 actions. Use when the user asks what to do today, for a brief, or for a daily plan.
+description: "Daily brief for a Pipedrive user: today's and overdue activities, idle deals, deals with no next step, and a ranked top 3 actions. Use when the user asks what to do today, for a brief, or for a daily plan."
 ---
 
 # pd-morning-brief
