@@ -16,6 +16,7 @@ Usage:
   python3 win_back_candidates.py --lost lost*.json [--reason-map reasons.json]
       [--persons persons*.json] [--open open*.json] [--orgs orgs*.json]
       [--min-days 60] [--top 25] [--today YYYY-MM-DD] [--out candidates.json]
+      [--scope-note "..."]
 
 Reason map: {"<lost reason text, lowercase>": "<class>"}. Missing reasons
 fall back to a small multilingual keyword match, then "other".
@@ -111,6 +112,7 @@ def main():
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--today")
     ap.add_argument("--out")
+    ap.add_argument("--scope-note", default="")
     args = ap.parse_args()
     today = date.fromisoformat(args.today) if args.today else date.today()
 
@@ -179,9 +181,12 @@ def main():
 
     result = {"today": today.isoformat(), "candidates": rows, "skipped": skipped,
               "windows": WINDOWS}
+    result["note"] = args.scope_note
     if args.out:
         with open(args.out, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=1, ensure_ascii=False)
+    if args.scope_note:
+        print(f"Scope: {args.scope_note}")
     print(f"Candidates {len(rows)} | skipped: bad fit {skipped['bad_fit']}, too recent "
           f"{skipped['too_recent']}, org has open deal {skipped['has_open_deal']}")
     for r in rows[:args.top]:

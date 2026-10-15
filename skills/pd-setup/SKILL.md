@@ -26,6 +26,7 @@ Fallback: no filesystem (claude.ai chat) -> keep context in this conversation on
       "pipelines": {"<id>": {"name": "", "stages": {"<id>": ""}}},
       "stages": {"<id>": "<name>"}, "users": {"<id>": "<name>"}}
      ```
+   - `account_context.json`: the raw `getAccountContext` result, unchanged. Scripts read stage order, custom fields, option labels and `is_writable` from it; the slim file above lacks them.
    - `field-map.json`: `{"deal": {"<Field name>": {"key": "<hash>", "type": "", "options": {"<label>": <id>}}}, "person": {}, "org": {}}`
    - `config.json`: from `references/config.template.json`, filled with answers from step 5.
    - `last_run.json`: `{}`

@@ -25,6 +25,7 @@ Write these? (yes / edit / no)
 - Activities: always set subject, type, due date, linked deal or person, owner.
 - Never overwrite a non-empty field without listing old -> new in the change set.
 - Batch limit: 25 writes per confirmation.
+- Exception: a score write-back to one custom field (pd-account-health, pd-icp-discovery) may cover up to 200 rows on one yes, if the change set shows the count, the field, 5 sample rows old -> new, and the full list is saved to a file the user can open first.
 
 ## After writing
 

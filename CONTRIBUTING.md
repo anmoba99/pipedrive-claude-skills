@@ -24,7 +24,7 @@ The file is always called `SKILL.md`; the Claude skill format requires that name
 - Never hardcode MCP tool prefixes. Describe the capability ("a tool that saves a Gmail draft").
 - Every CRM write is shown to the user and confirmed first. Notes start with `[Claude]`.
 - Filter every query and ask only for the fields you need.
-- Do not rebuild what Pipedrive already does. Off-limits for new skills: anything Nova covers (meeting prep, transcription, summaries, CRM updates from meetings), the native WhatsApp and email integrations, automations, filters and reports.
+- Do not rebuild what Pipedrive already does. Check Pipedrive's native features first (Nova, the WhatsApp and email integrations, automations, filters and reports) and build on the data they leave in Pipedrive.
 - No real customer data in examples.
 
 ## New industry pack
