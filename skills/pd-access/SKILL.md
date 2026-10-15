@@ -14,7 +14,7 @@ Pipedrive access has two layers: what the connector was allowed to read (permiss
 
 ## Checks
 
-1. **Connector permissions.** Use the account context (cached or one `getAccountContext`). Read its `errors` object. Map each error:
+1. **Connector permissions.** Use the account context (`.pipedrive/account_context.json` saved by pd-setup, or one `getAccountContext`). Read its `errors` object. Map each error:
    | Error mentions | Effect | Skills affected |
    |---|---|---|
    | `base` (user) | Claude does not know who "me" is | "my deals", pd-morning-brief, pd-follow-up sender |

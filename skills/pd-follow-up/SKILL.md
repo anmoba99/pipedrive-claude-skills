@@ -13,7 +13,7 @@ Fallback: Pipedrive note `[Claude] Draft email` (after confirm) or chat
 
 ## Steps
 
-1. Identify deal(s). Batch mode: "nudge my quiet deals" -> `getDeals owner_id=<me> status=open updated_until=<today - stale_days> limit=20`, then draft up to 10.
+1. Identify deal(s). Batch mode: "nudge my quiet deals" -> `getDeals owner_id=<me> status=open updated_until=<today - stale_days> limit=20` (`stale_days` from `.pipedrive/config.json`, default 14), then draft up to 10.
 2. Per deal fetch: `getDeal`, `getNotes deal_id limit=5`, `getPersons deal_id` (recipient email). No email on file: say so, draft anyway.
 3. Pick the type: recap after call, nudge after silence, proposal follow-up, re-engage lost/cold, meeting request.
 4. Draft rules:
