@@ -10,7 +10,9 @@
 
 Nineteen Claude skills that work on top of your Pipedrive. Free, MIT, no signup, no API key. The only thing to connect is the Pipedrive connector in Claude.
 
-Pipedrive is where your customers, deals and sales process live. These skills read that data and turn it into answers and next steps: the kind of analysis that usually means an export, a spreadsheet, an extra tool or an analyst.
+Pipedrive already runs a lot of your sales: pipelines and deals, the Leads Inbox, email and Campaigns, workflow automations, Insights reports and goals, Pipedrive AI and Nova for meetings, plus a Marketplace of apps for everything else. The [Pipedrive Knowledge Base](https://support.pipedrive.com/en) is full of tips worth knowing.
+
+Some work usually means adding a third-party integration, an export or a BI tool: finding which open deals look like the ones you lost, the path your wins really took, which customer segments win most, who is really involved in each deal, which lost deals are worth reopening now. These skills do that directly in Claude, on your own Pipedrive data, so you get more out of the CRM you already use.
 
 One of them briefs you every morning. One drafts the follow-up from the deal. One scores your leads. One tells you which open deals look like the ones you lost, and the move that saves them. One finds the customer profile your wins point to. One maps who is really involved in each deal.
 
