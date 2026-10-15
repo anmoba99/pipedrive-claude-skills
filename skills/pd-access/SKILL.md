@@ -1,6 +1,9 @@
 ---
 name: pd-access
 description: Check what Claude can and cannot see or change in Pipedrive with the current connection (connector permissions, who "me" is, how many owners' deals are visible, deal visibility settings, read-only fields) and give the exact fix for each gap. Use when team reports look incomplete, Claude does not know who the user is, or before rolling the skills out to a team. Read-only.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-access

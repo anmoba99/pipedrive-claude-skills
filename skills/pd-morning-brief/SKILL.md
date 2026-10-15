@@ -1,6 +1,9 @@
 ---
 name: pd-morning-brief
 description: "Daily brief for a Pipedrive user: today's and overdue activities, idle deals, deals with no next step, and a ranked top 3 actions. Use when the user asks what to do today, for a brief, or for a daily plan."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-morning-brief

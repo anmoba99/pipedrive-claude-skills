@@ -1,6 +1,9 @@
 ---
 name: pd-pipeline-review
 description: "Pipeline review for managers and owners in three modes: review (by rep and stage, stuck and risky deals), forecast (stage probability vs real activity, slipping close dates), digest (short weekly business summary). Use for pipeline review, forecast check, weekly digest or team performance questions."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-pipeline-review

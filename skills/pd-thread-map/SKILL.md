@@ -1,6 +1,9 @@
 ---
 name: pd-thread-map
 description: "Maps the buying group on open Pipedrive deals: who is involved, who we actually talk to, the role each person plays (champion, decision maker, blocker) read from notes, single-threaded deals, champions gone quiet, and past contacts from won deals who now work elsewhere. Use when the user asks who is involved in a deal, about single-threaded deals, multi-threading, the buying committee, \"who else should we talk to\", or where past champions went."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-thread-map

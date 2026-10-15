@@ -1,6 +1,9 @@
 ---
 name: pd-playbook-miner
 description: Builds the sales playbook your won Pipedrive deals actually followed (which steps, in what order, how fast, how many contacts), shows what lost deals skipped, then audits open deals against it. Use when the user asks for a sales playbook, "what do our wins have in common", best practices from won deals, onboarding material for new reps, or which open deals are off track.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-playbook-miner

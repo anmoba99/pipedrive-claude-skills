@@ -1,6 +1,9 @@
 ---
 name: pd-account-health
 description: "Account management on Pipedrive organizations: book of business per account manager, health scores, renewals, accounts with only one contact, products similar customers buy, account review (QBR) briefs and sales to customer success handoff. Optional health score saved to an organization field. Use for account health, churn risk, renewals, upsell, QBR or handoff requests."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-account-health

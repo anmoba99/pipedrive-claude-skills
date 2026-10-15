@@ -1,6 +1,9 @@
 ---
 name: pd-win-loss
 description: "Win-loss analysis from Pipedrive closed deals: themes behind wins and losses from lost reasons and note text, by stage, owner, segment and competitor, with concrete actions. Use when the user asks why they lose or win deals, for win-loss, or lost reason analysis."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-win-loss

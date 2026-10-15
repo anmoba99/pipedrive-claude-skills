@@ -1,6 +1,9 @@
 ---
 name: pd-data-hygiene
 description: Pipedrive data quality. Audit mode finds empty fields, duplicates, deals with no next step and stale records, and builds a data health page plus a fix list. Import-clean mode cleans and dedupes a CSV before import. Use when the user wants to clean the CRM, find duplicates, or prepare an import.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-data-hygiene

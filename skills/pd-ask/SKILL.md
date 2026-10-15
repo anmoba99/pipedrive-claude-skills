@@ -1,6 +1,9 @@
 ---
 name: pd-ask
 description: Answer any plain-English question about the user's Pipedrive data (deals, contacts, organizations, activities, notes, leads, products) with the cheapest possible queries. Use for ad-hoc questions not covered by a more specific pd-* skill.
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-ask

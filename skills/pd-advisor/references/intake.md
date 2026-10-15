@@ -2,7 +2,7 @@
 
 Ask only what changes the plan. Max 3, one message. Pick from:
 
-1. What do you sell, and to whom? (industry, B2B or B2C)
+1. What do you sell, and to whom? (industry, B2B or B2C) Or share your website and I will read it.
 2. How many people use Pipedrive, and what roles? (reps, manager, owner, ops, CS)
 3. Biggest pain right now? (follow-up, forecast, messy data, lead quality, losing deals, renewals)
 4. Typical sales cycle? (days, weeks, months)

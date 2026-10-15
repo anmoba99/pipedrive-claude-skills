@@ -21,6 +21,7 @@ The file is always called `SKILL.md`; the Claude skill format requires that name
 
 - Keep `SKILL.md` short. Move detail into `references/`.
 - The `description` in the frontmatter is loaded in every chat. One or two sentences.
+- Keep `license: MIT` and `metadata.version` in the frontmatter. The version matches `.claude-plugin/` and is bumped for every release.
 - Never hardcode MCP tool prefixes. Describe the capability ("a tool that saves a Gmail draft").
 - Every CRM write is shown to the user and confirmed first. Notes start with `[Claude]`.
 - Filter every query and ask only for the fields you need.

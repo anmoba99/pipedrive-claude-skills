@@ -1,6 +1,9 @@
 ---
 name: pd-icp-discovery
 description: "Discovers the ideal customer profile hiding in your Pipedrive history: which sources, sizes, countries, industries and deal sizes win most, close fastest and pay most, and which ones waste time. Then scores open deals and leads by fit. Use when the user asks for their ICP, best customers, \"who should we target\", which lead sources work, or to rank leads by how much they look like past wins."
+license: MIT
+metadata:
+  version: "2.0.0"
 ---
 
 # pd-icp-discovery
