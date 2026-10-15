@@ -1,6 +1,6 @@
 <div align="center">
 
-# Pipedrive Skills for Claude
+# Pipedrive Skills for Claude (Unofficial)
 
 **Tell Claude about your business. Get a sales assistant that works inside your Pipedrive.**
 
@@ -21,6 +21,8 @@
 </div>
 
 > **Disclaimer:** these skills were built by me in a personal capacity. They are not an official Pipedrive product and are not endorsed, maintained or supported by Pipedrive. Always review changes before letting Claude update your CRM.
+>
+> Not affiliated with or endorsed by Anthropic either. Pipedrive is a trademark of Pipedrive OÜ, used here only to describe compatibility.
 
 ---
 
@@ -49,7 +51,7 @@ Ask in your own words and your own language. No setup screens, no code.
 
 ## Install
 
-**Claude app** (claude.ai, Desktop, and Cowork, the Claude desktop workspace): download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest), upload them in **Settings > Capabilities > Skills**, then connect Pipedrive in **Settings > Connectors**.
+**Claude app** (claude.ai, Desktop, and Cowork, the Claude desktop workspace): download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest) (at minimum `pd-core`, `pd-advisor` and `pd-setup`; see [INSTALL.md](./INSTALL.md)), upload them in **Settings > Capabilities > Skills**, then connect Pipedrive in **Settings > Connectors**.
 
 **Claude Code:**
 
@@ -66,7 +68,7 @@ Start with `pd-advisor`. It picks the rest for you.
 
 | Skill | Say something like | You get |
 |---|---|---|
-| `pd-advisor` | "We're a 6 person agency, deals go quiet after proposals" | A short plan: which skills, what to set up once, daily and weekly rhythm |
+| `pd-advisor` | "We are a 6-person agency, deals go quiet after proposals" | A short plan: which skills, what to set up once, daily and weekly rhythm |
 | `pd-setup` | "set up Pipedrive" | Claude learns your pipelines, stages, users and fields once, so every later ask is faster |
 | `pd-morning-brief` | "brief me for today" | Today's activities, overdue work, idle deals, top 3 actions |
 | `pd-follow-up` | "draft a follow-up for Acme" | An email draft from the deal context |
@@ -92,7 +94,7 @@ Start with `pd-advisor`. It picks the rest for you.
 
 You type:
 
-> We are a 6 person real estate agency in Lisbon. Agents forget to follow up after viewings and I have no idea which buyers are serious. We use Pipedrive and Gmail.
+> We are a 6-person real estate agency in Lisbon. Agents forget to follow up after viewings and I have no idea which buyers are serious. We use Pipedrive and Gmail.
 
 Claude replies:
 
@@ -125,7 +127,7 @@ Short on purpose. Say "normal mode" for full sentences.
 
 ## Tested, and what the skills can see
 
-- The scripts were checked on generated sample data, and several skills on my own Pipedrive account.
+- The scripts were checked on generated sample data, and several skills on a personal test account, not a company account.
 - None of that data is in this repo, its history or the release zips. Downloading gives you instructions and small scripts only, no CRM data from anyone.
 - When you run a skill, it reads only what your own Pipedrive connector can see, inside your own Claude session. Nothing is sent to me or anyone else.
 - Results stay in your chat, your email drafts, or a local `pipedrive-out/` folder you control.

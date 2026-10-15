@@ -1,6 +1,6 @@
 ---
 name: pd-account-health
-description: Account management on Pipedrive organizations: book of business per account manager, health scores, renewals, accounts with only one contact, products similar customers buy, account review (QBR) briefs and sales to customer success handoff. Optional health score saved to an organization field. Use for account health, churn risk, renewals, upsell, QBR or handoff requests.
+description: "Account management on Pipedrive organizations: book of business per account manager, health scores, renewals, accounts with only one contact, products similar customers buy, account review (QBR) briefs and sales to customer success handoff. Optional health score saved to an organization field. Use for account health, churn risk, renewals, upsell, QBR or handoff requests."
 ---
 
 # pd-account-health
@@ -35,7 +35,7 @@ More than about 30 accounts in scope: use the portfolio flow (script) even for h
 
 ## Write-back (opt-in)
 
-Only when `accounts.health_field` is set. Never in the first run of a session without asking.
+Only when `accounts.health_field` is set. Always ask before writing.
 1. Run the script with `--writeback-out`. It lists only accounts whose bucket changed or score moved 10+ points, max 200.
 2. Show: count, 5 sample rows (org, old, new), the field names. Ask "Update these <n> organizations?"
 3. On yes: `updateOrganization` with the `custom_fields` of each row. Log to `pipedrive-out/pd-account-health/<date>-writeback.log`. Stop on the first error and report.

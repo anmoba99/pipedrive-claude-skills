@@ -13,7 +13,7 @@ Usage:
   python3 deal_match.py --open open*.json --closed closed*.json
       [--activities acts*.json] [--context account_context.json]
       [--k 7] [--stale-days 14] [--top 25] [--today YYYY-MM-DD]
-      [--out premortem.json]
+      [--out premortem.json] [--scope-note "..."]
 
 Record files: JSON list, an object with a "data" list (raw MCP result), or
 a saved tool result wrapper. Several files and globs are allowed; records
@@ -172,6 +172,7 @@ def main():
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--today")
     ap.add_argument("--out")
+    ap.add_argument("--scope-note", default="")
     args = ap.parse_args()
 
     today = date.fromisoformat(args.today) if args.today else date.today()
@@ -253,9 +254,12 @@ def main():
                                                 for s, v in lost_stage_days.items()}},
         "deals": rows,
     }
+    result["note"] = args.scope_note
     if args.out:
         with open(args.out, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=1, ensure_ascii=False)
+    if args.scope_note:
+        print(f"Scope: {args.scope_note}")
 
     print(f"Open {len(open_f)} vs closed {len(closed_f)} (won {len(won)}, lost {len(lost)}, "
           f"baseline lost {result['baseline']['lost_share']}%)")

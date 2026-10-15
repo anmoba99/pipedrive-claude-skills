@@ -33,6 +33,7 @@ import argparse
 import csv
 import glob
 import json
+import os
 import sys
 from collections import defaultdict
 from datetime import date, datetime
@@ -509,7 +510,9 @@ def main():
         if "/*DATA*/" not in page:
             sys.exit("template has no /*DATA*/ placeholder")
         page = page.replace("/*DATA*/", text.replace("</", "<\\/"), 1)
-        with open(args.html_out or "tracker.html", "w", encoding="utf-8") as f:
+        html_out = args.html_out or os.path.join("pipedrive-out", "pd-data-hygiene", "tracker.html")
+        os.makedirs(os.path.dirname(html_out) or ".", exist_ok=True)
+        with open(html_out, "w", encoding="utf-8") as f:
             f.write(page)
     if not (args.out or args.html):
         print(text)

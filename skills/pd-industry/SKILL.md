@@ -1,6 +1,6 @@
 ---
 name: pd-industry
-description: Industry packs for the pd-* Pipedrive skills (real estate, SaaS, agencies, manufacturing, recruiting, financial services, construction, education, healthcare, events, nonprofits, logistics): object mapping, pipeline templates, qualification checks, risk and upsell signals, custom fields. Use when designing a pipeline for an industry or when another pd-* skill needs industry context.
+description: "Industry packs for the pd-* Pipedrive skills (real estate, SaaS, agencies, manufacturing, recruiting, financial services, construction, education, healthcare, events, nonprofits, logistics): object mapping, pipeline templates, qualification checks, risk and upsell signals, custom fields. Use when designing a pipeline for an industry or when another pd-* skill needs industry context."
 ---
 
 # pd-industry
