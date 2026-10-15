@@ -12,6 +12,7 @@ Rules every pd-* skill follows. Short on purpose; details in `references/`.
 - Look for `.pipedrive/context.json` (written by pd-setup). If present and under 7 days old, use it for pipeline, stage and user IDs. Custom fields and stage order live in `.pipedrive/account_context.json`; pass that file to scripts that take `--context`.
 - If missing, stale, or no filesystem (claude.ai chat): call `getAccountContext` once per conversation and reuse the result. Never call it twice in one conversation.
 - A "field not found" or unknown stage error means the cache is stale: refresh once, then retry.
+- Never invent numbers, names or results. If an answer needs data the CRM does not have, say it is missing.
 - Custom fields are hash keys. Map names to keys with `.pipedrive/field-map.json` or the context. Never guess a key. Option labels come from the account context (`options` per field) and are cached in `field-map.json`; when showing option values, add `include_option_labels=true` to `getDeals`/`getPersons`. The "Selectable options in fields" export is a fallback merged by pd-setup. Match by API key, never by field name. Skip fields with `is_writable=false` when writing.
 
 ## 2. Cheapest query wins

@@ -2,6 +2,16 @@
 
 Five minutes. No code.
 
+## Fastest: let Claude Code do it
+
+Paste this into Claude Code:
+
+```
+https://github.com/anmoba99/pipedrive-claude-skills
+
+Install this plugin, then confirm /pd-advisor works.
+```
+
 ## Claude app (claude.ai, Desktop, Cowork)
 
 1. Download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest).
