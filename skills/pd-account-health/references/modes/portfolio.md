@@ -14,7 +14,7 @@ python3 scripts/account_rollup.py \
   --activities 'pipedrive-out/pd-account-health/raw/activities-*.json' \
   [--persons 'pipedrive-out/pd-account-health/raw/persons-*.json'] \
   [--products 'pipedrive-out/pd-account-health/raw/products-*.json'] \
-  --config .pipedrive/config.json --context .pipedrive/context.json --field-map .pipedrive/field-map.json \
+  --config .pipedrive/config.json --context .pipedrive/account_context.json --field-map .pipedrive/field-map.json \
   [--prev pipedrive-out/pd-account-health/portfolio.json] \
   --scope-note "<what was not fetched>" \
   --out pipedrive-out/pd-account-health/portfolio.json \

@@ -11,7 +11,7 @@ library only, no network, no LLM.
 Usage:
   python3 won_paths.py --closed closed*.json --activities acts*.json
       [--open open*.json] [--min-support 0.2] [--today YYYY-MM-DD]
-      [--out playbook.json] [--audit-csv audit.csv]
+      [--out playbook.json] [--audit-csv audit.csv] [--scope-note "..."]
 
 Record files: JSON list, an object with a "data" list (raw MCP result), or a
 saved tool result wrapper. Several files and globs are allowed; records are
@@ -122,6 +122,7 @@ def main():
     ap.add_argument("--min-support", type=float, default=0.2)
     ap.add_argument("--today")
     ap.add_argument("--out")
+    ap.add_argument("--scope-note", default="")
     ap.add_argument("--audit-csv")
     args = ap.parse_args()
     today = date.fromisoformat(args.today) if args.today else date.today()
@@ -195,9 +196,12 @@ def main():
     result = {"today": today.isoformat(), "timing": timing, "steps": steps,
               "sequence_won": sequence, "openings_won": openings(won),
               "openings_lost": openings(lost), "audit": audit}
+    result["note"] = args.scope_note
     if args.out:
         with open(args.out, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=1, ensure_ascii=False)
+    if args.scope_note:
+        print(f"Scope: {args.scope_note}")
     if args.audit_csv:
         with open(args.audit_csv, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)

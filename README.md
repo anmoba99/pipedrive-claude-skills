@@ -1,98 +1,122 @@
 <div align="center">
 
-# Pipedrive Skills for Claude
-
-**Tell Claude about your business. Get a sales assistant that works inside your Pipedrive.**
+# Pipedrive Skills for Claude (Unofficial)
 
 <a href="https://github.com/anmoba99/pipedrive-claude-skills/releases/latest"><img src="https://img.shields.io/github/v/release/anmoba99/pipedrive-claude-skills?style=flat-square&color=1A7F37&label=release" alt="Latest release"></a>
 <a href="./INSTALL.md"><img src="https://img.shields.io/badge/works_with-Claude_app_%26_Claude_Code-D97757?style=flat-square" alt="Works with Claude app and Claude Code"></a>
 <a href="#license"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT license"></a>
 
-<table>
-<tr>
-<td align="center" width="33%"><h3>1 message</h3>to start: describe your business,<br>get a plan built for it</td>
-<td align="center" width="33%"><h3>0 changes</h3>to your CRM<br>without your yes</td>
-<td align="center" width="33%"><h3>19 skills</h3>plus 12 industry packs,<br>free and open</td>
-</tr>
-</table>
-
-**[What changes](#what-changes) · [Install](#install) · [What you get](#what-you-get) · [How it starts](#how-it-starts) · [Safety](#safety) · [Tested](#tested-and-what-the-skills-can-see)**
-
 </div>
 
+Nineteen Claude skills that work on top of your Pipedrive. Free, MIT, no signup, no API key. The only thing to connect is the Pipedrive connector in Claude.
+
+Pipedrive already runs a lot of your sales: pipelines and deals, the Leads Inbox, email and Campaigns, workflow automations, Insights reports and goals, Pipedrive AI and Nova for meetings, plus a Marketplace of apps for everything else. The [Pipedrive Knowledge Base](https://support.pipedrive.com/en) is full of tips worth knowing.
+
+Some work usually means adding a third-party integration, an export or a BI tool: finding which open deals look like the ones you lost, the path your wins really took, which customer segments win most, who is really involved in each deal, which lost deals are worth reopening now. These skills do that directly in Claude, on your own Pipedrive data, so you get more out of the CRM you already use.
+
+One of them briefs you every morning. One drafts the follow-up from the deal. One scores your leads. One tells you which open deals look like the ones you lost, and the move that saves them. One finds the customer profile your wins point to. One maps who is really involved in each deal.
+
+And one is the advisor, which is where you start. Describe your business in one message and it picks the rest.
+
+**Nothing changes in your CRM until you say yes.** Claude shows the change, you approve it.
+
 > **Disclaimer:** these skills were built by me in a personal capacity. They are not an official Pipedrive product and are not endorsed, maintained or supported by Pipedrive. Always review changes before letting Claude update your CRM.
-
----
-
-## What changes
-
-Pipedrive stores your deals well. The work around them still eats your day. These skills hand that work to Claude.
-
-| Moment | Without | With these skills |
-|---|---|---|
-| **Monday, 8:30** | Open Pipedrive, scroll 60 deals, guess what matters | "brief me for today": overdue work, idle deals, your top 3 actions |
-| **Following up** | Write the same nudge email again | A draft built from the deal, waiting in Gmail or Outlook. Never sent for you |
-| **Which leads are real** | Gut feeling | Each lead checked for budget, decision maker, need and timing (or your own checklist), plus the next question to ask |
-| **Pipeline review** | Export to a sheet, chase reps for updates | "forecast check": stuck deals, slipping close dates, stage vs real activity |
-| **Why you lose** | Lost reason says "Price" | Patterns from the notes your team actually wrote |
-| **Messy data** | Find duplicates when reports break | A data health page: how full every field is, empty custom fields, duplicates, deals with no next step, and what improved since last time |
-| **Account management** | A spreadsheet of customers, renewals found too late | "show my book": every account scored, renewals in the next 90 days, accounts where you know only one person, what similar customers buy that they do not. Optional health score saved back to Pipedrive |
-| **Which deals will slip** | Find out at quarter end | "which deals will we lose?": each open deal matched to the lost deals it looks like, how it will most likely die, and the move that saves it |
-| **What actually wins** | A playbook nobody follows, written from memory | The path your won deals really took: steps, order, timing, contacts. Open deals that are off it |
-| **One contact per deal** | Your champion leaves, the deal dies | Who is involved, their role read from notes, deals that depend on one person, past champions now at other companies |
-| **Lost deals** | Gone forever | Lost deals that are a chance for a new deal now and why now (timing came around, contract renewal, contact moved), with a draft built from the old conversation. The lost deal stays as it is |
-| **Who to target** | ICP written in a workshop | The customer profile your wins point to, the segments that waste time, and every open deal and lead scored by fit |
-| **CRM setup** | Stages and fields nobody questions | A blueprint from real usage: stages to merge or split, fields nobody fills, fields hiding in notes, lost reason picklist, automations worth building |
-| **Who sees what** | Reports quietly miss deals you cannot see | "what can Claude see?": missing permissions, owner-only deals, and the exact fix |
-
-Ask in your own words and your own language. No setup screens, no code.
+>
+> Not affiliated with or endorsed by Anthropic either. Pipedrive is a trademark of Pipedrive OÜ, used here only to describe compatibility.
 
 ## Install
 
-**Claude app** (claude.ai, Desktop, and Cowork, the Claude desktop workspace): download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest), upload them in **Settings > Capabilities > Skills**, then connect Pipedrive in **Settings > Connectors**.
+Paste this into Claude Code:
 
-**Claude Code:**
+```
+https://github.com/anmoba99/pipedrive-claude-skills
+
+Install this plugin, then confirm /pd-advisor works.
+```
+
+Or do it yourself:
 
 ```bash
 claude plugin marketplace add anmoba99/pipedrive-claude-skills
 claude plugin install pipedrive-skills@pipedrive-claude-skills
 ```
 
+**Claude app** (claude.ai, Desktop, Cowork): download the zips from the [latest release](https://github.com/anmoba99/pipedrive-claude-skills/releases/latest), upload them in **Settings > Capabilities > Skills** (at minimum `pd-core`, `pd-advisor` and `pd-setup`), then connect Pipedrive in **Settings > Connectors**.
+
+Then spend two minutes on `pd-setup`. Say "set up Pipedrive" and Claude learns your pipelines, stages, users and fields once. Every other skill reads that, so later answers are faster and cheaper.
+
 Full steps, team rollout and troubleshooting: [INSTALL.md](./INSTALL.md).
 
-## What you get
+## The Basics
 
-Start with `pd-advisor`. It picks the rest for you.
+The daily work, done faster.
 
-| Skill | Say something like | You get |
-|---|---|---|
-| `pd-advisor` | "We're a 6 person agency, deals go quiet after proposals" | A short plan: which skills, what to set up once, daily and weekly rhythm |
-| `pd-setup` | "set up Pipedrive" | Claude learns your pipelines, stages, users and fields once, so every later ask is faster |
-| `pd-morning-brief` | "brief me for today" | Today's activities, overdue work, idle deals, top 3 actions |
-| `pd-follow-up` | "draft a follow-up for Acme" | An email draft from the deal context |
-| `pd-lead-qualifier` | "which leads are serious?" | Scored leads, missing info, next question |
-| `pd-pipeline-review` | "weekly digest" | Review by rep and stage, forecast check, owner summary |
-| `pd-win-loss` | "why are we losing deals?" | Win and loss patterns from lost reasons and notes |
-| `pd-data-hygiene` | "clean my CRM" | A data health page: how full each field is, duplicates, deals with no next step, open value at risk, by owner and pipeline, progress since last run. Plus a fix list and CSV import cleanup. Works on large accounts |
-| `pd-access` | "what can Claude see?" | Connector permissions, whose deals are visible, owner-only deals, read-only fields, exact fixes |
-| `pd-account-health` | "show my book" | A page per account manager: health score, revenue, renewals, contacts per account, products similar customers buy that this one does not. Quarterly account review briefs, sales to customer success handoff. Optional health score saved to a Pipedrive field you choose |
-| `pd-premortem` | "which deals will we lose?" | Each open deal vs the lost deals it resembles: cause of death, proof, likely date, save move |
-| `pd-playbook-miner` | "what do our wins have in common?" | A playbook mined from won deals (steps, order, timing, contacts), what losses skipped, open deals off track |
-| `pd-thread-map` | "who is involved in the Acme deal?" | Buying group with roles from notes, deals that depend on one person, silent champions, past champions at new companies |
-| `pd-win-back` | "which lost deals could become new deals?" | Lost deals worth a new conversation now, the reason why now, a draft from the old conversation, and a new deal for the same company after your yes. Never reopens the lost deal |
-| `pd-icp-discovery` | "who is our ideal customer?" | Win rate, value and cycle by segment, the profile that wins, the segments to stop chasing, fit score for open deals and leads |
-| `pd-crm-architect` | "is our Pipedrive set up right?" | A before and after blueprint: stages, fields, picklists, required fields, automations, with manual steps for the admin |
-| `pd-ask` | "how many deals did we win in March?" | A straight answer from your CRM |
-| `pd-industry` | (used by the others) | How your industry sells: stages, vocabulary, qualification, risk signals |
-| `pd-core` | (used by the others) | Shared rules: cheap queries, short answers, safe writes |
+| skill | what it does |
+| --- | --- |
+| `pd-advisor` | Start here. One message about your business, back comes a plan: which skills, what to set up once, a daily and weekly rhythm. |
+| `pd-setup` | Learns your account once: pipelines, stages, users, custom fields and dropdown labels. |
+| `pd-morning-brief` | "Brief me for today." Activities, overdue work, idle deals, your top 3 actions. |
+| `pd-follow-up` | A follow-up email drafted from the deal's history, waiting in Gmail or Outlook. Never sent for you. |
+| `pd-lead-qualifier` | Scores leads on [BANT, CHAMP, MEDDICC](skills/pd-lead-qualifier/references/frameworks.md) or your own checklist, with the missing info and the next question to ask. |
+| `pd-pipeline-review` | The weekly digest by rep and stage: stuck deals, slipping close dates, stage vs real activity. |
+| `pd-ask` | Any question about your CRM in plain words. "How many deals did we win in March?" |
+| `pd-access` | What Claude can see with your user, which deals are owner-only, and the exact fix before a team report goes out. |
+| `pd-data-hygiene` | A data health page: how full each field is, duplicates, deals with no next step, progress since last run. Plus a fix list and CSV import cleanup. |
 
-**Industry packs:** real estate, SaaS, agencies, manufacturing and wholesale, recruiting, financial services and insurance, construction and home services, education, healthcare and medtech, events and hospitality, nonprofits, logistics.
+## The Intelligence
+
+New ways to measure the data you already have, so you know where the next deal comes from.
+
+| skill | what it does |
+| --- | --- |
+| `pd-premortem` | Matches every open deal to the closed deals it looks like, names how it will most likely die ([8 causes](skills/pd-premortem/references/obituary.md)), and the one move that changes the ending. |
+| `pd-playbook-miner` | The path your won deals really took: steps, order, timing, contacts. What the losses skipped, and which open deals are off it. |
+| `pd-icp-discovery` | Win rate, value and cycle by segment. The customer profile that wins, the segments to stop chasing, and every open deal scored by fit. |
+| `pd-win-loss` | Why you win and lose, from lost reasons and the notes your team actually wrote. By owner, stage and value band. |
+| `pd-thread-map` | Who is involved in each deal, tagged with [7 buying roles](skills/pd-thread-map/references/roles.md) from notes. Deals hanging on one person, past champions now at other companies. |
+| `pd-win-back` | Lost deals worth a new conversation now, and why now ([9 reason classes](skills/pd-win-back/references/triggers.md) with timing windows). A new deal for the same company after your yes; the lost deal stays as it is. |
+| `pd-account-health` | Your customer book in [7 modes](skills/pd-account-health/references/modes/): health score, renewals in the next 90 days, single-contact accounts, what similar customers buy that this one does not, review briefs, handoffs. |
+| `pd-crm-architect` | A blueprint from real usage: stages to merge or split, fields nobody fills, fields hiding in notes, a lost reason picklist, automations worth building in Pipedrive. |
+
+Two helpers run underneath: `pd-core` (cheap queries, short answers, safe writes) and `pd-industry`, with [12 industry packs](skills/pd-industry/references/): real estate, SaaS, agencies, manufacturing and wholesale, recruiting, financial services and insurance, construction and home services, education, healthcare and medtech, events and hospitality, nonprofits, logistics.
+
+## How the intelligence works
+
+The Intelligence skills ship small Python scripts with no dependencies. Claude fetches the records through your connector, saves them on your machine, and the script does the math there. Nothing is uploaded, and the numbers come from your data, not from a language model guessing.
+
+| skill | what it measures |
+| --- | --- |
+| `pd-premortem` | Distance from each open deal to closed deals: stage, value, age, days in stage, idle days, activity pace, next step, unanswered email. Risk is the share of its nearest neighbours that were lost. |
+| `pd-icp-discovery` | Win rate per attribute against your base rate (lift), with a minimum sample, then the strongest two-attribute combinations. Open deals get a 0 to 100 fit score. |
+| `pd-playbook-miner` | Which activity types show up in wins vs losses, in what order, first-touch speed and the longest gap between touches. |
+| `pd-thread-map` | Contacts per deal, how many were active in the last 90 days, people who sit on several open deals. |
+| `pd-win-back` | Days since the loss against the window for its reason class, and whether the company already has an open deal. |
+| `pd-account-health` | Revenue, activity, contact coverage and renewal dates rolled up per organization, compared with similar accounts. |
+| `pd-data-hygiene` | Fill rate for every field, duplicates by email, phone and similar names, open value sitting on deals with no next step. |
+
+Here is `icp_lift.py` on generated sample data (320 closed deals, made up for this demo, trimmed):
+
+```
+Closed 320 | won 155 | base win rate 48% | min sample 8
+Best segments:
+- origin=Referral | 88 deals | win 70% | lift 1.44 | avg won 11661 | cycle 45d
+- Industry=Healthcare | 83 deals | win 65% | lift 1.34 | avg won 11963 | cycle 51d
+Best combinations:
+- Industry=Healthcare + origin=Referral | 29 deals | win 79% | lift 1.6
+Worst segments:
+- origin=Outbound | 79 deals | win 30% | lift 0.64
+- Industry=Education | 97 deals | win 40% | lift 0.83
+Scored 45 open deals and leads. Top fit:
+deal 364 | Org 3 deal | fit 100 | origin=Referral, Industry=Healthcare
+```
+
+Claude turns that into the plain version: referrals from healthcare close at 79%, outbound at 30%, so here is where to spend next quarter, and here are the open deals that fit.
 
 ## How it starts
 
 You type:
 
-> We are a 6 person real estate agency in Lisbon. Agents forget to follow up after viewings and I have no idea which buyers are serious. We use Pipedrive and Gmail.
+> We are a 6-person real estate agency in Lisbon. Agents forget to follow up after viewings and I have no idea which buyers are serious. We use Pipedrive and Gmail.
 
 Claude replies:
 
@@ -113,34 +137,44 @@ Rhythm:
 Try now: "Run pd-setup for a real estate agency"
 ```
 
-Short on purpose. Say "normal mode" for full sentences.
+Short on purpose. Say "normal mode" for full sentences. Ask in your own words and your own language.
 
-## Safety
+## The fine print, which is the honest part
 
-- Claude **never writes to Pipedrive without showing you the change first** and getting a yes.
-- Every note Claude writes starts with `[Claude]`, so your team can find and review them.
-- No deletes. Cleanup skills give you a fix list; you merge or delete in Pipedrive.
-- Email is always a draft. Nothing goes to Slack unless you turn it on.
-- Claude sees only what your Pipedrive user can see. `pd-access` tells you what that is before a team report goes out. Skills never see or store passwords.
+**Every write needs your yes.** Claude shows the change set first: what changes, old value and new. Notes it writes start with `[Claude]` so your team can find them. There are no deletes: cleanup skills give you a fix list, and you merge or delete in Pipedrive.
 
-## Tested, and what the skills can see
+**Email is always a draft.** Nothing is sent for you, and nothing goes to Slack or Teams unless you turn it on.
 
-- The scripts were checked on generated sample data, and several skills on my own Pipedrive account.
-- None of that data is in this repo, its history or the release zips. Downloading gives you instructions and small scripts only, no CRM data from anyone.
-- When you run a skill, it reads only what your own Pipedrive connector can see, inside your own Claude session. Nothing is sent to me or anyone else.
-- Results stay in your chat, your email drafts, or a local `pipedrive-out/` folder you control.
-- More detail in [SECURITY.md](./SECURITY.md).
+**The scores are patterns, not forecasts.** A risk of 80% means most deals that looked like this one were lost. It does not mean this one will be. The scripts need history to say anything, and say so when it is missing: the playbook miner will not write a playbook from fewer than 5 won deals with activities.
 
-## Good to know
+**Nothing is made up.** If an answer needs a number your CRM does not have, Claude says it is missing.
 
-- Pipedrive is the only connector you need. Slack, Teams, Gmail, Outlook, Google Drive and Calendar are optional; without them, output lands in the chat or a Pipedrive note.
-- Meetings, calls, WhatsApp and email: use Pipedrive's native tools (Nova, the Pipedrive AI assistant for meetings and calls, plus WhatsApp and email integrations). These skills build on the data they leave in Pipedrive.
-- The connector cannot create pipelines, stages or custom fields. Claude tells you what to add by hand.
-- Built to keep costs low: setup is cached, queries are filtered, answers are short, and math runs in small scripts.
+**Claude sees what your Pipedrive user sees.** No more. `pd-access` tells you exactly what that is. Skills never see or store passwords.
+
+**Tested on sample data.** The scripts were checked on generated data, and several skills on a personal test account, not a company account. None of that data is in this repo, its history or the release zips. When you run a skill, your data stays in your Claude session, your drafts, or a local `pipedrive-out/` folder. More in [SECURITY.md](./SECURITY.md).
+
+**Works alongside what Pipedrive already does.** Use Nova, the Pipedrive AI assistant, for meetings and calls, and the native WhatsApp and email integrations for conversations. These skills build on the data they leave in Pipedrive. Pipelines, stages and custom fields are created by an admin in Pipedrive; Claude tells you what to add.
+
+## Files
+
+```
+skills/pd-premortem/scripts/deal_match.py           open deals vs the closed deals they resemble
+skills/pd-icp-discovery/scripts/icp_lift.py         win rate and lift by segment, fit scores
+skills/pd-playbook-miner/scripts/won_paths.py       activity paths of wins vs losses
+skills/pd-thread-map/scripts/thread_graph.py        contacts and roles per deal
+skills/pd-win-back/scripts/win_back_candidates.py   lost deals in their win-back window
+skills/pd-account-health/scripts/account_rollup.py  per-account health, renewals, whitespace
+skills/pd-data-hygiene/scripts/field_health.py      fill rates and the data health page
+skills/pd-data-hygiene/scripts/find_dupes.py        duplicate people and organizations
+skills/pd-crm-architect/scripts/usage_map.py        how stages and fields are really used
+skills/pd-core/scripts/pd_digest.py                 pipeline digest numbers
+skills/pd-setup/scripts/field_options.py            dropdown labels from a Pipedrive export
+skills/pd-core/references/safe-write.md             the rules every write follows
+```
 
 ## License
 
-MIT. See [LICENSE](./LICENSE). Want to add an industry pack or improve a skill? See [CONTRIBUTING.md](./CONTRIBUTING.md).
+MIT. See [LICENSE](./LICENSE). Take it, change it, ship it. Want to add an industry pack or improve a skill? See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ---
 

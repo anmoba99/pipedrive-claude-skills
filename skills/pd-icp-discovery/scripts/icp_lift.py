@@ -14,7 +14,7 @@ Usage:
       [--open open*.json] [--leads leads*.json] [--context account_context.json]
       [--dims origin channel value_band org_country org_size deal:<key> org:<key> ...]
       [--min-n 8] [--top 20]
-      [--out icp.json] [--scores-csv fit.csv]
+      [--out icp.json] [--scores-csv fit.csv] [--scope-note "..."]
 
 Built-in dims: value_band, owner, pipeline, origin, channel, source,
 org_country, org_size, label. deal:<key> and org:<key> read standard or
@@ -168,6 +168,7 @@ def main():
     ap.add_argument("--min-n", type=int, default=8)
     ap.add_argument("--top", type=int, default=20)
     ap.add_argument("--out")
+    ap.add_argument("--scope-note", default="")
     ap.add_argument("--scores-csv")
     args = ap.parse_args()
     dims = args.dims or DEFAULT_DIMS
@@ -243,9 +244,12 @@ def main():
     result = {"base_win_rate": round(100 * base), "closed": len(rows), "won": won_n,
               "value_edges": edges, "dims": dims, "segments": singles, "pairs": pairs[:30],
               "scored": scored}
+    result["note"] = args.scope_note
     if args.out:
         with open(args.out, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=1, ensure_ascii=False)
+    if args.scope_note:
+        print(f"Scope: {args.scope_note}")
     if args.scores_csv:
         with open(args.scores_csv, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)

@@ -14,6 +14,6 @@ labels: bug
 
 **What you expected:**
 
-**Release version:** (for example v0.6.1)
+**Release version:** (for example v2.0.0)
 
 Please do not paste real customer names, emails, deal values or other CRM data. Replace them with made-up examples.

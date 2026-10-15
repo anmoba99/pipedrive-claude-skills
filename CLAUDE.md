@@ -10,8 +10,9 @@ Rules for AI agents editing this repo.
 
 ## README is the product page
 
-- Written for sales people, not developers. Value first: the "What changes" table leads.
-- The "What you get" table must match the real skills in `skills/`.
+- Written for sales people, not developers. Value first: the prose opening and the Basics / Intelligence tables lead.
+- Every skill in `skills/` appears in exactly one of those tables, or in the helpers line under them.
+- Frame Pipedrive positively: these skills build on Pipedrive data. Never write that Pipedrive "can't" or "fails at" something.
 - Install commands must work. Test before changing them.
 - Keep the disclaimer at the top, word for word.
 - Never invent numbers or results.

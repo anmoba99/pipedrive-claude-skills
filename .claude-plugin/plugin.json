@@ -1,7 +1,7 @@
 {
   "name": "pipedrive-skills",
-  "version": "0.6.1",
-  "description": "Skills for using Claude with the Pipedrive MCP connector. Start with pd-advisor: describe your business, get a plan.",
+  "version": "2.0.0",
+  "description": "Unofficial community skills that turn your Pipedrive data into answers and next steps: daily basics plus deal, customer and pipeline intelligence. Start with pd-advisor.",
   "author": {
     "name": "André Barreira"
   },

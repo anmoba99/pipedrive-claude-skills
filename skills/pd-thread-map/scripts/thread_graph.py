@@ -12,7 +12,7 @@ working at another organization. Standard library only, no network, no LLM.
 Usage:
   python3 thread_graph.py --open open*.json --persons persons*.json
       --activities acts*.json [--won won*.json] [--today YYYY-MM-DD]
-      [--top 25] [--out threads.json]
+      [--top 25] [--out threads.json] [--scope-note "..."]
 
 Record files: JSON list, an object with a "data" list (raw MCP result), or a
 saved tool result wrapper. Several files and globs are allowed; records are
@@ -114,6 +114,7 @@ def main():
     ap.add_argument("--today")
     ap.add_argument("--top", type=int, default=25)
     ap.add_argument("--out")
+    ap.add_argument("--scope-note", default="")
     args = ap.parse_args()
     today = date.fromisoformat(args.today) if args.today else date.today()
 
@@ -209,9 +210,12 @@ def main():
 
     result = {"today": today.isoformat(), "won_contacts_p50": won_p50, "deals": rows,
               "alumni": alumni, "bridges": bridges}
+    result["note"] = args.scope_note
     if args.out:
         with open(args.out, "w", encoding="utf-8") as f:
             json.dump(result, f, indent=1, ensure_ascii=False)
+    if args.scope_note:
+        print(f"Scope: {args.scope_note}")
 
     flagged = [r for r in rows if r["flags"]]
     print(f"Open deals {len(rows)} | flagged {len(flagged)} | single-threaded "

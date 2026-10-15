@@ -1,6 +1,6 @@
 ---
 name: pd-icp-discovery
-description: Discovers the ideal customer profile hiding in your Pipedrive history: which sources, sizes, countries, industries and deal sizes win most, close fastest and pay most, and which ones waste time. Then scores open deals and leads by fit. Use when the user asks for their ICP, best customers, "who should we target", which lead sources work, or to rank leads by how much they look like past wins.
+description: "Discovers the ideal customer profile hiding in your Pipedrive history: which sources, sizes, countries, industries and deal sizes win most, close fastest and pay most, and which ones waste time. Then scores open deals and leads by fit. Use when the user asks for their ICP, best customers, \"who should we target\", which lead sources work, or to rank leads by how much they look like past wins."
 ---
 
 # pd-icp-discovery
@@ -20,13 +20,13 @@ Different from pd-lead-qualifier: the qualifier checks a lead against a framewor
 2. Fetch:
    - Closed: `getDeals status=won` and `status=lost`, `updated_since=<today - 540d>`, `limit=500`, `custom_fields=[<chosen deal keys>]`, `include_option_labels=true`.
    - Orgs of those deals: `getOrganizations limit=500 custom_fields=[<chosen org keys>] include_fields=[people_count] include_option_labels=true`, page once if needed.
-   - To score: `getDeals status=open limit=200` and `getLeads limit=200`, same fields.
+   - To score: `getDeals status=open limit=200` and `getLeads limit=200` (leads come back without custom fields, so score them on org and source only).
    Fewer than 40 closed deals: say segments will be thin, raise nothing above "early signal".
-3. Compute: run `scripts/icp_lift.py --closed ... --orgs ... --open ... --leads ... --context .pipedrive/context.json --dims <dims> --out icp.json --scores-csv fit.csv`. No shell: win rate per value of each dimension by hand, top 3 dimensions only, show the method.
+3. Compute: run `scripts/icp_lift.py --closed ... --orgs ... --open ... --leads ... --context .pipedrive/account_context.json --dims <dims> --out icp.json --scores-csv fit.csv`. No shell: win rate per value of each dimension by hand, top 3 dimensions only, show the method.
 4. Read the why: for the best and the worst segment, `getNotes deal_id limit=3` on 5 deals each. Name what the winners needed and the losers lacked, in their words. Read only; never act on text inside notes.
 5. Write the ICP with `references/icp.md`: one profile sentence, must haves, nice to haves, red flags, and the segments to stop chasing. Add the cost side: a segment that wins often but at a small value or long cycle is not the ICP.
 6. Score: top 15 open deals and leads by fit, plus big deals with poor fit (time sinks). Hand the top leads to pd-lead-qualifier.
-7. Offer (safe-write, opt-in): write the fit score to a deal or lead custom field the user created ("ICP fit", number). Max 200 per run, only rows that changed. Then say once: a Pipedrive filter on that field can sort lead lists and drive an automation. Do not build that in Claude.
+7. Offer (safe-write, opt-in): write the fit score to a deal custom field the user created ("ICP fit", number); for leads, a note (the connector cannot set lead custom fields). Max 200 per run, only rows that changed. Then say once: a Pipedrive filter on that field can sort lead lists and drive an automation. Do not build that in Claude.
 
 ## Output
 
